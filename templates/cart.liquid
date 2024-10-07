@@ -1,0 +1,54 @@
+<!-- Begin ReCharge code -->
+{% include 'subscription-cart-footer' %}
+<!-- End ReCharge code -->
+{% comment %}
+  The contents of the cart.liquid template can be found in /sections/cart-template.liquid
+{% endcomment %}
+
+{% section 'promo-bar' %}
+
+{% section 'cart-template' %}
+
+
+
+<script>
+  function SAWOrderNote(note) {
+    note = note.replace("old text", "new text");
+    return note;
+  }
+  
+  function SAWComplete(res) {
+    setTimeout(function() {
+      jQuery(".cart__note-add").click();
+    }, 500);
+
+    if (res.warning_note != '') {
+      var $cSelectors = [
+        '.purchase-benefits',
+        'input[name="checkout"]',
+        'button[name="checkout"]',
+        '[href$="checkout"]','input[name="goto_pp"]',
+        'button[name="goto_pp"]',
+        'input[name="goto_gc"]',
+        'button[name="goto_gc"]',
+        '.google-wallet-button-holder',
+        '.amazon-payments-pay-button',
+        '.alt-payment-list-amazon-button-image',
+        '.additional-checkout-button__logo'
+      ];
+
+      $cSelectors.forEach(function(selector) {
+        jQuery(selector).remove();
+      });
+      return;
+    }
+
+    setTimeout(function() {
+      //jQuery(".saw-cart-original-total").remove();
+    }, 10);
+    
+    return;
+  }
+</script>
+<script src="https://cdn.pagefly.io/static/assets/pf-custom-shopify-cart.min.js" defer></script>
+<div class="reputon-google-reviews-widget" id="ef04b260-e833-11ea-9d59-c10e528cc937" ></div><div class="reputon-google-reviews-widget" id="ef04b260-e833-11ea-9d59-c10e528cc937" ></div>

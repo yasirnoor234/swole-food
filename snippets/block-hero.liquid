@@ -1,0 +1,106 @@
+{% if block.type == 'hero' %}
+<section class="section__block-hero" id="{{ block.id }}">
+
+
+    <div class="inner">
+
+
+      {% if template == "collection.swole" or template == "collection.active" or template == "collection.lowcarb" %}
+
+    
+                <div class="">
+                  {% if block.settings.inner-image == blank %}<h3>{{ block.settings.title }}</h3>{% endif %} 
+
+                  <div class="new-hero-n-wrap">
+                    <div class="new-hero-n-wrap-icon">
+                      <img
+                          alt="{{ block.settings.title }}"
+                          src="{{ block.settings.inner-image | img_url: '1024x' }}" />
+                    </div>
+
+                    <div style="float: left;">
+                      {% if block.settings.inner-image != blank %}
+                        <h3 class="range-titles">{{ block.settings.title }}</h3>
+                      {% endif %}
+                      {{ block.settings.subtext }}
+                    </div>
+                    <br clear="all">
+                    
+                  </div>
+
+                  <a href="#scrollDown{{ block.id }}" class="hero__scroll"><i class="fal fa-angle-down"></i></a>
+                </div>
+
+      {% else %}
+
+                <div class="page-width">
+                  {% if block.settings.inner-image == blank %}<h3>{{ block.settings.title }}</h3>{% endif %} 
+                  {% if block.settings.inner-image != blank %}
+                  <div class="grid">
+                
+                    <div class="grid__item medium-up--one-twelfth small--one-quarter inner-image">
+                      <img
+                          alt="{{ block.settings.title }}"
+                          src="{{ block.settings.inner-image | img_url: 'x150' }}"
+                          data-src="{{ block.settings.inner-image | img_url: 'x150' }}"
+                          class="lazyload blur-up" />
+                    </div>
+                    {% endif %}
+                  <div class="{% if block.settings.inner-image != blank %}grid__item medium-up--four-fifths small--one-half {% endif %} text">
+                    {% if block.settings.inner-image != blank %} <h3>{{ block.settings.title }}</h3>{% endif %} 
+                    <h3 style="color:white;">{{ block.settings.text }}</h3>
+                    {{ block.settings.subtext }}
+                  </div>
+                {% if block.settings.inner-image != blank %}  </div> {% endif %}
+                    <!--a href="/collections" class="btn popup-hide" data-featherlight="/ #planWrapper">Start Building my plan now!</a-->
+                  <a href="#scrollDown{{ block.id }}" class="hero__scroll"><i class="fal fa-angle-down"></i></a>
+                </div>
+
+
+      {% endif %}
+
+
+
+
+
+    </div>
+  
+ 	
+    
+    <img
+	alt="{{ block.settings.title }}"
+	src="{{ block.settings.image | img_url: 'x1850' }}"
+	data-src="{{ block.settings.image | img_url: 'x1850' }}"
+	class="background-image lazyload blur-up img-desk" 
+    style="object-position: {{ block.settings.bg_position }};"
+         />
+  
+  
+    <img
+      alt="{{ block.settings.title }}"
+      src="{{ block.settings.image | img_url: 'x1850' }}"
+      data-src="
+                {% if block.settings.mobileimage %}
+                	{{ block.settings.mobileimage | img_url: 'x1850' }}
+                {% else %}
+                	{{ block.settings.image | img_url: 'x1850' }}
+                {% endif %}
+                "
+      class="background-image lazyload blur-up img-mobile" 
+      style="object-position: {{ block.settings.bg_position }};"
+           />
+
+</section>
+
+ {% if template == "collection.swole" or template == "collection.active" or template == "collection.lowcarb" %}
+    <div class="hero-build-cta">
+      <p>
+        <span>Build my meal pack now!</span>
+        <a href="/colletions" class="btn" data-featherlight="/ #planWrapper">Get started</a>
+      </p>
+    </div>
+  {% endif %}
+
+
+<div id="scrollDown{{ block.id }}"></div>
+{% endif %}

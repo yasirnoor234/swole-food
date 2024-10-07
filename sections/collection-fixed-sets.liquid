@@ -1,0 +1,111 @@
+{{ 'customize.css' | asset_url | stylesheet_tag }}
+{{ 'custom.css' | asset_url | stylesheet_tag }}
+{{ 'styles.css' | asset_url | stylesheet_tag }}
+
+{% if collection.handle == 'fixed-sets' %}
+<div class="fixed-sets">
+  <div class="banner_collection banner_des" style="background-image: url('{{section.settings.bg-img | img_url:''}}');">
+    <div class="content">
+      <h1 style="padding-top:0;">{{section.settings.titlebanner}}</h1>
+      <p>{{section.settings.subtitle-banner}}</p>
+    </div>
+  </div>
+  <div class="banner_collection banner_mb" style="background-image: url('{{section.settings.bg_mb | img_url:''}}');">
+    <div class="content">
+      <span style="padding-top:0;">{{section.settings.titlebanner}}</span>
+      <p>{{section.settings.subtitle-banner}}</p>
+    </div>
+  </div>
+  <div class="page-width">
+  	<h2>{{section.settings.title}}</h2>
+    <div class="list_set_meals">
+      <div class="list">
+        {%- assign collection = collections[section.settings.collection] -%}
+        {% for product in collection.products %}
+        <div class="meal_item">
+          <div class="meal_content">
+            <div class="img">
+              <img
+               alt="{{ product.featured_image.alt | escape }}"
+               src="{{ product | img_url: ''  }}"
+               data-src="{{ product | img_url: '' }}"
+               class="lazyload blur-up" />
+            </div>
+            <div class="meta">
+              <h4 class="custom-focus"><a href="{{ product.url | within: collection }}">{{ product.title }}</a></h4>
+              
+              <div class="content">
+                {{ product.description | split: '<h3>Meals</h3>' | first | strip_html | truncatewords: 20 }}
+              </div>
+              <p class="price">{{ product.price | money}}</p>
+              <a href="{{ product.url | within: collection }}" class="btn">Get Started</a>
+              
+                {% for tag in product.tags %}
+                  {% if tag contains 'Meals_' %}
+              		<div class="per_day">
+                      {{ tag | split: 'Meals_' | last | split: 'Meals'}}<p>MEALS</p>
+                    </div>
+                  {% endif %}
+                {% endfor %}
+              
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+
+    </div>
+  </div>
+</div>
+{% endif %}
+{% schema %}
+  {
+    "name": "Content",
+    "settings": [
+	{
+      "content": "Banner",
+      "type":"header"
+    },
+	{
+      "id": "bg-img",
+      "type":"image_picker",
+      "label": "Background Banner"
+    },
+	{
+      "type": "image_picker",
+      "id": "bg_mb",
+      "label": "Background Mobile Banner"
+    },
+	{
+      "id": "titlebanner",
+      "type":"text",
+      "label": "Title Banner"
+    },
+	{
+      "id": "subtitle-banner",
+      "type":"text",
+      "label": "Sub Title Banner"
+    },
+	{
+      "content": "Collection Product",
+      "type":"header"
+    },
+	{
+      "id": "title",
+      "type":"text",
+      "label": "Title"
+    },
+	{
+      "id": "collection",
+      "type":"collection",
+      "label": "Select collection"
+    }
+]
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

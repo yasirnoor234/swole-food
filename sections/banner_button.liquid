@@ -1,0 +1,66 @@
+<div class="banner_button" style="background-image: url('{{section.settings.bg | img_url:''}}');">
+  <div class="page-width">
+    <h3 class="title_ge">{{section.settings.title}}</h3>
+    <h2 class="title_ge">{{section.settings.title2}}</h2>
+    {% if section.settings.btn != blank %}
+    <a href="{{section.settings.link}}" class="btn_ge btn_large btn_blue">{{section.settings.btn}}</a>
+    {% endif %}
+    {% if section.settings.btn2 != blank %}
+    <a href="{{section.settings.link2}}" class="btn_ge btn_large btn_orange">{{section.settings.btn2}}</a>
+    {% endif %}
+  </div>  
+</div>
+{% schema %}
+  {
+    "name": "Banner Button",
+    "settings": [
+{
+      "type": "image_picker",
+      "id": "bg",
+      "label": "Background Image"
+    },
+	{
+      "type": "text",
+      "id": "title",
+      "label": "Title"
+    },
+	{
+      "type": "text",
+      "id": "title2",
+      "label": "Title 2"
+    },	
+	{
+      "type": "text",
+      "id": "btn",
+      "label": "Button text 1"
+    },
+	{
+      "type": "text",
+      "id": "link",
+      "label": "Button Link 1"
+    },	
+	{
+      "type": "text",
+      "id": "btn2",
+      "label": "Button text 2"
+    },
+	{
+      "type": "text",
+      "id": "link2",
+      "label": "Button Link 2"
+    }
+],
+  "presets": [
+    {
+      "name": "Banner Button",
+      "category": "Image"
+    }
+]
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

@@ -1,0 +1,523 @@
+<div class="list_other_products check1234">
+    <div class="container">
+      <h2>{{product.title}}</h2>
+      {% assign subtitle = product.description | split: '<h3>Meals</h3>' | first | split: "</h4>" | last %}
+      <div class="subtitle">{{subtitle}}</div>
+      <div class="row">
+        {% assign current_product = product.handle %}
+        {% for block in section.blocks %}
+        {% assign product_cur = block.settings.product %}
+        {% assign slug = block.settings.slug %}
+        {% if current_product == product_cur or current_product == slug %}
+        {%for i in (1..20)%}
+        {% capture product %}product{{ i }}{% endcapture %}
+        {% capture qty %}qty{{ i }}{% endcapture %}
+        {% assign product_item = block.settings[product] %}
+        {% if product_item != blank %}
+        <div class="col-md-3 col-sm-4 col-xs-6 col">
+          <div class="product_item product-block product-custom-{{ all_products[product_item].id }}">
+
+              <div class="image-container image-wrapper">
+                <img src="{{ all_products[product_item].featured_image | img_url: ''}}" alt="{{ all_products[product_item].title}}" class="img" />
+                <div class="image-container--overlay">
+                  <div class="overlay-icon">
+                    <img src="{{ 'zoom.svg' | asset_url }}">
+                  </div>
+                </div>
+                {% assign swole_nutrition = all_products[product_item].metafields.c_f.swole_nutrition | split: ", " %}
+                {% assign active_nutrition = all_products[product_item].metafields.c_f.active_nutrition | split: ", " %}
+                {% assign low_carb_nutrition = all_products[product_item].metafields.c_f.low_carb_nutrition | split: ", " %}
+                <div class="nutrition nutrition--swole" id="nurition_swole{{ all_products[product_item].id }}">
+                  <div class="title">Swole nutrition 450g</div>
+                  <ul>
+                    {% for item in swole_nutrition %}
+                    <li>{{ item | replace: ': ','<br>' }}</li>
+                    {% endfor %}
+                  </ul>
+                </div>
+                <div class="nutrition nutrition--active" id="nurition_active{{ all_products[product_item].id }}">
+                  <div class="title">Active nutrition 350g</div>
+                  <ul>
+                    {% for item in active_nutrition %}
+                    <li>{{ item | replace: ': ','<br>' }}</li>
+                    {% endfor %}
+                  </ul>
+                </div>
+                <div class="nutrition nutrition--low_carb" id="nurition_low-carb{{ all_products[product_item].id }}">
+                  <div class="title">Low Carb nutrition 300g</div>
+                  <ul>
+                    {% for item in low_carb_nutrition %}
+                    <li>{{ item | replace: ': ','<br>' }}</li>
+                    {% endfor %}
+                  </ul>
+                </div>
+              </div>
+              <div class="meta bottom">
+                <h4><a class="product_more" href="javascript:void(0)">{{ all_products[product_item].title}}</a></h4>
+                <span class="shopify-product-reviews-badge" data-id="{{ all_products[product_item].id }}"></span>
+                
+                <ul class="order-buttons" style="margin-top:30px;">
+                  {% for variant in all_products[product_item].variants %}
+                  {% assign variant_title = variant.title | handleize %}
+                  {% endfor %}
+                  {% if all_products[product_item].variants.size > 0 and variant_title != 'default-title' %}
+                  {% for variant in all_products[product_item].variants %}
+                  {%- assign available = false -%}
+
+                  {% if variant.inventory_quantity > 0 %}
+                  {%- assign available = true -%}
+                  {% endif %}
+                  {% assign variant_title = variant.title | handleize %}
+                  {% if variant_title != 'default-title' %}
+                  <li class="order-variant variant--{{ variant.title | handleize }}" data-id="nurition_{{ variant.title | handleize }}{{ all_products[product_item].id }}">
+                    <div class="variant-title {% if available == false %}variantTextDisable{% endif %}" id="{{ variant.id }}-title-variant"><strong>{{ variant.title }}</strong></div>
+                    <div class="variant-price {% if available == false %}variantTextDisable{% endif %}">{{ variant.price | money }}</div>
+
+                  </li>
+                  {% endif %}
+                  {% endfor %}
+                  {% else %}
+                  {{product.price | money}}
+                  {% endif %}
+                </ul>
+                
+              </div>
+
+            <span class="qty">{{ block.settings[qty] }}</span>
+            <div class="popup_product featherlight-inner" data-id="{{ all_products[product_item].id }}">
+              <span class="close">✕</span>
+              <div class="popup_content">
+
+                <div class="product-page">
+                  <div class="grid grid--stretch-align">
+                    <div class="grid__item large-up--one-half product__slider-wrapper">
+                      <div class="product__slider fixed-element slider--{{ all_products[product_item].id }}">
+                        {% for image in  all_products[product_item].images %}
+                        <div class="slide">
+                          <img
+                               alt="{{ image.alt | escape  }}"
+                               src="{{ image.src | img_url: '50x50', crop: 'center'  }}"
+                               data-src="{{ image.src  | img_url: '700x700', crop: 'center' }}"
+                               class="lazyload blur-up" />
+                        </div>
+                        {% endfor %}
+                      </div>
+                    </div>
+                    <div class="grid__item large-up--one-half">
+                      <div class="product__info">
+                        <div class="product__header">
+                            <h1>{{ all_products[product_item].title }}</h1>
+                        </div>
+
+                        <div class="product__description">
+
+                        {% if all_products[product_item].description contains '<h6>'%}
+                        <div id="accordion-container"> 
+
+                          {% assign ind = 0 %}
+
+                          {% assign description_parts = all_products[product_item].description | split: "<h6" %}
+                          {% assign product_info = description_parts | first %}
+
+                          {% if product_info contains '<p>' %}
+                          {{ product_info }}
+                          {% else %}
+                          <p>{{ product_info }}</p> 
+                          {% endif %}
+
+                          {% for part in description_parts %}
+                          {% if part contains "</h6>" %}
+                          {% assign remove = part | split: ">" | first | append: ">" %}
+                          <div class="accordion-header" >{{ part | split: "</h6>" | first | strip_html | replace: remove, "" }}<i class="fal fa-angle-down"></i></div>
+                          <div class="accordion-content">{{ part | split: "</h6>" | last | replace: "<div", "<span" | replace: "</div", "</span" }}</div> 
+                          {%comment%}<div class="accordion-content"{% if ind == 1 %}style="display: block;"{% endif %}>{{ part | split: "</h6>" | last | replace: "<div", "<span" | replace: "</div", "</span" }}</div> {%endcomment%}
+                          <hr/>
+                          {% endif %}
+                          {% assign ind = ind | plus: 1 %}
+                          {% endfor %}
+
+
+                        </div>
+                        {% else %}
+                          {{ all_products[product_item].description }}
+                        {% endif %}
+						{%- comment -%}
+                        {% section 'product-note' %}
+                         Change on May 03, 2020 by Bekka F. at Shopify {%- endcomment -%} 
+                        <div id="shopify-product-reviews" data-id="{{all_products[product_item].id}}">{{ all_products[product_item].metafields.spr.reviews }}</div>
+                      </div>
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+              <script>
+                
+                var $jq = jQuery.noConflict();
+                $jq('.slider--{{ all_products[product_item].id }}').slick({
+                    draggable:true,
+                    arrows:false,
+                    autoplay:true,
+                    autoplaySpeed: 2000,
+                    centerMode:false,
+                    infinite: true,
+                    slidesToShow: 1,
+                    slidesToScroll: 1,
+                    variableWidth:false,
+                    dots:true,
+                    swipeToSlide:false
+
+                    });
+
+				$('.product-custom-{{ all_products[product_item].id }} .image-container--overlay').on('click',function(){
+                  var obj = $(this);
+                  setTimeout(function(){
+                		obj.parents('.product_item').find('.product__slider').get(0).slick.setPosition();
+                  }, 500);
+                  
+                
+                });
+
+
+                // The Accordion Effect
+                $('.product-custom-{{ all_products[product_item].id }} .accordion-header').on('click',function () {
+                    if($(this).hasClass('inactive-header')) {
+                      $(this).removeClass('inactive-header');
+                      $(this).next().removeClass('open-content');
+
+                    }else {
+                      $(this).addClass('inactive-header');
+                      $(this).next().addClass('open-content');
+
+                    }
+                });
+                
+
+              </script>
+          </div>
+      </div>
+      {% endif %}	
+      {% endfor %}
+      {% endif %}
+
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+  {
+    "name": "List other products",
+    "settings": [
+	
+],
+"blocks" : [
+    {
+    "type": "Product",
+    "name": "Product item",
+    "settings": [
+        
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Select Product For List Product"
+        },
+		{
+          "type": "text",
+          "id": "slug",
+          "label": "Enter Slug Product For List Product"
+        },
+		{
+          "type": "header",
+          "content": "Product 1"
+        },
+		{
+          "type": "product",
+          "id": "product1",
+          "label": "Product"
+        },
+        {
+          "type": "text",
+          "id": "qty1",
+          "label": "Quantity"
+        },
+		{
+          "type": "header",
+          "content": "Product 2"
+        },
+		{
+          "type": "product",
+          "id": "product2",
+          "label": "Product"
+        },
+        {
+          "type": "text",
+          "id": "qty2",
+          "label": "Quantity"
+        },
+		{
+          "type": "header",
+          "content": "Product 3"
+        },
+		{
+          "type": "product",
+          "id": "product3",
+          "label": "Product"
+        },
+        {
+          "type": "text",
+          "id": "qty3",
+          "label": "Quantity"
+        },
+		{
+          "type": "header",
+          "content": "Product 4"
+        },
+		{
+          "type": "product",
+          "id": "product4",
+          "label": "Product"
+        },
+        {
+          "type": "text",
+          "id": "qty4",
+          "label": "Quantity"
+        },
+		{
+          "type": "header",
+          "content": "Product 5"
+        },
+		{
+          "type": "product",
+          "id": "product5",
+          "label": "Product"
+        },
+        {
+          "type": "text",
+          "id": "qty5",
+          "label": "Quantity"
+        },
+		{
+          "type": "header",
+          "content": "Product 6"
+        },
+		{
+          "type": "product",
+          "id": "product6",
+          "label": "Product"
+        },
+        {
+          "type": "text",
+          "id": "qty6",
+          "label": "Quantity"
+        },
+		{
+          "type": "header",
+          "content": "Product 7"
+        },
+		{
+          "type": "product",
+          "id": "product7",
+          "label": "Product"
+        },
+        {
+          "type": "text",
+          "id": "qty7",
+          "label": "Quantity"
+        },
+		{
+          "type": "header",
+          "content": "Product 8"
+        },
+		{
+          "type": "product",
+          "id": "product8",
+          "label": "Product"
+        },
+        {
+          "type": "text",
+          "id": "qty8",
+          "label": "Quantity"
+        },
+		{
+          "type": "header",
+          "content": "Product 9"
+        },
+		{
+          "type": "product",
+          "id": "product9",
+          "label": "Product"
+        },
+        {
+          "type": "text",
+          "id": "qty9",
+          "label": "Quantity"
+        },
+		{
+          "type": "header",
+          "content": "Product 10"
+        },
+		{
+          "type": "product",
+          "id": "product10",
+          "label": "Product"
+        },
+        {
+          "type": "text",
+          "id": "qty10",
+          "label": "Quantity"
+        },
+		{
+          "type": "header",
+          "content": "Product 11"
+        },
+		{
+          "type": "product",
+          "id": "product11",
+          "label": "Product"
+        },
+        {
+          "type": "text",
+          "id": "qty11",
+          "label": "Quantity"
+        },
+		{
+          "type": "header",
+          "content": "Product 12"
+        },
+		{
+          "type": "product",
+          "id": "product12",
+          "label": "Product"
+        },
+        {
+          "type": "text",
+          "id": "qty12",
+          "label": "Quantity"
+        },
+		{
+          "type": "header",
+          "content": "Product 13"
+        },
+		{
+          "type": "product",
+          "id": "product13",
+          "label": "Product"
+        },
+        {
+          "type": "text",
+          "id": "qty13",
+          "label": "Quantity"
+        },
+		{
+          "type": "header",
+          "content": "Product 14"
+        },
+		{
+          "type": "product",
+          "id": "product14",
+          "label": "Product"
+        },
+        {
+          "type": "text",
+          "id": "qty14",
+          "label": "Quantity"
+        },
+		{
+          "type": "header",
+          "content": "Product 15"
+        },
+		{
+          "type": "product",
+          "id": "product15",
+          "label": "Product"
+        },
+        {
+          "type": "text",
+          "id": "qty15",
+          "label": "Quantity"
+        },
+		{
+          "type": "header",
+          "content": "Product 16"
+        },
+		{
+          "type": "product",
+          "id": "product16",
+          "label": "Product"
+        },
+        {
+          "type": "text",
+          "id": "qty16",
+          "label": "Quantity"
+        },
+		{
+          "type": "header",
+          "content": "Product 17"
+        },
+		{
+          "type": "product",
+          "id": "product17",
+          "label": "Product"
+        },
+        {
+          "type": "text",
+          "id": "qty17",
+          "label": "Quantity"
+        },
+		{
+          "type": "header",
+          "content": "Product 18"
+        },
+		{
+          "type": "product",
+          "id": "product18",
+          "label": "Product"
+        },
+        {
+          "type": "text",
+          "id": "qty18",
+          "label": "Quantity"
+        },
+		{
+          "type": "header",
+          "content": "Product 19"
+        },
+		{
+          "type": "product",
+          "id": "product19",
+          "label": "Product"
+        },
+        {
+          "type": "text",
+          "id": "qty19",
+          "label": "Quantity"
+        },
+		{
+          "type": "header",
+          "content": "Product 20"
+        },
+		{
+          "type": "product",
+          "id": "product20",
+          "label": "Product"
+        },
+        {
+          "type": "text",
+          "id": "qt20",
+          "label": "Quantity"
+        }
+    ]
+   }
+]
+	     
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

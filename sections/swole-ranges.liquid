@@ -1,0 +1,505 @@
+{% for block in section.blocks %}
+{% if block.type == 'hero' %}
+<div class="banner_collection section_bgimg nutri_section" style="background-image: url({{block.settings.bg | img_url: '' }});">
+   <div class="page-width"> 
+  	<div class="content">
+      <h3>{{block.settings.title}}</h3>
+      <div class="text">{{block.settings.content}}</div>
+    </div>
+  </div>
+</div>
+{% endif %}
+{% if block.type == 'bar' %}
+	<div class="nutrition_bar" style="background-color:{{block.settings.bg}};">
+     <div class="nutri-container"> 
+      <div class="bar_content">
+        <img class="icon_bar" src="{{ block.settings.icon_nutri | img_url: ''  }}" alt="Icon" class="lazyload blur-up">
+        <div class="average_value">
+          <p>{{block.settings.cal}} <span style="color: #20BEFC;">CAL</span></p>
+          <p>{{block.settings.pro}} <span style="color: #20BEFC;">P</span></p>
+          <p>{{block.settings.car}} <span style="color: #20BEFC;">C</span></p>
+          <p>{{block.settings.fat}} <span style="color: #20BEFC;">F</span></p>
+        </div>
+        <div class="text">{{block.settings.content}}</div>
+      </div>
+    </div>
+</div>
+{% endif %}
+{% if block.type == 'text' %}
+<div class="how-it-work text-center py-80" style="background-color:{{block.settings.bg}};">
+  <div class="page-width">
+    <h3 class="title_ge">{{block.settings.title}}</h3>
+    <div class="content center">{{block.settings.content}}</div>
+  </div>
+</div>
+{% endif %}
+{% if block.type == 'image-text' %}
+<div class="feature-image-new {% if block.settings.layout == 'right' %}img-right{%endif%}" style="background-color:{{block.settings.bg}};">
+  <div class="page-width">
+    
+    <div class="featurerow {% if block.settings.imgright %}featurerow_image_right{% endif %}">
+      
+      
+      
+      <div class="feature-row__item feature-row__img">
+		<div class="feature-row__image-wrapper js">       
+          <div class="img">
+            <img class="feature-row__image" src="{{ block.settings.image | img_url: ''  }}" alt="{{ block.settings.title | escape }}" class="lazyload blur-up">
+          </div>
+        </div>
+      </div>
+      <div class="feature-row__item feature-row__text feature-row__text--{{ block.settings.layout }}">
+        {% if block.settings.text != blank %}<h4>{{ block.settings.text }}</h4>{% endif %}
+        {% if block.settings.title != blank %}
+        <h3 class="title_ge">{{ block.settings.title }}</h3>
+        {% endif %}
+          
+        {% if block.settings.content != blank %}
+        <div class="rte rte-setting featured-row__subtext">{{ block.settings.content }}</div>
+        {% endif %}
+         
+      </div>
+      
+      
+    </div>
+    
+  </div>
+</div>
+{% endif %}
+{% if block.type == 'products' %}
+<section class="section__block-products ">
+
+  <div class="page-width">
+    	<h3 class="title_ge">{{ block.settings.title }}</h3>
+    <div class="row">
+      {%for i in (1..4)%}
+      {% capture products %}product{{ i }}{% endcapture %}
+      <div class="productitem product_item col-md-3" id="product_modal">
+   		{% assign product = block.settings[products] %}
+        {% include 'product-item'  with 'view'%}
+        {% include 'product-popup'  with 'view'%}
+      </div>
+      {% endfor %}
+    </div>
+    <div class="button-wrapper text-center">
+      <a href="{{block.settings.btn_link}}" class="btn" style="background-color:{{block.settings.btn_color}};">{{block.settings.btn}}</a>
+    </div>
+  </div>
+</section>
+{% endif %}
+{% if block.type == 'parallax' %}
+<div class="parallax_section py-80 section_bgimg" style="background-image: url({{block.settings.bg | img_url: '' }});">
+  <div class="page-width">
+    <div class="content text-center">
+      {% if block.settings.title != blank %}
+      <h3 class="title_ge">{{ block.settings.title }}</h3>
+      {% endif %}
+      
+      {% if block.settings.content != blank %}
+      <div class="text">{{block.settings.content}}</div>
+      {% endif %}
+      <a href="{{block.settings.btn_link}}" class="btn" style="background-color:{{block.settings.btn_color}};">{{block.settings.btn}}</a>
+    </div>
+  </div>
+</div>
+{% endif %}
+{% if block.type == 'blog' %}
+<div class="listpost py-80">
+  <div class="page-width">
+    {% if block.settings.subtitle != blank %}
+    <h4 class="subtitle">{{ block.settings.subtitle }}</h4>
+    {% endif %}
+    {% if block.settings.title != blank %}
+    <h3 class="title_ge">{{ block.settings.title }}</h3>
+    {% endif %}
+    <div class="row">
+      
+      {% assign blog_handles = "blog,news,recipes" | split: "," %}
+
+      {% for handle1 in blog_handles %}
+
+        {% for article in blogs[handle1].articles %}
+      		{% assign handle2 = article.handle | split: '/' | last %}
+      		{%for i in (1..4)%}
+      			{% capture blogs %}blog{{ i }}{% endcapture %}
+      			{% assign blogdetail = block.settings[blogs] | split: '/' | last %}
+      			{% if handle2 == blogdetail %}
+      				<div class="col-md-3 col-sm-4 col-xs-12 blog-item">
+                      <div class="blog-content">
+                        <div class="section-post-media">
+                          <a href="{{ article.url }}" class="img">
+                            <img src="{{ article.image.src | img_url: 'original' }}" alt="">
+                          </a>
+                        </div>
+                        <div class="section-post-body">
+                          <div class="section-post-time">
+                            {{ article.published_at | time_tag: format: 'month_day_year' }}
+                            {% for tag in article.tags %}
+                              {% assign handle = tag | handle %}
+                              {% if handle == 'diet' %}
+                                {% assign color = 'bg-red' %}
+                              {% elsif handle == 'sleep' %}
+                                {% assign color = 'orange' %}
+                              {% elsif handle == 'lifestyle' %}
+                                {% assign color = 'black' %}
+                              {% elsif handle == 'carbohydrates' %}
+                                {% assign color = 'pink' %}
+                              {% elsif handle == 'exercise' %}
+                                {% assign color = 'green' %} 
+                              {% elsif handle == 'motivation' %}
+                                {% assign color = 'gray' %} 
+                              {% elsif handle == 'nutrition' %}
+                                {% assign color = 'blue' %} 
+                              {% elsif handle == 'protein' %}
+                                {% assign color = 'yellow' %} 
+                              {% elsif handle == 'snacking' %}
+                                {% assign color = 'violet' %} 
+                              {% elsif handle == 'superfoods' %}
+                                {% assign color = 'greendark' %} 
+                              {% else %}
+                                {% assign color = 'brown' %} 
+                              {% endif %}
+                            <a href="/blogs/{{ section.settings.display_blog }}/tagged/{{ tag | handle }}" class="tag color-{{color}}">{{ tag }}</a>{% unless forloop.last %}<span>,</span>{% endunless %}
+                            {% endfor %}
+                          </div>
+
+                          <h4 class="section-post-title">
+                            <a href="{{ article.url }}" title="{{ article.title }}">{{ article.title }}</a>
+                          </h4>
+
+                          <p class="section-post-excerpt">{{ article.content | strip_html | truncate: 150 }}</p>
+
+
+                        </div>
+                      </div>
+                    </div>
+      			{% endif %}
+      		{% endfor %}
+      	{% endfor %}
+      {% endfor %}
+      
+      
+    </div>
+    <div class="button-wrapper text-center">
+    <a href="{{block.settings.btn_link}}" class="btn" style="background-color:{{block.settings.btn_color}};">{{block.settings.btn}}</a>
+    </div>
+  </div>
+</div>
+{% endif %}
+{% endfor %}
+<script>
+//   var fixmeTop = $('.nutrition_bar').offset().top;
+//   console.log(fixmeTop);
+//   if($(window).width() > 991) {
+//      $(window).scroll(function() {
+//     var currentScroll = $(window).scrollTop();
+//     if (currentScroll >= fixmeTop) {
+//       $('.nutrition_bar').addClass('fixed');
+//     } else {
+//       $('.nutrition_bar').removeClass('fixed');
+//     }
+//   });
+     }
+</script>
+{% schema %}
+  {
+    "name": "Content",
+    "settings": [
+	
+	
+
+],
+"blocks" : [
+		{
+			"name": "Hero",
+			"type": "hero",
+			"settings": [
+				{ 
+                  "type": "text",
+                  "id": "title",
+                  "label": "Title"
+                },
+                { 
+                  "type": "richtext",
+                  "id": "content",
+                  "label": "Content"
+                },
+				{ 
+                  "type": "image_picker",
+                  "id": "bg",
+                  "label": "Background Banner"
+                }
+			]
+
+		},
+		{
+			"name": "Nutritional Infor Bar",
+			"type": "bar",
+			"settings": [
+				{ 
+                  "type": "image_picker",
+                  "id": "icon_nutri",
+                  "label": "Icon Nutritional"
+                },
+				{ 
+                  "type": "number",
+                  "id": "cal",
+                  "label": "Calorie  Value",
+				  "default": 0
+                },
+                { 
+                  "type": "number",
+                  "id": "pro",
+                  "label": "Protein Value",
+				  "default": 0
+                },
+				{ 
+                  "type": "number",
+                  "id": "car",
+                  "label": "Carbohydrates ",
+				  "default": 0
+                },
+				{ 
+                  "type": "number",
+                  "id": "fat",
+                  "label": "Fat Value",
+                  "default": 0
+                },
+				{ 
+                  "type": "richtext",
+                  "id": "content",
+                  "label": "Note"
+                },
+				{ 
+                  "type": "color",
+                  "id": "bg",
+                  "label": "Background Color"
+                }
+				
+			]
+
+		},
+		{
+			"name": "Text",
+			"type": "text",
+			"settings": [
+				{ 
+                  "type": "text",
+                  "id": "title",
+                  "label": "Title"
+                },
+                { 
+                  "type": "richtext",
+                  "id": "content",
+                  "label": "Content"
+                },
+				{ 
+                  "type": "color",
+                  "id": "bg",
+                  "label": "Background Color"
+                }
+			]
+
+		},
+		{
+			"name": "Parallax section",
+			"type": "parallax",
+			"settings": [
+				{ 
+                  "type": "text",
+                  "id": "title",
+                  "label": "Title"
+                },
+                { 
+                  "type": "richtext",
+                  "id": "content",
+                  "label": "Content"
+                },
+				{ 
+                  "type": "image_picker",
+                  "id": "bg",
+                  "label": "Background Image"
+                },
+				{ 
+                   "type": "text",
+                   "id": "btn",
+                   "label": "Button text"
+                },
+                { 
+                   "type": "text",
+                   "id": "btn_link",
+                   "label": "Button url"
+                },
+                { 
+                   "type": "color",
+                   "id": "btn_color",
+                   "label": "Button color"
+                }
+			]
+
+		},
+		{
+        "type": "image-text",
+        "name": "Image and Text",
+        "settings": [
+		  { 
+            "type": "color",
+            "id": "bg",
+            "label": "Background Color",
+			"default" : "#fff"
+          },
+          { 
+             "type": "text",
+             "id": "title",
+             "label": "Title"
+          },
+          { 
+             "type": "text",
+             "id": "text",
+             "label": "Text"
+          },
+          { 
+             "type": "richtext",
+             "id": "content",
+             "label": "Content"
+          },
+          {
+            "type": "image_picker",
+            "id": "image",
+            "label": "Image"
+          },
+		  {
+            "type": "select",
+            "id": "layout",
+            "label": "Image alignment",
+            "default": "left",
+            "options": [
+              {
+                "value": "left",
+                "label": "Left"
+              },
+              {
+                "value": "right",
+                "label": "Right"
+              }
+            ]
+          }
+        ]
+      },
+	  {
+        "type": "products",
+        "name": "Products",
+        "settings": [
+          { 
+             "type": "text",
+             "id": "title",
+             "label": "Title"
+          },
+		  { 
+             "type": "header",
+             "content": "List product"
+          },
+		  { 
+             "type": "product",
+             "id": "product1",
+             "label": "Product 1"
+          },
+		  { 
+             "type": "product",
+             "id": "product2",
+             "label": "Product 2"
+          },
+		  { 
+             "type": "product",
+             "id": "product3",
+             "label": "Product 3"
+          },
+		  { 
+             "type": "product",
+             "id": "product4",
+             "label": "Product 4"
+          },
+          { 
+             "type": "text",
+             "id": "btn",
+             "label": "Button text"
+          },
+		  { 
+             "type": "text",
+             "id": "btn_link",
+             "label": "Button url"
+          },
+		  { 
+             "type": "color",
+             "id": "btn_color",
+             "label": "Button color"
+          }
+        ]
+      },
+	  {
+        "type": "blog",
+        "name": "Blogs",
+        "settings": [
+          { 
+             "type": "text",
+             "id": "title",
+             "label": "Title"
+          },
+		  { 
+             "type": "text",
+             "id": "subtitle",
+             "label": "SubTitle"
+          },
+		  { 
+             "type": "header",
+             "content": "List Blogs"
+          },
+		  { 
+             "type": "url",
+             "id": "blog1",
+             "label": "Blog 1"
+          },
+		  { 
+             "type": "url",
+             "id": "blog2",
+             "label": "Blog 2"
+          },
+		  { 
+             "type": "url",
+             "id": "blog3",
+             "label": "Blog 3"
+          },
+		  { 
+             "type": "url",
+             "id": "blog4",
+             "label": "Blog 4"
+          },
+          { 
+             "type": "text",
+             "id": "btn",
+             "label": "Button text"
+          },
+		  { 
+             "type": "text",
+             "id": "btn_link",
+             "label": "Button url"
+          },
+		  { 
+             "type": "color",
+             "id": "btn_color",
+             "label": "Button color"
+          }
+        ]
+      }
+
+
+
+	]
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

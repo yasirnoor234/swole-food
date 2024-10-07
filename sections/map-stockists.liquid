@@ -1,0 +1,145 @@
+<div class="stockists">
+  <div class="page-width">
+    <h6 class="title">{{section.settings.title}}</h6>
+    <div class="content_map">
+      {{section.settings.content}}
+      {%comment%}
+      <div class="contents">
+        <div class="search">
+          <input type="text" id="fsearch" name="fsearch">
+          <button class="icon_search"><i class="fas fa-search"></i></button>
+        </div>
+        <div class="list_map">
+
+          {% for item in section.blocks %}
+          <div class="item">
+             <i class="fas fa-map-marker-alt"></i>
+             <div class="item_content">
+               <h6>{{item.settings.titles}}</h6>
+               <p>{{item.settings.subtitle1}}</p>
+               <p>{{item.settings.subtitle2}}</p>
+               <p>{{item.settings.subtitle3}}</p>
+               <p>{{item.settings.subtitle4}}</p>
+               <p>{{item.settings.subtitle5}}</p>
+               <p>{{item.settings.subtitle6}}</p>
+               <p>{{item.settings.subtitle7}}</p>
+             </div>
+          </div>
+          {% endfor %}
+        </div>
+        <p class="copy_right">{{section.settings.copy_right}}</p>
+      </div>
+      <div class="map_wrap">
+        {{ page.content }}
+      </div>
+      {%endcomment%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Search Map",
+  "settings": [
+    {
+      "type": "text",
+      "label": "Title",
+      "id": "title"
+    },
+    {
+      "type": "text",
+      "label": "Text",
+      "id": "copy_right"
+    },
+    {
+      "type": "html",
+      "label": "Content",
+      "id": "content"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "text",
+      "name": "listMap",
+      "settings": [
+        {
+          "type": "text",
+          "label": "titles",
+          "id": "titles"
+        },
+        {
+          "type": "text",
+          "label": "subtitle1",
+          "id": "subtitle1"
+        },
+        {
+          "type": "text",
+          "label": "subtitle2",
+          "id": "subtitle2"
+        },
+        {
+          "type": "text",
+          "label": "subtitle3",
+          "id": "subtitle3"
+        },
+        {
+          "type": "text",
+          "label": "subtitle4",
+          "id": "subtitle4"
+        },
+        {
+          "type": "text",
+          "label": "subtitle5",
+          "id": "subtitle5"
+        },
+        {
+          "type": "text",
+          "label": "subtitle6",
+          "id": "subtitle6"
+        },
+        {
+          "type": "text",
+          "label": "subtitle7",
+          "id": "subtitle7"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Search Map",
+      "category": "Maps",
+      "settings": {
+        "title": "Search Map",
+        "copy_right": "© 2024 Your Company. All rights reserved.",
+        "content": "<p>Insert your map here.</p>"
+      },
+      "blocks": [
+        {
+          "type": "text",
+          "settings": {
+            "titles": "Location",
+            "subtitle1": "New York",
+            "subtitle2": "Los Angeles",
+            "subtitle3": "Chicago",
+            "subtitle4": "Houston",
+            "subtitle5": "Phoenix",
+            "subtitle6": "Philadelphia",
+            "subtitle7": "San Antonio"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
+
+
+{% stylesheet %}
+
+
+
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

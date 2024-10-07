@@ -1,0 +1,213 @@
+<div class="listpost" id="listpost">
+  <div class="page-width">
+    <h2>{{blogs[section.settings.display_blog].title}}</h2>
+    <ul>  
+      {% for tag in blogs[section.settings.display_blog].all_tags %}  
+      {% assign handle = tag | handle %}
+      {% if handle == 'diet' %}
+        {% assign bgcolor = 'red' %}
+      {% elsif handle == 'sleep' %}
+        {% assign bgcolor = 'orange' %}
+      {% elsif handle == 'training' %}
+        {% assign bgcolor = 'orange' %}
+      {% elsif handle == 'lifestyle' %}
+        {% assign bgcolor = 'red' %}
+      {% elsif handle == 'carbohydrates' %}
+        {% assign bgcolor = 'pink' %}
+      {% elsif handle == 'exercise' %}
+        {% assign bgcolor = 'gray' %} 
+      {% elsif handle == 'motivation' %}
+        {% assign bgcolor = 'blue' %} 
+      {% elsif handle == 'nutrition' %}
+        {% assign bgcolor = 'green' %} 
+      {% elsif handle == 'protein' %}
+        {% assign bgcolor = 'yellow' %} 
+      {% elsif handle == 'snacking' %}
+        {% assign bgcolor = 'violet' %} 
+      {% elsif handle == 'superfoods' %}
+        {% assign bgcolor = 'greendark' %} 
+      {% else %}
+        {% assign color = 'brown' %} 
+      {% endif %}
+      <li>
+        <a href="/blogs/{{ section.settings.display_blog }}/tagged/{{ tag | handle }}" class="bgcolor-{{bgcolor}}">{{ tag }}</a>
+      </li>
+      {%- endfor -%} 
+    </ul>
+
+    {% if current_tags %}
+        {% assign tg = current_tags.first | handleize %}
+    {% else %}
+        {% assign tg = '' %}
+    {% endif %}
+
+    <div class="row">
+      
+      {% for article in blogs[section.settings.display_blog].articles %}
+        {% if tg != '' %}
+          {% for tag in article.tags %}
+            {% assign tg2 = tag | handle %}
+
+
+              {% if tg == tg2 %}
+                <div class="col-md-3 col-sm-4 col-xs-12 blog-item">
+                  <div class="blog-content">
+                    <div class="section-post-media">
+                      <a href="{{ article.url }}" class="img">
+                        <img src="{{ article.image.src | img_url: 'original' }}" alt="">
+                      </a>
+                    </div>
+                    <div class="section-post-body">
+                      <div class="section-post-time">
+                        {{ article.published_at | time_tag: format: 'month_day_year' }}
+                        {% for tag in article.tags %}
+                          {% assign handle = tag | handle %}
+                          {% if handle == 'diet' %}
+                            {% assign color = 'bg-red' %}
+                          {% elsif handle == 'sleep' %}
+                            {% assign color = 'orange' %}
+                          {% elsif handle == 'lifestyle' %}
+                            {% assign color = 'black' %}
+                          {% elsif handle == 'carbohydrates' %}
+                            {% assign color = 'pink' %}
+                          {% elsif handle == 'exercise' %}
+                            {% assign color = 'green' %} 
+                          {% elsif handle == 'motivation' %}
+                            {% assign color = 'gray' %} 
+                          {% elsif handle == 'nutrition' %}
+                            {% assign color = 'blue' %} 
+                          {% elsif handle == 'protein' %}
+                            {% assign color = 'yellow' %} 
+                          {% elsif handle == 'snacking' %}
+                            {% assign color = 'violet' %} 
+                          {% elsif handle == 'superfoods' %}
+                            {% assign color = 'greendark' %} 
+                          {% else %}
+                            {% assign color = 'brown' %} 
+                          {% endif %}
+                        <a href="/blogs/{{ section.settings.display_blog }}/tagged/{{ tag | handle }}" class="tag color-{{color}}">{{ tag }}</a>{% unless forloop.last %}<span>,</span>{% endunless %}
+                        {% endfor %}
+                      </div>
+
+                      <h4 class="section-post-title">
+                        <a href="{{ article.url }}" title="{{ article.title }}">{{ article.title }}</a>
+                      </h4>
+
+                      <p class="section-post-excerpt">{{ article.content | strip_html | truncate: 150 }}</p>
+
+
+                    </div>
+                  </div>
+                </div>
+            {% endif %}
+          {% endfor %}
+        {% else %}
+          <div class="col-md-3 col-sm-4 col-xs-12 blog-item">
+                <div class="blog-content">
+                  <div class="section-post-media">
+                    <a href="{{ article.url }}" class="img">
+                      <img src="{{ article.image.src | img_url: 'original' }}" alt="">
+                    </a>
+                  </div>
+                  <div class="section-post-body">
+                    <div class="section-post-time">
+                      {{ article.published_at | date: "%B %d, %Y" }}
+                      {% for tag in article.tags %}
+                        {% assign handle = tag | handle %}
+                        {% if handle == 'diet' %}
+                          {% assign color = 'bg-red' %}
+                        {% elsif handle == 'sleep' %}
+                          {% assign color = 'orange' %}
+                        {% elsif handle == 'lifestyle' %}
+                          {% assign color = 'black' %}
+                        {% elsif handle == 'carbohydrates' %}
+                          {% assign color = 'pink' %}
+                        {% elsif handle == 'exercise' %}
+                          {% assign color = 'green' %} 
+                        {% elsif handle == 'motivation' %}
+                          {% assign color = 'gray' %} 
+                        {% elsif handle == 'nutrition' %}
+                          {% assign color = 'blue' %} 
+                        {% elsif handle == 'protein' %}
+                          {% assign color = 'yellow' %} 
+                        {% elsif handle == 'snacking' %}
+                          {% assign color = 'violet' %} 
+                        {% elsif handle == 'superfoods' %}
+                          {% assign color = 'greendark' %} 
+                        {% else %}
+                          {% assign color = 'brown' %} 
+                        {% endif %}
+                      <a href="/blogs/{{ section.settings.display_blog }}/tagged/{{ tag | handle }}" class="tag color-{{color}}">{{ tag }}</a>{% unless forloop.last %}<span>,</span>{% endunless %}
+                      {% endfor %}
+                    </div>
+
+                    <h4 class="section-post-title">
+                      <a href="{{ article.url }}" title="{{ article.title }}">{{ article.title }}</a>
+                    </h4>
+
+                    <p class="section-post-excerpt">{{ article.content | strip_html | truncate: 150 }}</p>
+
+
+                  </div>
+                </div>
+              </div>
+        {% endif %}
+
+      {% endfor %}
+     
+    </div>
+  </div>
+</div>
+<div class="banner_bottom bgimg" style="background-image: url('{{section.settings.bg_banner | img_url:''}}');">
+  <div class="page-width">
+    <div class="content">
+      <h2>{{section.settings.title_banner}}</h2>
+      <p>{{section.settings.subtitle_banner}}</p>
+      <a href="{{section.settings.link_banner}}" class="btn_ge btn_large btn_orange">Get Started</a>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+  {
+    "name": "List blog post",
+    "settings": [
+	  {
+        "id": "title",
+        "type": "text",
+        "label": "Title Blog"
+      },
+      {
+        "id": "display_blog",
+        "type": "blog",
+        "label": "Display Blog"
+      },
+	  { 
+        "type": "image_picker",
+        "id": "bg_banner",
+        "label": "Backround Banner"
+      },
+      { 
+        "type": "text",
+        "id": "title_banner",
+        "label": "Title Banner"
+      },
+	  { 
+        "type": "text",
+        "id": "subtitle_banner",
+        "label": "Subtitle"
+      },
+      { 
+        "type": "text",
+        "id": "link_banner",
+        "label": "Button Link"
+      }
+]
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

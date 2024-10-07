@@ -1,0 +1,49 @@
+{% if block.type == 'image-text' %}
+<section class="section__block-image-text block-image-text section--grey" id="{{ block.id }}" style="padding: 0;">
+
+  <div class="">
+    <div class="grid grid--align {% cycle '','grid--reverse' %} grid-no-gutter">
+      <div class="grid__item medium-up--one-half image" >
+        <div class="image-wrapper">
+          <img
+               alt="{{ block.settings.title | escape }}"
+               src="{{ block.settings.image | img_url: '960x585'  }}"
+               data-src="{{ block.settings.image | img_url: '960x585', crop: 'center' }}"
+               class="lazyload blur-up" />
+        </div>
+      </div>
+
+
+      {%- comment -%}
+      <div class="grid__item medium-up--one-twelfth text">
+        &nbsp;
+      </div>
+      {%- endcomment -%}
+
+      <div class="grid__item medium-up--one-half text">
+
+
+        <div class="align-text-wrapper">
+          <div class="text__wrapper">
+            {% if block.settings.title != blank %}
+              <h3>{{ block.settings.title }}</h3>
+            {% endif %}
+            {% if block.settings.text != blank %}<div class="text">{{ block.settings.text }}</div>{% endif %}
+            {% unless block.settings.bullet-points %}
+              <div class="bulletpoints">
+                <ul>
+                  {{ block.settings.bullet-pointstext | replace: '<p>','<li>' | replace: '</p>','</li>'}}
+                </ul>
+              </div><br>
+              {% endunless %}
+          </div>
+        </div>
+
+
+
+      </div>
+
+    </div>
+  </div>
+</section>
+{% endif %}

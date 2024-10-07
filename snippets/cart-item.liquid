@@ -1,0 +1,56 @@
+<div rv-each-item="cart.items" class="sidebar-item product_group" rv-data-product="item.id" rv-data-handle="item.handle">
+
+
+  <img rv-src="item.image | productImageSize '150x150'" rv-alt="item.product_title">
+
+
+  <div class="info">
+    
+ 
+    <p class="product-title">{ item.product_title }</p>   
+    <div class="info__meta">
+      <span class="product-variant" rv-data-title="item.variant_title ">{ item.variant_title }</span>
+      <span class="item-price">{ item.price | money Currency.currentCurrency }</span>
+    </div>
+ 
+    <div class="quantity">
+      
+      <span class="check_inc"  style="display:none">{ item.properties.fixedd  }</span>
+      
+      
+      
+      <a href="#" class="plussss updateCart" rv-data-cart-update-id="item.id" rv-data-cart-quantity="item.quantity | minus 1">-</a>
+     
+      <span rv-text="item.quantity" class="number_qty"></span>
+      <a href="#" class="minuss updateCart" rv-data-cart-update-id="item.id" rv-data-cart-quantity="item.quantity | plus 1">+</a>
+    </div>
+    <a href="#" class="btn btn--small btn--tertiary cart__remove" rv-data-cart-remove="index | plus 1">&times;</a>
+  </div>
+  <div>
+
+  </div>
+  
+</div>
+<script>
+  setTimeout(function(){ 
+    $(".sidebar-item").each(function(){
+      var ttt=$(this).find(".check_inc").html();
+  //console.log(ttt);
+  if(ttt=='1'){
+    $(this).find(".plussss").hide();
+    $(this).find(".minuss").hide();
+  }else{
+  $(this).find(".plussss").show();
+    $(this).find(".minuss").show();
+  }
+    
+    
+    })
+  
+     }, 1500);
+  $(".cart__remove").click(function(){
+  setTimeout(function(){ 
+    location.reload();
+    }, 500);
+  });
+</script>

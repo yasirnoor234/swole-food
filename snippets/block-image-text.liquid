@@ -1,0 +1,32 @@
+{% if block.type == 'image-text' %}
+<section class="block-image-text">
+
+  <div class="page-width">
+    <div class="grid grid--align {% cycle '','grid--reverse' %}">
+
+      <div class="grid__item medium-up--five-twelfths image">
+        <div class="image-wrapper">
+          <img
+               alt="{{ block.settings.title | escape }}"
+               src="{{ block.settings.image | img_url: '700x700', crop: 'center'  }}"
+               data-src="{{ block.settings.image | img_url: '700x700', crop: 'center' }}"
+               class="lazyload blur-up"
+            />
+        </div>
+      </div>
+
+      <div class="grid__item medium-up--one-twelfth text">
+        &nbsp;
+      </div>
+
+      <div class="grid__item medium-up--six-twelfths text">
+        <div class="text__wrapper">
+          {% if block.settings.title != blank %}<h2>{{ block.settings.title }}</h2>{% endif %}
+          {% if block.settings.text != blank %}<div class="text">{{ block.settings.text }}</div>{% endif %}
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+{% endif %}

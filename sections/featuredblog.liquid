@@ -1,0 +1,101 @@
+<div class="lastest-news">
+  <div class="page-width">
+  	<div class="list">
+      {% assign blog_handles = "blog,news,recipes" | split: "," %}
+
+      {% for handle in blog_handles %}
+
+        {% for article in blogs[handle].articles %}
+      		{% assign handle2 = article.handle | split: '/' | last %}
+      		{% for block in section.blocks %}
+            {% assign url = block.settings.blog | split: '/' | last %}
+			{% if handle2 == url %}
+
+            
+        	<div class="blogitem">
+              <div class="post-cotent">
+                <div class="post-media">
+                  <div class="img">
+                    <img src="{{ article.image.src | img_url: 'original' }}" alt="">
+                  </div>
+                </div>
+                <div class="post-body">
+                  <div class="post-time">
+                    {{ article.published_at | time_tag: format: 'month_day_year' }}
+                    {% for tag in article.tags %}
+                    {% assign han = tag | handle %}
+                    {% if han == 'diet' %}
+                    {% assign color = 'bg-red' %}
+                    {% elsif han == 'sleep' %}
+                    {% assign color = 'orange' %}
+                    {% elsif han == 'lifestyle' %}
+                    {% assign color = 'black' %}
+                    {% elsif han == 'carbohydrates' %}
+                    {% assign color = 'pink' %}
+                    {% elsif han == 'exercise' %}
+                    {% assign color = 'green' %} 
+                    {% elsif han == 'motivation' %}
+                    {% assign color = 'gray' %} 
+                    {% elsif han == 'nutrition' %}
+                    {% assign color = 'blue' %} 
+                    {% elsif han == 'protein' %}
+                    {% assign color = 'yellow' %} 
+                    {% elsif han == 'snacking' %}
+                    {% assign color = 'violet' %} 
+                    {% elsif han == 'superfoods' %}
+                    {% assign color = 'greendark' %} 
+                    {% else %}
+                    {% assign color = 'brown' %} 
+                    {% endif %}
+                    <a href="/blogs/{{ section.settings.display_blog }}/tagged/{{ tag | handle }}" class="tag color-{{color}}">{{ tag }}</a>{% unless forloop.last %}<span>,</span>{% endunless %}
+                    {% endfor %}
+                  </div>
+
+                  <h4 class="post-title">
+                    <a href="{{ article.url }}" title="{{ article.title }}">{{ article.title }}</a>
+                  </h4>
+
+                  <p class="post-excerpt">{{ article.content | strip_html | truncate: 150 }}</p>
+
+
+                </div>
+              </div>
+            </div>
+      		{% endif %}
+      		{% endfor %}
+        {% endfor %}
+
+      {% endfor %}
+      
+	
+  </div>
+  </div>
+</div>
+{% schema %}
+  {
+    "name": "Lastest News",
+    "settings": [
+	  
+],
+"blocks": [
+      {
+        "type": "block",
+        "name": "Blog Item",
+        "settings": [
+          {
+            "type": "url",
+            "id": "blog",
+            "label": "Blog"
+          }
+		 
+        ]
+      }
+    ]
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

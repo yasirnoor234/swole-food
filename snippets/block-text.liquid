@@ -1,0 +1,73 @@
+{% if block.type == 'text' %}
+<section class="section__block-text section__block-text--{{ template }}" id="{{ block.id }}"  data-aos="fade-up" data-aos-anchor-placement="top-center">
+
+  <div class="page-width">
+
+    
+          <div class="text">
+          <h3>{{ block.settings.title }}</h3>
+
+        
+
+        {% if page.title == "About Us" %}
+
+          {% if block.settings.text_top contains '|' %}
+
+              {% assign words = block.settings.text_top | split: '|' %}
+              <div style="text-align: center">
+                <div>{{ words | first }}</div>
+                <div style="font-size: 18px;">{{ words | last }}</div>
+              </div>
+
+          {% else %}
+            <div style="text-align: center">
+              {{ block.settings.text_top }}
+            </div>
+          {% endif %}
+
+        {% else %}
+
+            {{  block.settings.text_top  }}
+
+        {% endif %}
+        
+            
+          {% if block.settings.show_icons %} 
+          
+            
+        <ul class="benefit-icons">
+          <li><img src="{% if block.settings.icon_1 == blank %}{{'benefit-shadow-1.svg' | asset_url }}{% endif %}{{ block.settings.icon_1 | img_url: '138x158' }}" alt="{{ page.title }} Benefit Icon 1"></li>
+          <li><img src="{% if block.settings.icon_2 == blank %}{{'benefit-shadow-2.svg' | asset_url }}{% endif %}{{ block.settings.icon_2 | img_url: '138x158' }}" alt="{{ page.title }} Benefit Icon 2"></li>
+          <li><img src="{% if block.settings.icon_3 == blank %}{{'benefit-shadow-3.svg' | asset_url }}{% endif %}{{ block.settings.icon_3 | img_url: '138x158'  }}" alt="{{ page.title }} Benefit Icon 3"></li>
+          <li><img src="{% if block.settings.icon_4 == blank %}{{'benefit-shadow-4.svg' | asset_url }}{% endif %}{{ block.settings.icon_4 | img_url: '138x158'  }}" alt="{{ page.title }} Benefit Icon 4"></li>
+        </ul>
+           {% endif %}
+
+            {% unless block.settings.bullet-points %}
+            <div class="bulletpoints">
+              <ul>
+              {{ block.settings.bullet-pointstext  | replace: '<p>','<li>' | replace: '</p>','</li>'}}
+              </ul>
+            </div><br>
+            {% endunless %}
+            {% unless block.settings.bullet-points-2 %}
+            <div class="bulletpoints">
+              <ul>
+                {% assign lists = block.settings.bullet-pointstext-2 | split: '<p>' %}
+                {% for list in lists offset: 1 %}
+                  {% if forloop.first == true and list contains '<strong>' %}
+                	<p>{{ list | replace: '</p>', '' }}</p>
+                {% else %}
+                      <li>{{ list | replace: '</p>', '' }}</li>
+                  {% endif %}
+                {% endfor %}
+              </ul>
+            </div><br>
+            {% endunless %}
+            <div style="text-align: center">{{ block.settings.text_bottom }}</div>
+          </div>
+
+  </div>
+
+</section>
+{% endif %}

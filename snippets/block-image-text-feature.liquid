@@ -1,0 +1,73 @@
+{% if block.type == 'image-text-feature' %}
+<section class="section__block-image-text block-image-text block-feature-range" id="{{ block.id }}" style="margin: 0 !important;">
+
+  <div class="">
+    <div class="grid grid--align padd-feature-prod-grid" >
+
+
+      <div class="grid__item medium-up--three-fifths text grid-no-gutter">
+        <div class="align-text-wrapper-feature">
+          <div class="text__wrapper">
+            {% if block.settings.title != blank %}
+              <h2 class="h2-feature-content">{{ block.settings.title }}</h2>
+            {% endif %}
+
+            {% if block.settings.text != blank %}
+              <div class="text feature-text">
+                {{ block.settings.text }}
+              </div>
+            {% endif %}
+
+            
+              <div class="features-col">
+                <ul>
+
+                  {% if block.settings.title_col1 != blank %}
+                    <li>
+                      <span>{{ block.settings.title_col1 }}</span>
+                      {{ block.settings.text_col1 }}
+                    </li>
+                  {% endif %}
+
+                   {% if block.settings.title_col2 != blank %}
+                    <li>
+                      <span>{{ block.settings.title_col2 }}</span>
+                      {{ block.settings.text_col2 }}
+                    </li>
+                  {% endif %}
+
+                   {% if block.settings.title_col3 != blank %}
+                    <li>
+                      <span>{{ block.settings.title_col3 }}</span>
+                      {{ block.settings.text_col3 }}
+                    </li>
+                  {% endif %}
+              
+                
+                </ul>
+              </div>
+
+
+          </div>
+        </div>
+      </div>
+
+
+      <div class="grid__item medium-up--two-fifths image" >
+        <div class="image-wrapper">
+          <img
+               alt="{{ block.settings.title | escape }}"
+               src="{{ block.settings.image | img_url: '800x800', crop: 'center'  }}"
+               data-src="{{ block.settings.image | img_url: '800x800', crop: 'center' }}"
+               class="lazyload blur-up" />
+        </div>
+      </div>
+
+
+
+
+
+    </div>
+  </div>
+</section>
+{% endif %}

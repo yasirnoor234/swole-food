@@ -1,0 +1,699 @@
+<style>
+.page-width {
+    max-width: 1380px;
+}
+@media only screen and (min-width: 750px) {
+    .medium-up--two-thirds {
+        max-width: 100% !important;
+        width: 66.66667% !important;
+    }
+    .medium-up--one-third {
+        width: 32.33333% !important;
+        max-width: 100% !important;
+    }
+}
+.grid__item.medium-up--two-thirds{
+  width: unset;
+  max-width: unset;
+}
+.grid__item.medium-up--one-third{
+    width: 100%;
+    max-width: 100%;
+}  
+div#nvd-widget-cart {
+    background-color: #FFFFFF;
+    border-radius: 0px;
+    padding: 10px 10px 0px 0px;
+}  
+/* .btn, .shopify-payment-button .shopify-payment-button__button--unbranded{
+    margin-top: unset !important;
+    padding: 8px 10px;
+    font-size: .6em !important;
+}
+a.btn.btn--has-icon-after.cart__continue-btn{
+    font-size: 20px !important;
+    font-weight: 700;
+    padding: 18px 60px !important;
+    line-height: normal;
+} */
+</style>
+
+<section class="section__collection-hero" id="{{ collection.id }}">
+  <div class="inner">
+    <div class="page-width">
+      <h1>Cart</h1>
+    </div>
+  </div>
+  <img
+     alt="Cart"
+     src="{{ section.settings.image | img_url: 'x100' }}"
+     data-src="{{ section.settings.image | img_url: 'x1850' }}"
+     class="background-image lazyload blur-up" />
+</section>
+
+<form action="{{ routes.cart_url }}" method="post" novalidate class="cart">
+
+  <div class="page-width" data-section-id="{{ section.id }}" data-section-type="cart-template">
+    {% if cart.item_count > 0 %}
+    <div class="cart-return-link"><i class="fal fa-long-arrow-left"></i> Return to 
+      <a class="btn btn--small btn--tertiary btn--return" href="/collections/">Meal Plans</a>
+      {% comment %}
+        {% if customer.tags contains 'wholesale' %}
+        <a class="btn btn--small btn--tertiary btn--return" href="/collections/wholesale">Meals</a>
+        {% else %}
+        <a class="btn btn--small btn--tertiary btn--return" href="/collections/6-meals">6 Meals</a>&nbsp;
+        <a class="btn btn--small btn--tertiary btn--return" href="/collections/12-meals">12 Meals</a>&nbsp;
+        <a class="btn btn--small btn--tertiary btn--return" href="/collections/18-meals">18 Meals</a>
+        {% endif %}
+      {% endcomment %}
+    </div>
+    <div data-cart-view="data-cart-view">
+
+      <div class="grid">
+        <div class="grid__item medium-up--two-thirds">
+
+          {% comment %}
+          <div class="collection__sidebar--notification" rv-data-quantity="cart.item_count">
+
+            {% comment %}If item cound is less than minium{% endcomment %}
+            <div rv-if="cart.item_count | lt {{ collectionCount }}">
+              <strong class="color--red" ><span rv-text="6 | minus cart.item_count"></span> meal<span rv-if="cart.item_count | lt {{ collectionCount | minus: 1 }}">s</span> to go</strong>
+            </div>
+
+            {% comment %}If item cound is greather than limit{% endcomment %}
+            <div rv-if="cart.item_count | gt {{ collectionCount | minus: 1 }}">
+              <strong class="color--green">{ cart.item_count  }/{{ collectionCount }}</strong> meals selected
+            </div>
+
+          </div>
+          {% endcomment %}
+
+
+          <div class="cart__products">
+            {% include 'cart-item' %}
+            <div rv-show="cart.item_count | lt 1">
+              <td colspan="5">You don't have any items in your cart.</td>
+            </div>
+            <div rv-show="cart.item_count | gt 0" class="sidebar__footer">
+              <tr>
+                <td colspan="4" rv-html="cart.total_weight | weight_with_unit"></td>
+                <td rv-html="cart.total_price | money Currency.currentCurrency"></td>
+              </tr>
+            </div>
+            <!-- <div class="cart-note">
+              <label>Add a note to your order:</label>
+              <textarea name="note" placeholder="Add a note to your order">{{ cart.note }}</textarea>
+            </div> -->
+          </div>
+        </div>
+
+        <div class="grid__item medium-up--one-third">
+          <div class="cart-sidebar">
+            <div class="title">Total</div>
+            <div rv-html="cart.total_price | money Currency.currentCurrency" class="cart-sidebar__price"></div>
+            
+              <!-- {{ cart.total_price | minus: 795 | money }} -->
+            <div class="subscribtion-options">
+              <div class="subscription-radio">
+                <input type="radio" name="is_subscription" value="false" id="is_subscription-false" checked>
+                <label for="is_subscription-false"><div class="pseudo-radio"><i class="far fa-check"></i></div> One off order</label>
+              </div>
+              <div class="subscription-radio">
+                <input type="radio" name="is_subscription" value="true" id="is_subscription-true">
+                <label for="is_subscription-true"><div class="pseudo-radio"><i class="far fa-check"></i></div> Recurring order  (SAVE 10%) </label>
+              </div>
+            </div>
+
+
+
+
+            <div class="subscription-date subscription-show" style="display: none;">
+              <label for="subscription_date">Deliver</label>
+              <select id="subscription_date" name="subscription_date">
+                <option value="1">Weekly</option>
+                <option value="2">Fortnightly</option>
+                <option value="4">Monthly</option>
+              </select>
+
+              <div class="cart-agree-info">{{ section.settings.agree }}</div>
+
+            </div>
+            <!-- Navidium App -->
+            <div class="nvd-mini"></div>
+			
+			{% assign totalcart =  cart.total_price | money | remove: '$' | ceil  %}
+            <div class="checkout-buttons">
+
+              {% capture checkoutButton %}
+                {% if cart.total_price < 7900 %}
+                <input type="button" disabled='true' name="checkout-fake"
+                      class="btn btn--blue add-value btn-disabled-cart"
+                      value="Place my order">
+                <p class="text-error-price">Min spend is $79</p>
+                {% else%}
+                <input type="button" name="checkout-fake"
+                      class="btn btn--blue add-value 1 btn-disabled-cart"
+                      value="Place my order">
+
+                {% endif%}
+              {% endcapture %}
+
+              {% capture checkoutButtonDisabled %}
+                {% if cart.total_price < 7900 %}
+                <input type="button" disabled='true' name="checkout-fake"
+                      class="btn btn--blue add-value btn-disabled-cart"
+                      value="Place my order">
+                 <p class="text-error-price">Min spend is $79</p>
+                {% else%}
+                {{ checkoutButton }}
+              	<p class="text-error-price add-error"></p>
+                {% endif%}
+
+              {% endcapture %}
+
+              {% capture checkoutButtonDisabledWholesale %}
+              
+              <input type="button" disabled='true'
+                     class="btn btn--blue"
+                     value="Place my order">
+              {% endcapture %}
+
+              <input type="submit" name="checkout"
+                     class="cart__submit cart__submit-control hidden_submit"
+                     value="Checkout">
+
+              {% if customer.tags contains 'wholesale' %}
+
+              <div rv-show="cart.item_count | gt 0">
+                {{ checkoutButton }}
+              </div>
+              <div rv-show="cart.item_count | lt 1">
+                
+                {{ checkoutButtonDisabledWholesale }}
+              </div>
+
+              {% else %}            
+              <div rv-if="cart.item_count | lt 7">
+                <div rv-show="cart.item_count | eq 6">
+                  {{ checkoutButton }}
+                </div>
+                <div rv-show="cart.item_count | dneq 6">
+                  {{ checkoutButtonDisabled }}
+                </div>
+              </div>
+
+              <div rv-show="cart.item_count | lt 13">
+                <div rv-show="cart.item_count | gt 6">
+                  <div rv-show="cart.item_count | eq 12">
+                    {{ checkoutButton }}
+                  </div>
+                  <div rv-show="cart.item_count | dneq 12">
+                    {{ checkoutButtonDisabled }}
+                  </div>
+                </div>
+              </div>
+
+              <div rv-show="cart.item_count | gt 12">
+                <div rv-show="cart.item_count | eq 18">
+                  {{ checkoutButton }}
+                </div>
+                <div rv-show="cart.item_count | dneq 18">
+                  {{ checkoutButtonDisabled }}
+                </div>
+              </div>		
+              {% endif %}
+            </div>    
+            <div class="cart-note">
+
+              <textarea name="note" placeholder="Add a note to your order">{{ cart.note }}</textarea>
+            </div>            
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <br>
+
+    {% else %}
+    <div class="cart__products">
+      <div class="empty-page-content text-center">
+        <h1>{{ 'cart.general.title' | t }}</h1>
+        <p class="cart--empty-message">{{ 'cart.general.empty' | t }}</p>
+        <div class="cookie-message">
+          <p>{{ 'cart.general.cookies_required' | t }}</p>
+        </div>
+        <a href="/" class="btn btn--has-icon-after cart__continue-btn">{{ 'general.404.link' | t }}{% include 'icon-arrow-right' %}</a>
+      </div>
+    </div>
+    {% endif %}
+
+  </div>
+
+</form>
+
+
+<script> 
+  fetch('/cart.js').then(function(res){ 
+  return res.json()
+}).then(function(cart){ 
+  console.log(cart.token, cart.items)
+})
+     
+     
+  
+  $(document).on("change", "#subscription_date", function () {
+ applySubscriptionOptions(); 
+    /*jQuery.post('/cart/add.js', {
+  items: [
+    {
+      quantity: 1,
+      id: 1568785595,
+      properties: {
+        'First name': 'Caroline'
+      }
+    },
+    {
+      quantity: 2,
+      id: 1568785595,
+      properties: {
+        'First name': 'Mike'
+      }
+    }
+  ]
+}); */
+    
+    
+   
+  
+});
+  
+  
+  function checkRecurring() {
+    var hasRecurring = false;
+    var hasOneOff = false;
+    var subscriptionRadioCheckedVal = JSON.parse($('.subscription-radio input:checked').val());
+    var flag = -1;
+    try {
+      $.ajax({
+        url: '/cart.js',
+        type: "GET",
+        dataType: 'json',
+        async: false,
+        success: function (cart) {
+          var itemCount = cart.item_count;
+          localStorage.setItem("cart_size", itemCount);
+        console.log(cart);
+          for (var i = 0; i < cart.items.length; i++) {
+            if (cart.items[i].properties != null && cart.items[i].properties.subscription_id != null) {
+              hasRecurring = true;
+            }
+            else {
+              hasOneOff = true;
+            }
+          }
+
+          if (!subscriptionRadioCheckedVal && hasRecurring) {
+            flag = 0;
+          }
+          else if (subscriptionRadioCheckedVal && hasOneOff) {
+            flag = 1;
+          }
+          else {
+            flag = 2;
+          }
+        },
+        error: function (xhr) {
+          var errorMessage = xhr.status + ': ' + xhr.statusText
+          console.log('Error - ' + errorMessage);
+          showError();
+        }
+      });
+    } catch (error) {
+      console.log('Error - ' + error.message);
+      showError();
+    }
+    console.log("flag", flag)
+    return flag;
+  }
+
+  function showError(){
+    $("[name='checkout']").after("<strong class='color--red'>Ooops.Some errors happened, please try again later.</strong>");
+  }
+
+  function addToCart(data){
+    console.log(data,'data2');
+    var flag = false;
+    try {
+      $.ajax({
+        url: '/cart/add.js',
+        type: "POST",
+        async: false,
+        dataType: 'json',
+        data: data,   
+        success: function (data) {
+          flag = true;
+        },
+        error:function(xhr){
+          var errorMessage = xhr.status + ': ' + xhr.statusText
+          console.log('Error - ' + errorMessage);
+          showError();
+        }
+      });
+    } catch (error) {
+      console.log('Error - ' + error.message);
+      showError();
+    }  
+    return flag;
+  }
+
+  function updateCart(data){
+   console.log(data,'data');
+    var flag = false;
+    try {
+      $.ajax({
+        url: '/cart/change.js',
+        type: "POST",
+        async: false,
+        dataType: 'json',
+        data: data,      
+        success: function (data) {
+           console.log(data);
+          flag = true;
+        },
+        error:function(xhr){
+          var errorMessage = xhr.status + ': ' + xhr.statusText
+          console.log('Error - ' + errorMessage);
+          showError();
+        }
+      });
+    } catch (error) {
+      console.log('Error - ' + error.message);
+      showError();
+    }
+    return flag;
+  }  
+
+  function removeSubscriptionOptions() { 
+    var hasError = false;
+    try {        
+      $.ajax({
+        url: '/cart.js',
+        type: "GET",
+        dataType: 'json',
+        async: false,
+        success: function (cart) { 
+          $.ajax({
+            url:'/cart/clear.js',            
+            dataType: 'json',
+            async: false,
+            error: function(xhr){              
+              hasError = true;
+              var errorMessage = xhr.status + ': ' + xhr.statusText
+              console.log('Error - ' + errorMessage);
+              showError();
+            }
+          });
+
+          if(!hasError){
+            for(var i = 0; i < cart.items.length; i++){
+              var data = {quantity: cart.items[i].quantity, id: cart.items[i].variant_id};
+              if(!addToCart(data)){
+                hasError = true;
+                break;
+              }
+            }   
+          }          
+        },
+        error:function(xhr){
+          hasError = true;
+          var errorMessage = xhr.status + ': ' + xhr.statusText
+          console.log('Error - ' + errorMessage);
+          showError();
+        }
+      }); 
+    } catch (error) {
+      hasError = true;
+      console.log('Error - ' + error.message);
+      showError();
+    }
+    return !hasError;
+  }    
+
+  function applySubscriptionOptions() {     
+    var hasError= false;
+    try {
+      $.ajax({
+        url: '/cart.js',
+        type: "GET",
+        async: false,
+        dataType: 'json',
+        success: function (cart) { 
+          //console.log(cart);
+          for(var i = 0; i < cart.items.length; i++){
+            var j= i + 1;
+            var data = {
+              
+              line:j,
+              quantity: cart.items[i].quantity,
+             // discounted_price: 1452
+             // original_price: 4562,
+              properties: {
+                shipping_interval_frequency: $("#subscription_date").val(),
+                shipping_interval_unit_type: "Weeks",
+                subscription_id: "196022",
+                total_price:'500'
+              }};
+             // update_price(j,1);
+           
+            if(!updateCart(data)){
+              hasError = true;
+              
+              break;
+            }                   
+          } 
+        },
+        error: function(xhr){
+          hasError = true;
+          var errorMessage = xhr.status + ': ' + xhr.statusText
+          console.log('Error - ' + errorMessage);
+          showError();
+        }
+      });
+    } catch (error) {
+      hasError = true;
+      console.log('Error - ' + error.message);
+      showError();
+    }
+    return !hasError;
+  }
+
+  function update_price(store_id,cart_token,discount){
+    
+   $.ajax({
+        url: 'https://checkout.rechargeapps.com/shippingamount_responsive?store_id='+store_id+'&cart_token='+cart_token+'&discount_code='+discount+'&customer_email=',
+        type: "GET",
+        success: function (data) { 
+          console.log(data);
+         $(".cart-sidebar__price").html('$'+data.subtotal_after_discounts);
+        }
+   });
+  
+  }
+  
+  // FUNCTION: On Radio change/Page Load
+  function subscriptionOptions() {
+
+    var subscriptionRadioCheckedVal = JSON.parse($('.subscription-radio input:checked').val());
+
+   // console.log(subscriptionRadioCheckedVal);
+    var totla_val=0;
+      $.ajax({
+        url: '/cart.js',
+        type: "GET",
+        async: false,
+        dataType: 'json',
+        success: function (cart) { 
+             totla_val=cart.total_price
+                }
+            });
+  //console.log(totla_val);
+    if (subscriptionRadioCheckedVal) {
+      $('.subscription-show').show();
+      var p=totla_val/100;
+      var custom=p*0.1;
+      var t=p-custom;
+      t=t.toFixed(2);
+     $(".cart-sidebar__price").html('$'+t);
+     
+      localStorage.setItem('storedDiscount', 'code-recuring');  
+    } else {
+      $('.subscription-show').hide();
+       var p2=totla_val/100;
+        $(".cart-sidebar__price").html('$'+p2);
+      
+    }
+  };
+
+  function reChargeProcessCart() {
+    function get_cookie(name){ return( document.cookie.match('(^|; )'+name+'=([^;]*)')||0 )[2] }
+    do {
+      token=get_cookie('cart');
+    }
+    while(token == undefined);
+
+    var myshopify_domain='{{ shop.permanent_domain }}'
+    try { var ga_linker = ga.getAll()[0].get('linkerParam') } catch(err) { var ga_linker ='' }
+    var customer_param = '{% if customer %}customer_id={{customer.id}}&customer_email={{customer.email}}{% endif %}'
+    checkout_url= "https://checkout.rechargeapps.com/r/checkout?myshopify_domain="+myshopify_domain+"&cart_token="+token+"&"+ga_linker+"&"+customer_param+"&discount=CODE4563";
+   // window.location.href= checkout_url;
+  }
+
+  $(document).ready(function(){
+	
+    if(!$('.page-width > div').hasClass('empty-page-content')){
+      subscriptionOptions();
+    }
+    
+
+    if(window.location.href.includes("gocheckout")){
+      $("[name='checkout']").click();
+    }  
+
+    var $subscriptionRadio = $('.subscription-radio input');
+
+    $subscriptionRadio.on('change', subscriptionOptions);
+
+    /*
+
+    var subscriptionSelected = $('.subscription-radio input:checked').val();
+
+    console.log(subscriptionSelected);
+
+    if(subscriptionSelected){
+        $('.subscription-show').show();
+    }else{
+        $('.subscription-show').hide();
+    }
+    */
+
+    $("[name='checkout-fake']").click(function(){
+      switch (checkRecurring()) {
+        case 0:
+          if(removeSubscriptionOptions()){
+            window.location.href = "/cart?gocheckout"
+          }
+          break;
+        case 1:
+          if(applySubscriptionOptions()){
+            reChargeProcessCart();
+          }
+          break;
+        case 2:
+          $("[name='checkout']").click();
+          break;
+      };
+    });
+
+  });
+
+  /* Begin Discount Autofill Code */
+  /* Read the Query String value from the URL */    
+  /* Link: http://stackoverflow.com/a/2880929 - Notes: No clue how this regex stuff works. Probably fairy magic.  */
+  var urlParams;
+  (window.onpopstate = function () {
+    var match,
+        pl     = /\+/g,  // Regex for replacing addition symbol with a space
+        search = /([^&=]+)=?([^&]*)/g,
+        decode = function (s) { return decodeURIComponent(s.replace(pl, " ")); },
+        query  = window.location.search.substring(1);
+
+    urlParams = {};
+    while (match = search.exec(query))
+      urlParams[decode(match[1])] = decode(match[2]);
+  })();
+
+  /* If the value of the hidden discount input field is blank, undefined or null then set the contents of localstorage discount to be the result of our Query String function above */    
+  if ($("#discount_input").val() == ('' || undefined || null || 'undefined')) {
+    /* Set sessionStorage variable "discount" to the result of our Query string function above */
+    sessionStorage.setItem("discount", urlParams["discount"]);
+  }
+
+  /* If the value in our hidden input field doesn’t match the result of our Query String function above then clear the current sessionStorage value for "discount" and replace it with the new one */
+  /* Link: http://stackoverflow.com/q/19844750 */
+  else if ($("#discount_input").val() != urlParams["discount"]) {
+    sessionStorage.removeItem("discount");
+    sessionStorage.setItem("discount", urlParams["discount"]);
+  }    
+  /* End Discount Autofill Code */
+
+
+
+</script>
+
+
+
+
+
+
+
+<!-- <script>
+$(document).ready(function(){
+console.log('HELLO';)
+var cart_size = LocalStorage.get(cart_size);
+console.log('Cart size: ' + cart_size);
+});
+</script>
+-->
+
+
+{% schema %}
+{
+  "name": {
+    "de": "Warenkorb-Seite",
+    "en": "Cart page",
+    "es": "Página de carrito",
+    "fr": "Page du panier",
+    "it": "Pagina del carrello",
+    "ja": "カートページ",
+    "pt-BR": "Página do carrinho"
+  },
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": {
+        "de": "Foto",
+        "en": "Image",
+        "es": "Imagen",
+        "fr": "Image",
+        "it": "Immagine",
+        "ja": "画像",
+        "pt-BR": "Imagem"
+      }
+    },
+    {
+      "type": "checkbox",
+      "id": "cart_notes_enable",
+      "label": {
+        "de": "Warenkorb-Notifikationen erlauben",
+        "en": "Enable cart notes",
+        "es": "Habilitar notas de carrito",
+        "fr": "Activer les notes de panier",
+        "it": "Abilita note carrello",
+        "ja": "カートメモを有効にする",
+        "pt-BR": "Ativar observações sobre o carrinho"
+      },
+      "default": false
+    },
+    {
+      "type": "richtext",
+      "id": "agree",
+      "label": "Agree text"
+    }
+  ]
+}
+{% endschema %}
+
+
+

@@ -1,0 +1,66 @@
+{{ 'customize.css' | asset_url | stylesheet_tag }}
+{{ 'custom.css' | asset_url | stylesheet_tag }}
+
+<div class="page-about">
+<div class="icon-wrap page-width">
+  {% for item in section.blocks %}
+  <div class="wrap">
+  	<img src="{{item.settings.image| img_url:'master'}}" />
+    <h6 class="title">{{item.settings.title}}</h6>
+    <p class="content">{{item.settings.content}}</p>
+  </div>
+  {% endfor %}
+</div>
+</div>
+{% schema %}
+  {
+    "name": "Icon column text",
+    "class": "icon_col_text",
+    "settings": [],
+    "blocks": [
+      {
+        "type": "text",
+        "name": "image text",
+        "settings": [
+          {
+            "type": "image_picker",
+            "id": "image",
+            "label": "Image"
+          },
+          {
+            "type": "text",
+            "id": "title",
+            "label": "Title"
+          },
+          {
+            "type": "text",
+            "id": "content",
+            "label": "Content"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "Icon Column Text",
+        "category": "Custom",
+        "blocks": [
+          {
+            "type": "text",
+            "settings": {
+              "title": "Sample Title",
+              "content": "Sample content text"
+            }
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}
+
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

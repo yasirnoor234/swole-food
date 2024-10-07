@@ -1,0 +1,10 @@
+{% for item in cart.items %}
+<div class="cart-product-id" data-product-id="{{item.id}}">
+{% assign product_tags_string = item.product.tags %}
+{% for product_tags in product_tags_string %}
+  {% if product_tags contains 'Subscription' %}
+<div class="cart-product-tags" style="display:none">{{product_tags}}</div>
+	{% endif %}
+  {% endfor %}
+</div>
+{% endfor %}

@@ -1,0 +1,1508 @@
+  <!-- Slick Slider Library -->
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css"/>
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
+<script>
+  jQuery(document).ready(function ($) {
+
+    //$("#sidebar").stick_in_parent();
+
+
+    // Collection page scrips
+
+    // Shows associalted nutritional information on product titles
+    $('.order-variant').hover(function () {
+        var hoverNutritionID = $(this).data('id');
+
+        $('.image-wrapper .nutrition').removeClass('show');
+
+        $('#' + hoverNutritionID).addClass('show');
+    });
+    $('.order-buttons').mouseleave(function () {
+        $('.image-wrapper .nutrition').removeClass('show');
+    });
+});
+</script>
+  <style>
+    html {
+      scroll-behavior: smooth;
+    }
+    section {
+      margin-top: 1000px; /* Just to position the target section further down */
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    }
+
+    section.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Add some basic styles for better visualization */
+    ul {
+      list-style: none;
+    }
+
+    li {
+      cursor: pointer;
+    }
+  </style>
+<div class="banner_pc">
+  <div class="image_wrap">
+  	<img src="{{section.settings.bg-img | img_url:'master'}}" />
+  </div>
+  <div class="content">
+ 	 <h1 class="title">{{section.settings.titlebanner}}</h1>
+  </div>
+</div>
+<div class="main-collection collection-page">
+  <div class="categories-bar">
+    <div class="category">
+      <div class="category-wrap">
+      	 <h6 class="category-title">CATEGORIES</h6>
+         <i class="fas fa-chevron-right"></i>
+      </div>
+      {% if section.settings.display_type == 'all' %}
+      	<ul>
+      	{% for collection in collections %}
+          <li><a href="#{{ collection.handle }}">{{ collection.title }}</a></li>
+      	{% endfor %}
+       	</ul>
+      {% else %}
+      	<ul>
+      	{% for block in section.blocks %}
+          {% if block.type == 'collection' %}
+            {%- assign collection = collections[block.settings.collection] -%}
+              <a href="#{{ collection.handle }}">
+              <li class="{{block.settings.collection}}"><span>{{ collection.title }}</span></li>
+              </a>
+          {% endif %}
+        {% endfor %}
+        </ul>
+      {% endif %}
+    </div>
+    
+  </div>
+  <div class="left-list-collection collection__content">
+    	{%- assign blocks = section.blocks | sort: 'collection.all_products_count' -%}
+
+        {% case section.settings.grid %}
+          {% when 2 %}
+            {%- assign grid_item_width = 'medium-up--one-half' -%}
+            {%- assign image_size = '530x' -%}
+          {% when 3 %}
+            {%- assign grid_item_width = 'small--one-half medium-up--one-third' -%}
+            {%- assign image_size = '350x' -%}
+          {% when 4 %}
+            {%- assign grid_item_width = 'small--one-half medium-up--one-quarter' -%}
+            {%- assign image_size = '250x' -%}
+          {% when 5 %}
+            {%- assign grid_item_width = 'small--one-half medium-up--one-fifth' -%}
+            {%- assign image_size = '225x' -%}
+        {% endcase %}
+
+      	<div class="collection_list">
+          {% if section.settings.display_type == 'all' %}
+            {% case section.settings.sort %}
+              {% when 'products_high' or 'products_low' %}
+                {%- assign collections = collections | sort: 'all_products_count' -%}
+              {% when 'date' or 'date_reversed' %}
+                {%- assign collections = collections | sort: 'published_at' -%}
+            {% endcase %}
+          
+            {% if section.settings.sort == 'products_low' or section.settings.sort == 'date' or section.settings.sort == 'alphabetical' %}
+              {% for collection in collections %}
+          
+              <div class="collection_item" id="{{ collection.handle }}">
+                <h3><a href="{{collection.url}}">{% if collection.title == blank %}{{ 'homepage.onboarding.collection_title' | t }}{% else %}{{ collection.title }}{% endif %}</a></h3>
+                {% assign content = collection.description | split: '<h3>Nutrition Info</h3>' | last %}
+                
+                <div class="banner_collection-item{% if content != blank %} mb{% endif %}">
+                  <img src="{{ collection.image | img_url: '' }}" alt="{{ collection.image | Escape }}" />
+
+                  {% if content != blank %}
+                  <div class="bottom">
+                    <div class="main">
+                      <div class="center">
+                         <div class="nutrition-info">{{collection.description | split: '<h3>Nutrition Info</h3>' | last}}</div>
+                      </div>
+                    </div>
+                  </div>
+                  {% endif %}
+                  
+                </div>
+                
+                <div class="grid grid--uniform pro_list">
+                  {% for product in collection.products %}
+                  <div class="grid__item pro_item {{ grid_item_width }} product-custom-{{ product.id }}">
+                    <div class="content">
+                      <div class="image-container image-wrapper">
+                        <img alt="{{ product.featured_image.alt | escape }}"
+                               src="{{ product | img_url: '390x390', crop: 'center'  }}"
+                               data-src="{{ product | img_url: '390x390', crop: 'center' }}"
+                               class="lazyload blur-up" />
+                        <div class="image-container--overlay">
+                          <div class="overlay-icon">
+                            <img src="https://cdn.shopify.com/s/files/1/0180/4097/9520/files/zoom.svg?v=1717582532">
+                          </div>
+                        </div>
+                        {% assign swole_nutrition = product.metafields.c_f.swole_nutrition | split: ", " %}
+                          {% assign active_nutrition = product.metafields.c_f.active_nutrition | split: ", " %}
+                          {% assign low_carb_nutrition = product.metafields.c_f.low_carb_nutrition | split: ", " %}
+                          <div class="nutrition nutrition--swole" id="nurition_swole{{ product.id }}">
+                            <div class="title">Swole nutrition 450g</div>
+                              <ul>
+                                {% for item in swole_nutrition %}
+                                    <li>{{ item | replace: ': ','<br>' }}</li>
+                                {% endfor %}
+                              </ul>
+                            </div>
+                            <div class="nutrition nutrition--active" id="nurition_active{{ product.id }}">
+                              <div class="title">Active nutrition 350g</div>
+                              <ul>
+                                {% for item in active_nutrition %}
+                                    <li>{{ item | replace: ': ','<br>' }}</li>
+                                {% endfor %}
+                              </ul>
+                            </div>
+                            <div class="nutrition nutrition--low_carb" id="nurition_low-carb{{ product.id }}">
+                              <div class="title">Low Carb nutrition 300g</div>
+                              <ul>
+                                {% for item in low_carb_nutrition %}
+                                    <li>{{ item | replace: ': ','<br>' }}</li>
+                                {% endfor %}
+                              </ul>
+                            </div>
+                          </div>
+                      </div>
+                      <div class="bottom">
+                        <h4>{{ product.title }}</h4>
+                        <span class="shopify-product-reviews-badge" data-id="{{ product.id }}"></span>
+                        <form action="/cart/add" method="post" class="cart-btn product_group" data-product="{{ product.variants.first.id }}">
+                          <ul class="order-buttons">
+                              {% for variant in product.variants %}
+                              {% assign variant_title = variant.title | handleize %}
+                              {% endfor %}
+                              {% if product.variants.size > 0 and variant_title != 'default-title' %}
+                                  {% for variant in product.variants %}
+
+                                    {%- assign available = false -%}
+
+                                    {% if variant.inventory_quantity > 0 %}
+                                      {%- assign available = true -%}
+                                    {% endif %}
+                                    {% assign variant_title = variant.title | handleize %}
+                                    {% if variant_title != 'default-title' %}
+
+                                    <li class="order-variant variant--{{ variant.title | handleize }}" data-id="nurition_{{ variant.title | handleize }}{{ product.id }}">
+                                      <div class="variant-title {% if available == false %}variantTextDisable{% endif %}" id="{{ variant.id }}-title-variant"><strong>{{ variant.title }}</strong></div>
+                                      <div class="variant-price {% if available == false %}variantTextDisable{% endif %}">{{ variant.price | money }}</div>
+                                      <div class="variant-add__wrapper">
+                                        {% if collectionTag == 'wholesale' %}
+                                          <input type="number" class="input-quantity" min="1" style="width:80px;"/>
+                                        {% endif %}
+
+                                        {% if available %}
+                                          <button type="submit" class="variant-add" id="{{ variant.id }}-add-buttom" data-cart-add="{{ variant.id }}" data-cart-quantity="1" data-aitems="{{variant.inventory_quantity}}" data-parent="{{ product.id }}">+<span> Add</span></button>
+                                        {% else %}
+                                          <button class="variant-add variantDisable" title="SOLD OUT" disabled>+<span> Sold Out</span></button>
+                                        {% endif %}
+
+                                      </div>
+                                    </li>
+                                    {% endif %}
+                                  {% endfor %}
+                              {% else %}
+                              {{product.price | money}}
+                              {% endif %}
+                            </ul>
+                          <input type="hidden" name="id" value="{{ product.variants.first.id }}" />
+
+                            {% if product.available %}
+                            <div class="hide clearfix"> 
+                              <select name="id" >
+                                {% if product.compare_at_price_max > product.price %}
+
+                                {% assign found_one_in_stock = false %}
+                                {% for variant in product.variants %}
+                                {% if variant.available and variant.compare_at_price and found_one_in_stock == false %}
+                                {% assign found_one_in_stock = true %}
+                                {% assign found_variant_id = variant.id %}
+                                {% break %}
+                                {% endif %}
+                                {% endfor %}
+
+                                {% if found_one_in_stock == false %}
+                                {% for variant in product.variants %}
+                                {% if variant.available and found_one_in_stock == false %}
+                                {% assign found_one_in_stock = true %}
+                                {% assign found_variant_id = variant.id %}
+                                {% break %}
+                                {% endif %}
+                                {% endfor %}
+                                {% endif %}
+
+                                {% for variant in product.variants %}
+                                {% if variant.id == found_variant_id %}
+                                <option selected="selected" value="{{ variant.id }}">{{ variant.title | escape }}</option>
+                                {% else %}
+                                <option value="{{ variant.id }}">{{ variant.title | escape }}</option>
+                                {% endif %}
+                                {% endfor %}
+                                {% else %}
+                                {% assign found_one_in_stock = false %}
+                                {% for variant in product.variants %}
+                                {% if variant.available and found_one_in_stock == false %}
+                                {% assign found_one_in_stock = true %}
+                                <option selected="selected" value="{{ variant.id }}">{{ variant.title | escape }}</option>
+                                {% else %}
+                                <option value="{{ variant.id }}">{{ variant.title | escape }}</option>
+                                {% endif %}
+                                {% endfor %}
+                                {% endif %}
+                              </select>
+                            </div>  
+                            {% endif %}
+                          {% comment %}
+                            <div class="effect-ajax-cart">
+                              {% if product.available %}
+                              <div class="qtybox">
+                                <span class="btnqty qtyminus icon icon-minus"><i class="fa fa-minus" aria-hidden="true"></i></span>
+                                <input type="text" id="quantity" name="quantity" value="1" min="1" class="quantity-selector quantity-input" readonly="">
+                                <span class="btnqty qtyplus icon icon-plus"><i class="fa fa-plus" aria-hidden="true"></i></span>
+                              </div>
+                                <button class="btn add-to-cart" data-parent=".parent-fly" type="submit" name="add"><span class="cart-btn-text">Add Item</span></button>
+                              {% else %}
+                              <button class="btn add-to-cart disabled" disabled="disabled" type="button" name="add"><span class="cart-btn-text">Sold Out</span></button>
+                              {% endif %}
+
+                            </div>
+                            {% endcomment %}
+                          </form>
+                      </div>
+                      <div class="popup_product featherlight-inner" data-id="{{ product.id }}">
+                        <span class="close">✕</span>
+                        <div class="popup_content">
+
+                          <div class="product-page">
+                            <div class="grid--stretch-align">
+
+                              <div class="large-up--one-half product__slider-wrapper">
+                                <div class="product__slider fixed-element slider--{{ product.id }}">
+                                  {% for image in  product.images %}
+                                  <div class="slide">
+                                    <img
+                                         alt="{{ image.alt | escape  }}"
+                                         src="{{ image.src | img_url: '700x700', crop: 'center'  }}"
+                                         data-src="{{ image.src  | img_url: '700x700', crop: 'center' }}"
+                                         class="lazyload blur-up" />
+                                  </div>
+                                  {% endfor %}
+                                </div>
+                              </div>
+                              <div class="large-up--one-half">
+                                <div class="product__info">
+                                  <div class="product__header">
+                                    <h4>{{ product.title }}</h4>
+                                  </div>
+
+                                  <div class="product__description">
+
+                                    {% if product.description contains '<h6>'%}
+                                    <div id="accordion-container"> 
+
+                                      {% assign ind = 0 %}
+
+                                      {% assign description_parts = product.description | split: "<h6" %}
+                                      {% assign product_info = description_parts | first %}
+
+                                      {% if product_info contains '<p>' %}
+                                      {{ product_info }}
+                                      {% else %}
+                                      <p>{{ product_info }}</p> 
+                                      {% endif %}
+
+                                      {% for part in description_parts %}
+                                      {% if part contains "</h6>" %}
+                                      {% assign remove = part | split: ">" | first | append: ">" %}
+                                      <div class="accordion-header" >{{ part | split: "</h6>" | first | strip_html | replace: remove, "" }}<i class="fal fa-angle-down"></i></div>
+                                      <div class="accordion-content">{{ part | split: "</h6>" | last | replace: "<div", "<span" | replace: "</div", "</span" }}</div> 
+                                      {%comment%}<div class="accordion-content"{% if ind == 1 %}style="display: block;"{% endif %}>{{ part | split: "</h6>" | last | replace: "<div", "<span" | replace: "</div", "</span" }}</div> {%endcomment%}
+                                      <hr/>
+                                      {% endif %}
+                                      {% assign ind = ind | plus: 1 %}
+                                      {% endfor %}
+
+
+                                    </div>
+                                    {% else %}
+                                    {{ product.description }}
+                                    {% endif %}
+                                    {%- comment -%}
+                                    {% section 'product-note' %}
+                                    Change on May 03, 2020 by Bekka F. at Shopify {%- endcomment -%} 
+                                    <div id="shopify-product-reviews" data-id="{{product.id}}">{{ product.metafields.spr.reviews }}</div>
+                                  </div>
+                                </div>
+
+                              </div>
+
+                            </div>
+                          </div>
+
+                        </div>
+
+                      </div>
+                    </div>
+                  </div>
+                  <script>
+
+                    var $jq{{ product.id }} = jQuery.noConflict();
+                    $jq{{ product.id }}('.slider--{{ product.id }}').slick({
+                        draggable:true,
+                        arrows:false,
+                        autoplay:true,
+                        centerMode:false,
+                        autoplaySpeed: 2000,                
+                        infinite: true,
+                        slidesToShow: 1,
+                        slidesToScroll: 1,
+                        variableWidth:false,
+                        dots:true,
+                        swipeToSlide:false
+
+                        });
+
+                    $('.product-custom-{{ product.id }} .image-container--overlay').on('click',function(){
+                      var obj = $(this);
+                      setTimeout(function(){
+                            obj.parents('.product_item').find('.product__slider').get(0).slick.setPosition();
+                      }, 500);
+
+
+                    });
+
+
+                    // The Accordion Effect
+                    $('.product-custom-{{ product.id }} .accordion-header').on('click',function () {
+                        if($(this).hasClass('inactive-header')) {
+                          $(this).removeClass('inactive-header');
+                          $(this).next().removeClass('open-content');
+
+                        }else {
+                          $(this).addClass('inactive-header');
+                          $(this).next().addClass('open-content');
+
+                        }
+                    });
+
+
+                  </script>
+                  {% endfor %}
+                </div>
+          		
+              </div>
+    
+              {% endfor %}
+            {% else %}
+              {% for collection in collections reversed %}
+              <div class="collection_item" id="{{ collection.handle }}">
+                <h3><a href="{{collection.url}}">{% if collection.title == blank %}{{ 'homepage.onboarding.collection_title' | t }}{% else %}{{ collection.title }}{% endif %}</a></h3>
+                {% assign content = collection.description | split: '<h3>Nutrition Info</h3>' | last %}
+                <div class="banner_collection-item{% if content != blank %} mb{% endif %}">
+                  <img src="{{ collection.image | img_url: '' }}" alt="{{ collection.image | Escape }}" />
+
+                  {% if content != blank %}
+                  <div class="bottom">
+                    <div class="main">
+                      <div class="center">
+                        <div class="nutrition-info">{{collection.description | split: '<h3>Nutrition Info</h3>' | last}}</div>
+                      </div>
+
+                    </div>
+                  </div>
+                  {% endif %}
+                </div>
+                <div class="grid--uniform pro_list">
+                  {% for product in collection.products %}
+                  <div class="grid__item pro_item {{ grid_item_width }} product-custom-{{ product.id }}">
+                    <div class="content">
+                      <div class="image-container image-wrapper">
+                        <img alt="{{ product.featured_image.alt | escape }}"
+                             src="{{ product | img_url: '390x390', crop: 'center'  }}"
+                             data-src="{{ product | img_url: '390x390', crop: 'center' }}"
+                             class="lazyload blur-up" />
+                        <div class="image-container--overlay">
+                          <div class="overlay-icon">
+                            <img src="https://cdn.shopify.com/s/files/1/0180/4097/9520/files/zoom.svg?v=1717582532">
+                          </div>
+                        </div>
+                        {% assign swole_nutrition = product.metafields.c_f.swole_nutrition | split: ", " %}
+                        {% assign active_nutrition = product.metafields.c_f.active_nutrition | split: ", " %}
+                        {% assign low_carb_nutrition = product.metafields.c_f.low_carb_nutrition | split: ", " %}
+                        <div class="nutrition nutrition--swole" id="nurition_swole{{ product.id }}">
+                          <div class="title">Swole nutrition 450g</div>
+                          <ul>
+                            {% for item in swole_nutrition %}
+                            <li>{{ item | replace: ': ','<br>' }}</li>
+                            {% endfor %}
+                          </ul>
+                        </div>
+                        <div class="nutrition nutrition--active" id="nurition_active{{ product.id }}">
+                          <div class="title">Active nutrition 350g</div>
+                          <ul>
+                            {% for item in active_nutrition %}
+                            <li>{{ item | replace: ': ','<br>' }}</li>
+                            {% endfor %}
+                          </ul>
+                        </div>
+                        <div class="nutrition nutrition--low_carb" id="nurition_low-carb{{ product.id }}">
+                          <div class="title">Low Carb nutrition 300g</div>
+                          <ul>
+                            {% for item in low_carb_nutrition %}
+                            <li>{{ item | replace: ': ','<br>' }}</li>
+                            {% endfor %}
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="bottom">
+                      <h4>{{ product.title }}</h4>
+                      <span class="shopify-product-reviews-badge" data-id="{{ product.id }}"></span>
+                      <form action="/cart/add" method="post" class="cart-btn product_group"  data-product="{{ product.variants.first.id }}">
+                        <ul class="order-buttons">
+                          {% for variant in product.variants %}
+                          {% assign variant_title = variant.title | handleize %}
+                          {% endfor %}
+                          {% if product.variants.size > 0 and variant_title != 'default-title' %}
+                          {% for variant in product.variants %}
+
+                          {%- assign available = false -%}
+
+                          {% if variant.inventory_quantity > 0 %}
+                          {%- assign available = true -%}
+                          {% endif %}
+                          {% assign variant_title = variant.title | handleize %}
+                          {% if variant_title != 'default-title' %}
+                          <li class="order-variant variant--{{ variant.title | handleize }}" data-id="nurition_{{ variant.title | handleize }}{{ product.id }}">
+                            <div class="variant-title {% if available == false %}variantTextDisable{% endif %}" id="{{ variant.id }}-title-variant"><strong>{{ variant.title }}</strong></div>
+                            <div class="variant-price {% if available == false %}variantTextDisable{% endif %}">{{ variant.price | money }}</div>
+                            <div class="variant-add__wrapper">
+                              {% if collectionTag == 'wholesale' %}
+                              <input type="number" class="input-quantity" min="1" style="width:80px;"/>
+                              {% endif %}
+
+                              {% if available %}
+                              <button type="submit" class="variant-add" id="{{ variant.id }}-add-buttom" data-cart-add="{{ variant.id }}" data-cart-quantity="1" data-aitems="{{variant.inventory_quantity}}" data-parent="{{ product.id }}">+<span> Add</span></button>
+                              {% else %}
+                              <button class="variant-add variantDisable" title="SOLD OUT" disabled>+<span> Sold Out</span></button>
+                              {% endif %}
+
+                            </div>
+                          </li>
+                          {% endif %}
+                          {% endfor %}
+                          {% else %}
+                          {{product.price | money}}
+                          {% endif %}
+                        </ul>	
+                        <input type="hidden" name="id" value="{{ product.variants.first.id }}" />
+
+                        {% if product.available %}
+                        <div class="hide clearfix"> 
+                          <select name="id" >
+                            {% if product.compare_at_price_max > product.price %}
+
+                            {% assign found_one_in_stock = false %}
+                            {% for variant in product.variants %}
+                            {% if variant.available and variant.compare_at_price and found_one_in_stock == false %}
+                            {% assign found_one_in_stock = true %}
+                            {% assign found_variant_id = variant.id %}
+                            {% break %}
+                            {% endif %}
+                            {% endfor %}
+
+                            {% if found_one_in_stock == false %}
+                            {% for variant in product.variants %}
+                            {% if variant.available and found_one_in_stock == false %}
+                            {% assign found_one_in_stock = true %}
+                            {% assign found_variant_id = variant.id %}
+                            {% break %}
+                            {% endif %}
+                            {% endfor %}
+                            {% endif %}
+
+                            {% for variant in product.variants %}
+                            {% if variant.id == found_variant_id %}
+                            <option selected="selected" value="{{ variant.id }}">{{ variant.title | escape }}</option>
+                            {% else %}
+                            <option value="{{ variant.id }}">{{ variant.title | escape }}</option>
+                            {% endif %}
+                            {% endfor %}
+                            {% else %}
+                            {% assign found_one_in_stock = false %}
+                            {% for variant in product.variants %}
+                            {% if variant.available and found_one_in_stock == false %}
+                            {% assign found_one_in_stock = true %}
+                            <option selected="selected" value="{{ variant.id }}">{{ variant.title | escape }}</option>
+                            {% else %}
+                            <option value="{{ variant.id }}">{{ variant.title | escape }}</option>
+                            {% endif %}
+                            {% endfor %}
+                            {% endif %}
+                          </select>
+                        </div>  
+                        {% endif %}
+                        {% comment %}
+                        <div class="effect-ajax-cart">
+                          {% if product.available %}
+                          <div class="qtybox">
+                            <span class="btnqty qtyminus icon icon-minus"><i class="fa fa-minus" aria-hidden="true"></i></span>
+                            <input type="text" id="quantity" name="quantity" value="1" min="1" class="quantity-selector quantity-input" readonly="">
+                            <span class="btnqty qtyplus icon icon-plus"><i class="fa fa-plus" aria-hidden="true"></i></span>
+                          </div>
+                          <button class="btn add-to-cart" data-parent=".parent-fly" type="submit" name="add"><span class="cart-btn-text">Add Item</span></button>
+                          {% else %}
+                          <button class="btn add-to-cart disabled" disabled="disabled" type="button" name="add"><span class="cart-btn-text">Sold Out</span></button>
+                          {% endif %}
+
+                        </div>
+                        {% endcomment %}
+                      </form>
+                    </div>
+                    <div class="popup_product featherlight-inner" data-id="{{ product.id }}">
+                      <span class="close">✕</span>
+                      <div class="popup_content">
+
+                        <div class="product-page">
+                          <div class="grid--stretch-align">
+                            <div class="large-up--one-half product__slider-wrapper">
+                              <div class="product__slider fixed-element slider--{{ product.id }}">
+                                {% for image in  product.images %}
+                                <div class="slide">
+                                  <img
+                                       alt="{{ image.alt | escape  }}"
+                                       src="{{ image.src | img_url: '700x700', crop: 'center'  }}"
+                                       data-src="{{ image.src  | img_url: '700x700', crop: 'center' }}"
+                                       class="lazyload blur-up" />
+                                </div>
+                                {% endfor %}
+                              </div>
+                            </div>
+                            <div class="large-up--one-half">
+                              <div class="product__info">
+                                <div class="product__header">
+                                  <h3>{{ product.title }}</h3>
+                                </div>
+
+                                <div class="product__description">
+
+                                  {% if product.description contains '<h6>'%}
+                                  <div id="accordion-container"> 
+
+                                    {% assign ind = 0 %}
+
+                                    {% assign description_parts = product.description | split: "<h6" %}
+                                    {% assign product_info = description_parts | first %}
+
+                                    {% if product_info contains '<p>' %}
+                                    {{ product_info }}
+                                    {% else %}
+                                    <p>{{ product_info }}</p> 
+                                    {% endif %}
+
+                                    {% for part in description_parts %}
+                                    {% assign header = part | split: "</h6>" | first | strip_html | replace: remove, "" %}
+                                    {{header}}
+                                    {% if part contains "</h6>" %}
+                                    {% assign remove = part | split: ">" | first | append: ">" %}
+                                    {% if header != blank %}
+                                    <div class="accordion-header" >{{ part | split: "</h6>" | first | strip_html | replace: remove, "" }}<i class="fal fa-angle-down"></i></div>
+                                    <div class="accordion-content">{{ part | split: "</h6>" | last | replace: "<div", "<span" | replace: "</div", "</span" }}</div> 
+                                    {% endif %}
+                                    {%comment%}<div class="accordion-content"{% if ind == 1 %}style="display: block;"{% endif %}>{{ part | split: "</h6>" | last | replace: "<div", "<span" | replace: "</div", "</span" }}</div> {%endcomment%}
+                                    <hr/>
+                                    {% endif %}
+                                    {% assign ind = ind | plus: 1 %}
+                                    {% endfor %}
+
+
+                                  </div>
+                                  {% else %}
+                                  {{ product.description }}
+                                  {% endif %}
+                                  {%- comment -%}
+                                  {% section 'product-note' %}
+                                  Change on May 03, 2020 by Bekka F. at Shopify {%- endcomment -%} 
+                                  <div id="shopify-product-reviews" data-id="{{product.id}}">{{ product.metafields.spr.reviews }}</div>
+                                </div>
+                              </div>
+
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <script>
+
+                  var $jq{{ product.id }} = jQuery.noConflict();
+                  $jq{{ product.id }}('.slider--{{ product.id }}').slick({
+                                      draggable:true,
+                                      arrows:false,
+                                      autoplay:true,
+                                      centerMode:false,
+                                      autoplaySpeed: 2000,                
+                                      infinite: true,
+                                      slidesToShow: 1,
+                                      slidesToScroll: 1,
+                                      variableWidth:false,
+                                      dots:true,
+                                      swipeToSlide:false
+
+                                      });
+
+                  $('.product-custom-{{ product.id }} .image-container--overlay').on('click',function(){
+                    var obj = $(this);
+                  setTimeout(function(){
+                    obj.parents('.product_item').find('.product__slider').get(0).slick.setPosition();
+                  }, 500);
+
+
+                  });
+
+
+                  // The Accordion Effect
+                  $('.product-custom-{{ product.id }} .accordion-header').on('click',function () {
+                    if($(this).hasClass('inactive-header')) {
+                    $(this).removeClass('inactive-header');
+                    $(this).next().removeClass('open-content');
+
+                  }else {
+                    $(this).addClass('inactive-header');
+                    $(this).next().addClass('open-content');
+
+                  }
+                  });
+
+
+                </script>
+                {% endfor %}
+                
+              {% endfor %}
+            {% endif %}
+                
+          {% else %}
+                
+            {% for block in section.blocks %}
+              {% if block.type == 'collection' %}
+                {%- assign collection = collections[block.settings.collection] -%}
+                <div class="collection_item" id="{{ collection.handle }}">
+                  <h3><a href="{{collection.url}}">{% if collection.title == blank %}{{ 'homepage.onboarding.collection_title' | t }}{% else %}{{ collection.title }}{% endif %}</a></h3>
+                  {% assign content = collection.description | split: '<h3>Nutrition Info</h3>' | last %}
+                  <div class="banner_collection-item{% if content != blank %} mb{% endif %}">
+                    <img src="{{ collection.image | img_url: '' }}" alt="{{ collection.image | Escape }}" />
+
+                    {% if content != blank %}
+                    <div class="bottom">
+                      <div class="main">
+                        <div class="center">
+                           <div class="nutrition-info">{{collection.description | split: '<h3>Nutrition Info</h3>' | last}}</div>
+                        </div>
+
+                      </div>
+                    </div>
+                    {% endif %}
+                  </div>
+                  <div class="grid grid--uniform pro_list"> 
+                    {% for product in collection.products %}
+                      <div class="grid__item product_item pro_item {{ grid_item_width }} product-custom-{{ product.id }}">
+                        <div class="content product-block">
+                          
+                          
+                          <div class="product-card__tags">
+                          {% for tag in product.tags %}
+                            {% for block in section.blocks %}
+                              {% if block.type == 'tag' %}
+                                  {% assign tag1 = block.settings.tag1 %}
+                                  {% if tag == tag1 %}
+                                  <span class="tag" style="background:{{block.settings.color}};">{% if block.settings.tag2 != blank %}{{block.settings.tag2}}{%else%}{{tag1}}{% endif %}</span>
+                                  {% endif %}
+                              {% endif %}
+                            {% endfor %}
+                          {% endfor %}
+                          
+                          </div>
+                          <div class="image-container image-wrapper">
+                              <img alt="{{ product.featured_image.alt | escape }}"
+                                   src="{{ product | img_url: '390x390', crop: 'center'  }}"
+                                   data-src="{{ product | img_url: '390x390', crop: 'center' }}"
+                                   class="lazyload blur-up" />
+                              <div class="image-container--overlay">
+                                <div class="overlay-icon">
+                                  <img src="https://cdn.shopify.com/s/files/1/0180/4097/9520/files/zoom.svg?v=1717582532">
+                                </div>
+                              </div>
+                              {% assign swole_nutrition = product.metafields.c_f.swole_nutrition | split: ", " %}
+                              {% assign active_nutrition = product.metafields.c_f.active_nutrition | split: ", " %}
+                              {% assign low_carb_nutrition = product.metafields.c_f.low_carb_nutrition | split: ", " %}
+                              <div class="nutrition nutrition--swole" id="nurition_swole{{ product.id }}">
+                                <div class="title">Swole nutrition 450g</div>
+                                <ul>
+                                  {% for item in swole_nutrition %}
+                                  <li>{{ item | replace: ': ','<br>' }}</li>
+                                  {% endfor %}
+                                </ul>
+                              </div>
+                              <div class="nutrition nutrition--active" id="nurition_active{{ product.id }}">
+                                <div class="title">Active nutrition 350g</div>
+                                <ul>
+                                  {% for item in active_nutrition %}
+                                  <li>{{ item | replace: ': ','<br>' }}</li>
+                                  {% endfor %}
+                                </ul>
+                              </div>
+                              <div class="nutrition nutrition--low_carb" id="nurition_low-carb{{ product.id }}">
+                                <div class="title">Low Carb nutrition 300g</div>
+                                <ul>
+                                  {% for item in low_carb_nutrition %}
+                                  <li>{{ item | replace: ': ','<br>' }}</li>
+                                  {% endfor %}
+                                </ul>
+                              </div>
+                            </div>
+                          <div class="bottom">
+                            <h4>{{ product.title }}</h4>
+                            <!-- Start of Judge.me code -->
+                            <div style='{{ jm_style }}' class='jdgm-widget jdgm-preview-badge' data-id='{{ product.id }}' data-auto-install='false'>
+                              {{ product.metafields.judgeme.badge }}
+                            </div>
+                            <!-- End of Judge.me code -->
+                            {% comment %}
+                            <span class="shopify-product-reviews-badge" data-id="{{ product.id }}"></span>
+                            {% endcomment %}
+
+                            <form action="/cart/add" method="post" class="cart-btn product_group" data-product="{{ product.variants.first.id }}">
+                              <ul class="order-buttons">
+                                {% for variant in product.variants %}
+                                {% assign variant_title = variant.title | handleize %}
+                                {% endfor %}
+                                {% if product.variants.size > 0 and variant_title != 'default-title' %}
+                                  {% for variant in product.variants %}
+                                    {%- assign available = false -%}
+
+                                    {% if variant.inventory_quantity > 0 %}
+                                      {%- assign available = true -%}
+                                    {% endif %}
+                                    {% assign variant_title = variant.title | handleize %}
+                                    {% if variant_title != 'default-title' %}
+                                    <li class="order-variant variant--{{ variant.title | handleize }}" data-id="nurition_{{ variant.title | handleize }}{{ product.id }}">
+                                      <div class="variant-title {% if available == false %}variantTextDisable{% endif %}" id="{{ variant.id }}-title-variant"><strong>{{ variant.title }}</strong></div>
+                                      <div class="variant-price {% if available == false %}variantTextDisable{% endif %}">{{ variant.price | money }}</div>
+                                      <div class="variant-add__wrapper">
+                                          {% if collectionTag == 'wholesale' %}
+                                            <input type="number" class="input-quantity" min="1" style="width:80px;"/>
+                                          {% endif %}
+
+                                          {% if available %}
+                                            <button type="submit" class="variant-add" id="{{ variant.id }}-add-buttom" data-cart-add="{{ variant.id }}" data-cart-quantity="1" data-aitems="{{variant.inventory_quantity}}" data-parent="{{ product.id }}">+<span> Add</span></button>
+                                          {% else %}
+                                            <button class="variant-add variantDisable" title="SOLD OUT" disabled>+<span> Sold Out</span></button>
+                                          {% endif %}
+
+                                        </div>
+                                    </li>
+                                    {% endif %}
+                                  {% endfor %}
+                                {% else %}
+                                {{product.price | money}}
+                                {% endif %}
+                              </ul>
+                              <input type="hidden" name="id" value="{{ product.variants.first.id }}" />
+                              {% if product.available %}
+                              <div class="hide clearfix"> 
+                                <select name="id" >
+                                  {% if product.compare_at_price_max > product.price %}
+
+                                  {% assign found_one_in_stock = false %}
+                                  {% for variant in product.variants %}
+                                  {% if variant.available and variant.compare_at_price and found_one_in_stock == false %}
+                                  {% assign found_one_in_stock = true %}
+                                  {% assign found_variant_id = variant.id %}
+                                  {% break %}
+                                  {% endif %}
+                                  {% endfor %}
+
+                                  {% if found_one_in_stock == false %}
+                                  {% for variant in product.variants %}
+                                  {% if variant.available and found_one_in_stock == false %}
+                                  {% assign found_one_in_stock = true %}
+                                  {% assign found_variant_id = variant.id %}
+                                  {% break %}
+                                  {% endif %}
+                                  {% endfor %}
+                                  {% endif %}
+
+                                  {% for variant in product.variants %}
+                                  {% if variant.id == found_variant_id %}
+                                  <option selected="selected" value="{{ variant.id }}">{{ variant.title | escape }}</option>
+                                  {% else %}
+                                  <option value="{{ variant.id }}">{{ variant.title | escape }}</option>
+                                  {% endif %}
+                                  {% endfor %}
+                                  {% else %}
+                                  {% assign found_one_in_stock = false %}
+                                  {% for variant in product.variants %}
+                                  {% if variant.available and found_one_in_stock == false %}
+                                  {% assign found_one_in_stock = true %}
+                                  <option selected="selected" value="{{ variant.id }}">{{ variant.title | escape }}</option>
+                                  {% else %}
+                                  <option value="{{ variant.id }}">{{ variant.title | escape }}</option>
+                                  {% endif %}
+                                  {% endfor %}
+                                  {% endif %}
+                                </select>
+                              </div>  
+                              {% endif %}
+                              {% comment %}
+                              <div class="effect-ajax-cart">
+                                {% if product.available %}
+                                <div class="qtybox">
+                                  <span class="btnqty qtyminus icon icon-minus"><i class="fa fa-minus" aria-hidden="true"></i></span>
+                                  <input type="text" id="quantity" name="quantity" value="1" min="1" class="quantity-selector quantity-input" readonly="">
+                                  <span class="btnqty qtyplus icon icon-plus"><i class="fa fa-plus" aria-hidden="true"></i></span>
+                                </div>
+                                  <button class="btn add-to-cart" data-parent=".parent-fly" type="submit" name="add"><span class="cart-btn-text">Add Item</span></button>
+                                {% else %}
+                                <button class="btn add-to-cart disabled" disabled="disabled" type="button" name="add"><span class="cart-btn-text">Sold Out</span></button>
+                                {% endif %}
+
+                              </div>
+                               {% endcomment %}
+
+                            </form>
+                          </div>
+                          <div class="popup_product featherlight-inner" data-id="{{ product.id }}">
+                            <span class="close">✕</span>
+                            <div class="popup_content">
+
+                              <div class="product-page">
+                                <div class="grid--stretch-align">
+                                  <div class="large-up--one-half product__slider-wrapper">
+                                    <div class="product__slider fixed-element slider--{{ product.id }}">
+                                      {% for image in  product.images %}
+                                      <div class="slide">
+                                        <img
+                                             alt="{{ image.alt | escape  }}"
+                                             src="{{ image.src | img_url: '700x700', crop: 'center'  }}"
+                                             data-src="{{ image.src  | img_url: '700x700', crop: 'center' }}"
+                                             class="lazyload blur-up" />
+                                      </div>
+                                      {% endfor %}
+                                    </div>
+                                  </div>
+                                  <div class="large-up--one-half">
+                                    <div class="product__info">
+                                      <div class="product__header">
+                                          <h3>{{ product.title }}</h3>
+                                      </div>
+
+                                      <div class="product__description">
+
+                                      {% if product.description contains '<h6>'%}
+                                      <div id="accordion-container"> 
+
+                                        {% assign ind = 0 %}
+
+                                        {% assign description_parts = product.description | split: "<h6" %}
+                                        {% assign product_info = description_parts | first %}
+
+                                        {% if product_info contains '<p>' %}
+                                        {{ product_info }}
+                                        {% else %}
+                                        <p>{{ product_info }}</p> 
+                                        {% endif %}
+
+                                        {% for part in description_parts %}
+                                        {% if part contains "</h6>" %}
+                                        {% assign remove = part | split: ">" | first | append: ">" %}
+                                        <div class="accordion-header" >{{ part | split: "</h6>" | first | strip_html | replace: remove, "" }}<i class="fal fa-angle-down"></i></div>
+                                        <div class="accordion-content">{{ part | split: "</h6>" | last | replace: "<div", "<span" | replace: "</div", "</span" }}</div> 
+                                        {%comment%}<div class="accordion-content"{% if ind == 1 %}style="display: block;"{% endif %}>{{ part | split: "</h6>" | last | replace: "<div", "<span" | replace: "</div", "</span" }}</div> {%endcomment%}
+                                        <hr/>
+                                        {% endif %}
+                                        {% assign ind = ind | plus: 1 %}
+                                        {% endfor %}
+
+
+                                      </div>
+                                      {% else %}
+                                        {{ product.description }}
+                                      {% endif %}
+                                        {%- comment -%}
+                                      {% section 'product-note' %}
+                                       Change on May 03, 2020 by Bekka F. at Shopify {%- endcomment -%} 
+                                        <!-- Start of Judge.me code -->
+      <div style='clear:both'></div>
+      <div id='judgeme_product_reviews' class='jdgm-widget jdgm-review-widget' data-product-title='{{ product.title | escape }}' data-id='{{ product.id }}' data-auto-install='false'>
+        {{ product.metafields.judgeme.widget }}
+      </div>
+      <!-- End of Judge.me code -->
+                                        {% comment %}
+                                      <div id="shopify-product-reviews" data-id="{{product.id}}">{{ product.metafields.spr.reviews }}</div>
+                                        {% endcomment %}
+                                    </div>
+                                    </div>
+
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    <script>
+
+                      var $jq{{ product.id }} = jQuery.noConflict();
+                      $jq{{ product.id }}('.slider--{{ product.id }}').slick({
+                          draggable:true,
+                          arrows:false,
+                          autoplay:true,
+                          autoplaySpeed: 2000,                
+                          centerMode:false,
+                          infinite: true,
+                          slidesToShow: 1,
+                          slidesToScroll: 1,
+                          variableWidth:false,
+                          dots:true,
+                          swipeToSlide:false
+
+                          });
+
+                      $('.product-custom-{{ product.id }} .image-container--overlay').on('click',function(){
+                        var obj = $(this);
+                        setTimeout(function(){
+                              obj.parents('.product_item').find('.product__slider').get(0).slick.setPosition();
+                        }, 500);
+
+
+                      });
+
+
+                      // The Accordion Effect
+                      $('.product-custom-{{ product.id }} .accordion-header').on('click',function () {
+                          if($(this).hasClass('inactive-header')) {
+                            $(this).removeClass('inactive-header');
+                            $(this).next().removeClass('open-content');
+
+                          }else {
+                            $(this).addClass('inactive-header');
+                            $(this).next().addClass('open-content');
+
+                          }
+                      });
+
+
+                    </script>
+                    {% endfor %}
+                  </div>
+                </div>
+              {%endif%}
+            {% endfor %}
+                
+          {% endif %}
+      </div>
+  </div>
+  <!-- end left list collection  -->
+  
+  <!-- cart sidebar -->
+  <form action="/cart" method="post" novalidate class="cart">
+  <div data-cart-view="data-cart-view" id="viewSelection" class="view-selection">
+  		<div class="collection__sidebar--notification" rv-data-quantity="cart.item_count">
+
+
+            {% comment %}If item cound is greather than limit{% endcomment %}
+            <div>
+              <strong class="color--green">{ cart.item_count  }</strong> meals selected
+            </div>
+         </div>
+      	 <div class="view-title"><p class="title">View Selection</p><i class="fas fa-chevron-right"></i></div>
+  	</div>
+	<div class="collection__sidebar" >
+    	<div class="sidebar-hide"><span><i class="far fa-chevron-double-down"></i> hide</span></div>
+    	<div class="collection__sidebar-inner" id="sidebar"> 
+        <div data-cart-view="data-cart-view">
+
+          <div class="sidebar__header">
+            <h3>Your Cart</h3>          
+          </div>
+
+
+          <div class="sidebar__products">
+            <div class="sidebar-notification"><div class="sidebar-notification__inner">{{ upgradeText }}</div></div>
+            <div >
+              <div rv-each-item="cart.items" class="sidebar-item" rv-data-product="item.id">
+
+                <img rv-src="item.image | productImageSize '150x150'" rv-alt="item.product_title ">
+                <div class="info">
+
+                  <p class="product-title">{ item.product_title }</p>
+                  <div class="info__meta">
+                    <span class="product-variant" rv-data-title="item.variant_title ">{ item.variant_title }</span>
+                    <span class="item-price">{ item.price | money Currency.currentCurrency }</span>
+                  </div>
+
+                  <div class="quantity">
+                    <a href="#" rv-data-cart-update="index | plus 1" rv-data-cart-quantity="item.quantity | minus 1" class="sidebar-remove">-</a>
+                    <span class="add-quantity" rv-text="item.quantity"></span>
+                    <a href="#" rv-data-cart-update="index | plus 1" rv-data-cart-quantity="item.quantity | plus 1" class="sidebar-add">+</a>
+                  </div>
+                  {% comment %} <a href="#" rv-data-cart-remove="index | plus 1">&times;</a>{% endcomment %}
+                </div>
+                <div>
+	
+                </div>
+                <td rv-html="item.line_price | money Currency.currentCurrency"></td>
+              </div>
+
+              <div rv-show="cart.item_count | lt 1">
+                <td colspan="5">You don’t have any items in your Cart.</td>
+              </div>
+            </div>
+
+
+            <div rv-show="cart.item_count | gt 0" class="sidebar__footer">
+              <tr>
+                <td colspan="4" rv-html="cart.total_weight | weight_with_unit"></td>
+                <td rv-html="cart.total_price | money Currency.currentCurrency"></td>
+				
+              </tr>
+            </div>
+          </div>
+
+			<div data-cart-view>
+          
+              <div rv-show="cart.total_price | gt 7900" class="collection__sidebar-footer">
+            	<div class="collection__sidebar--notification" rv-data-quantity="cart.item_count">
+                    {% comment %}If item cound is greather than limit{% endcomment %}
+                    <div>
+                      <strong class="color--green">{ cart.item_count  }</strong> meals selected
+                    </div>
+                  	<div rv-html="cart.total_price | money Currency.currentCurrency" class="cart-sidebar__price"></div>
+                </div>
+                <div class="button_checkout">
+                  <div class="min_cart">Min spend is $79</div>
+                  <button type="submit" name="checkout" class="btn"  rv-if="cart.item_count | gt 0">Checkout</button>
+                  <button type="submit" name="checkout" class="btn"  rv-if="cart.item_count | lt 1" disabled>Checkout</button>
+                </div>
+      		</div>
+            <div rv-show="cart.total_price | lt 7900" class="collection__sidebar-footer no-checkout">
+              <div class="collection__sidebar--notification" rv-data-quantity="cart.item_count">
+                {% comment %}If item cound is greather than limit{% endcomment %}
+                <div>
+                  <strong class="color--green">{ cart.item_count  }</strong> meals selected
+                </div>
+                <div rv-html="cart.total_price | money Currency.currentCurrency" class="cart-sidebar__price"></div>
+              </div>
+              <div class="button_checkout">
+                <div class="min_cart">Min spend is $79</div>
+                <button type="submit" name="checkout" class="btn"  rv-if="cart.item_count | gt 0">Checkout</button>
+                <button type="submit" name="checkout" class="btn"  rv-if="cart.item_count | lt 1" disabled>Checkout</button>
+              </div>
+          	</div>
+         </div>
+          
+        
+      </div>
+          
+
+    </div>
+  </div>
+  </form>
+  
+<!-- end cart sidebar -->
+</div>
+
+  <script>
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+
+        const targetElement = document.querySelector(this.getAttribute('href'));
+
+        targetElement.scrollIntoView({
+          behavior: 'smooth'
+        });
+
+        // Add animation class after scrolling
+        setTimeout(() => {
+          targetElement.classList.add('visible');
+        }, 500); // Adjust timeout to match the scrolling duration if needed
+      });
+    });
+
+    // Optional: remove the animation class when the element is not in view
+    window.addEventListener('scroll', () => {
+      const smoothiesSection = document.getElementById('smoothies');
+      if (!isElementInViewport(smoothiesSection)) {
+        smoothiesSection.classList.remove('visible');
+      }
+    });
+
+    // Utility function to check if an element is in the viewport
+    function isElementInViewport(el) {
+      const rect = el.getBoundingClientRect();
+      return (
+        rect.top >= 0 &&
+        rect.left >= 0 &&
+        rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+        rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+      );
+    }
+  </script>
+{% comment %}
+{% include 'cartbar_bottom' %}
+{% endcomment %}
+<script>
+(function($) {
+  $('.sidebar-remove').on('click', function(){
+    var quantity = $(this).parents('.quantity').find('.add-quantity').text();
+    console.log('Sidebar remove clicked');
+    console.log('Quantity:', quantity);
+    if(quantity == '1'){
+      console.log('Quantity is 1');
+      $(".sidebar-item:last").remove();
+    }              
+  });
+
+  $('.qtybox .btnqty').on('click', function(){
+    console.log('Quantity box button clicked');
+    var qty = parseInt($(this).parent('.qtybox').find('.quantity-input').val());
+    if($(this).hasClass('qtyplus')) {
+      qty++;
+    } else {
+      if(qty > 1) {
+        qty--;
+      }
+    }
+    qty = (isNaN(qty))?1:qty;
+    $(this).parent('.qtybox').find('.quantity-input').val(qty);
+  }); 
+
+  $('.left-sidebar .category li a').click(function(){
+    console.log('Category link clicked');
+    var id = $(this).attr('href');
+    $('html,body').animate({scrollTop: $(id).offset().top - 65}, 1500);
+  });
+
+  $(window).scroll(function(){
+    console.log('Window scrolled');
+    var scrollbody = $(window).scrollTop();
+    var heightbody = $("body").height();
+    var footer = heightbody - $("footer").height() - 550;
+    if (700 < scrollbody && scrollbody < footer) { 
+      $(".main-collection").addClass('fixed');
+    } else {
+      $(".main-collection").removeClass('fixed');
+    }
+  });
+
+  $(window).scroll(function() {
+    console.log('Window scrolled');
+    var scrollDistance = $(window).scrollTop();
+    // Assign active class to nav links while scrolling
+    $('.main-collection .collection_item').each(function(i) {
+      if ($(this).position().top <= scrollDistance) {
+        console.log('Collection item', i, 'is in view');
+        $('.left-sidebar .category li a.active').removeClass('active');
+        $('.left-sidebar .category li a').eq(i).addClass('active');
+      }
+    });
+  }).scroll();
+
+  var cart = $('.main-collection .collection__sidebar').offset().top;
+  $(window).scroll(function() {
+    console.log('Window scrolled');
+    var Scrollcart = $(window).scrollTop();
+    if (Scrollcart >= cart) {
+      console.log('Cart is in view');
+      $('.main-collection .collection__sidebar').addClass('fixed-element');
+    } else {
+      $('.main-collection .collection__sidebar').removeClass('fixed-element');
+    }
+  });
+})(jQuery);
+
+
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/shopify-cartjs/1.1.0/cart.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/shopify-cartjs/1.1.0/rivets-cart.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+{% schema %}
+{
+  "name": {
+    "de": "Kategorien-Liste Seite",
+    "en": "Collections list page",
+    "es": "Lista de colecciones",
+    "fr": "Liste des collections",
+    "it": "Elenco collezioni",
+    "ja": "コレクションリストのページ",
+    "pt-BR": "Lista de coleções"
+  },
+  "settings": [
+	{
+      "id": "bg-img",
+      "type":"image_picker",
+      "label": "Background Banner"
+    },
+	{
+      "id": "titlebanner",
+      "type":"text",
+      "label": "Title Banner"
+    },
+	{
+      "id": "subtitle-banner",
+      "type":"text",
+      "label": "Sub Title Banner"
+    },
+    {
+      "type": "paragraph",
+      "content": {
+        "de": "Alle kategorien sind automatisch gelistet. Zum Ändern der Liste wählen Sie 'Ausgewählt' und fügen Sie Kategorien hinzu.",
+        "en": "All of your collections are listed by default. To customize your list, choose 'Selected' and add collections.",
+        "es": "Todas tus colecciones están enlistadas por defecto. Para personalizar tu lista, elige 'Seleccionadas' y agrega colecciones.",
+        "fr": "Toutes vos collections sont listées par défaut. Pour personaliser votre liste, cliquez sur « Sélection » et ajoutez des collections.",
+        "it": "Tutte le tue collezioni vengono elencate per impostazione predefinita. Per personalizzare il tuo elenco, scegli \"Selezionato\" e aggiungi delle collezioni.",
+        "ja": "すべてのコレクションがデフォルトで一覧表示されます。一覧をカスタマイズするには、「選択済み」を選択してコレクションを追加します。",
+        "pt-BR": "Todas as suas coleções são listadas por padrão. Para personalizar sua lista, escolha \"Selecionado\" e adicione coleções."
+      }
+    },
+    {
+      "type": "radio",
+      "id": "display_type",
+      "label": {
+        "de": "Collections auswählen, die angezeigt werden sollen",
+        "en": "Select collections to show",
+        "es": "Selecciona colecciones para mostrar",
+        "fr": "Sélectionner les collections à afficher",
+        "it": "Seleziona le collezioni da mostrare",
+        "ja": "表示するコレクションを選択する",
+        "pt-BR": "Selecione coleções para exibir"
+      },
+      "default": "all",
+      "options": [
+        {
+          "value": "all",
+          "label": {
+            "de": "Alle",
+            "en": "All",
+            "es": "Todas",
+            "fr": "Toutes",
+            "it": "Tutti",
+            "ja": "すべて",
+            "pt-BR": "Tudo"
+          }
+        },
+        {
+          "value": "selected",
+          "label": {
+            "de": "Ausgewählt",
+            "en": "Selected",
+            "es": "Seleccionadas",
+            "fr": "Sélection",
+            "it": "Selezionato",
+            "ja": "選択済み",
+            "pt-BR": "Selecionado"
+          }
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "sort",
+      "label": {
+        "de": "Kategorien sortieren nach:",
+        "en": "Sort collections by:",
+        "es": "Ordenar colecciones por:",
+        "fr": "Trier les collections par:",
+        "it": "Ordina le collezioni per:",
+        "ja": "コレクションの並べ替え方法:",
+        "pt-BR": "Ordenar coleções por:"
+      },
+      "info": {
+        "de": "Sortieren funktioniert nur, wenn 'Alle' ausgewählt ist",
+        "en": "Sorting only applies when 'All' is selected",
+        "es": "La función ordenar solo se aplica cuando se selecciona \"Todas\"",
+        "fr": "Le tri ne s'applique que lorsque “Toutes“ est sélectionné",
+        "it": "L'ordinamento viene applicato solo quanto è selezionato \"Tutto\"",
+        "ja": "「すべて」が選択されている場合にのみ並べ替えを適用する",
+        "pt-BR": "A classificação só se aplica quando \"Tudo\" está selecionado"
+      },
+      "default": "alphabetical",
+      "options": [
+        {
+          "value": "products_high",
+          "label": {
+            "de": "Produktanzahl, hoch zu niedrig",
+            "en": "Product count, high to low",
+            "es": "Recuento de productos, de mayor a menor",
+            "fr": "Nombre de produits, ordre décroissant",
+            "it": "Conteggio decrescente prodotti",
+            "ja": "商品数の多い順",
+            "pt-BR": "Contagem de produtos, alta para baixa"
+          }
+        },
+        {
+          "value": "products_low",
+          "label": {
+            "de": "Produktanzahl, niedrig zu hoch",
+            "en": "Product count, low to high",
+            "es": "Recuento de productos, de menor a mayor",
+            "fr": "Nombre de produits, ordre croissant",
+            "it": "Conteggio crescente prodotti",
+            "ja": "商品数の少ない順",
+            "pt-BR": "Contagem de produtos, baixa para alta"
+          }
+        },
+        {
+          "value": "alphabetical",
+          "label": {
+            "de": "Alphabetisch, A-Z",
+            "en": "Alphabetically, A-Z",
+            "es": "Alfabéticamente, A-Z",
+            "fr": "Alphabétique, A-Z",
+            "it": "In ordine alfabetico, A - Z",
+            "ja": "アルファベット順、 A-Z",
+            "pt-BR": "Ordem alfabética, A–Z"
+          }
+        },
+        {
+          "value": "alphabetical_reversed",
+          "label": {
+            "de": "Alphabetisch, Z-A",
+            "en": "Alphabetically, Z-A",
+            "es": "Alfabéticamente, Z-A",
+            "fr": "Alphabétique, Z-A",
+            "it": "In ordine alfabetico, Z - A",
+            "ja": "アルファベット順、 Z-A",
+            "pt-BR": "Ordem alfabética, Z–A"
+          }
+        },
+        {
+          "value": "date",
+          "label": {
+            "de": "Datum, alt zu neu",
+            "en": "Date, old to new",
+            "es": "Fecha: antiguo(a) a reciente",
+            "fr": "Date, anciennes à récentes",
+            "it": "Data, dal più vecchio al più recente",
+            "ja": "古い商品順",
+            "pt-BR": "Data, mais antiga primeiro"
+          }
+        },
+        {
+          "value": "date_reversed",
+          "label": {
+            "de": "Datum, neu zu alt",
+            "en": "Date, new to old",
+            "es": "Fecha: reciente a antiguo(a)",
+            "fr": "Date, récentes à anciennes",
+            "it": "Data, dal più recente al più vecchio",
+            "ja": "新着順",
+            "pt-BR": "Data, mais recente primeiro"
+          }
+        }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "grid",
+      "label": {
+        "de": "Kategorien per Reihe",
+        "en": "Collections per row",
+        "es": "Colecciones por fila",
+        "fr": "Collections par rangée",
+        "it": "Collezioni per riga",
+        "ja": "行あたりのコレクション数",
+        "pt-BR": "Coleções por linha"
+      },
+      "default": 3,
+      "min": 2,
+      "max": 5,
+      "step": 1
+    },
+	{
+      "type": "header",
+      "content": "Cart Bar Bottom"
+    },
+	{
+      "type": "text",
+      "id": "save",
+      "label": "SUBSCRIBE SAVE"
+    },
+	{
+      "type": "text",
+      "id": "min_order",
+      "label": "Min order"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "collection",
+      "name": {
+        "de": "Kategorie",
+        "en": "Collection",
+        "es": "Colección",
+        "fr": "Collection",
+        "it": "Collezione",
+        "ja": "コレクション",
+        "pt-BR": "Coleção"
+      },
+      "settings": [
+        {
+          "label": {
+            "de": "Kategorie",
+            "en": "Collection",
+            "es": "Colección",
+            "fr": "Collection",
+            "it": "Collezione",
+            "ja": "コレクション",
+            "pt-BR": "Coleção"
+          },
+          "id": "collection",
+          "type": "collection"
+        },
+		{
+          "id": "img_collection",
+          "type":"image_picker",
+          "label": "Featured Collection"
+        }
+      ]
+    },
+	{
+      "type": "tag",
+      "name": "Tag",
+      "settings": [
+        {
+          "id": "tag1",
+          "type":"text",
+          "label": "Change"
+        },
+		{
+          "id": "tag2",
+          "type":"text",
+          "label": "To"
+        },
+		{
+          "id": "color",
+          "type":"color",
+          "label": "Color"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

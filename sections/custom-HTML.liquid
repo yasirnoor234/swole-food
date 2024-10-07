@@ -1,0 +1,29 @@
+<section>
+{% if section.settings.code != blank %}
+                {{ section.settings.code }}
+              {% endif %}
+</section>
+{% schema %}
+  {
+    "name": "Custom HTML",
+    "settings": [
+       {
+	 	"id": "code",
+		"type":"html",
+		"label": "HTML"
+       }
+	],
+   "presets": [
+      {
+        "name": "Custom HTML", 
+        "category": "Zyber Custom"
+      }
+  ]
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

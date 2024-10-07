@@ -1,0 +1,330 @@
+{{ 'hero-video.css' | asset_url | stylesheet_tag }}
+
+{%- if section.blocks.size > 0 -%}
+	{%- for block in section.blocks -%}
+		{%- assign img_url = block.settings.image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' -%}
+
+		{% if block.type == 'video' %}
+			<div class="videoBox" style="{%- if block.settings.video_link == blank -%}background-image: url('{{ block.settings.video_image  | img_url: 'master' }}');{%- endif -%}">
+
+				{%- if block.settings.video_link != blank -%}
+					<div class="fullscreen-video-wrap fullscreen-video-wrap-desktop">
+						<video class="video-js" loop autoplay preload="none" muted playsinline
+						poster="https:{{ block.settings.video_image | img_url: '2048x' }}">
+							<source src="{{ block.settings.video_link }}" type="video/mp4">
+						</video>
+					</div>
+				{% endif %}
+              
+              	{%- if block.settings.video_link_mobile != blank -%}
+					<div class="fullscreen-video-wrap fullscreen-video-wrap-mobile">
+						<video class="video-js" loop autoplay preload="none" muted playsinline
+						poster="https:{{ block.settings.video_image_mobile | img_url: '600x' }}">
+							<source src="{{ block.settings.video_link_mobile }}" type="video/mp4">
+						</video>
+					</div>
+				{% endif %}
+              
+				{% if block.settings.title != blank or block.settings.button_label != blank or block.settings.text != blank   %}
+                  <div class="overlay" style="opacity: {{ block.settings.overlay_opacity }}%"></div>
+                  <div class="videoBoxInfo">
+                      {% if block.settings.title != blank %}
+                          <h1 class="subtitle videoTitle" style="color: {{ block.settings.color_text }};">
+                              {{ block.settings.title | escape }}
+                          </h1>
+                      {% endif %}
+
+                      {%- style -%}
+                          .videoBackground .imageBoxInfoDescription p {
+                              color: {{ block.settings.color_text }}!important;
+                          }
+                      {%- endstyle -%}
+
+                      {% if block.settings.text != blank %}
+                          <div class="imageBoxInfoDescription" id="{{ block.id }}" style="color: {{ block.settings.color_text }}">
+                              {{ block.settings.text }}
+                          </div>
+                      {% endif %}
+
+                      {% if block.settings.button_link != blank and block.settings.button_label != blank %}
+                          <a href="{{ block.settings.button_link }}" class="btn_ge btn_large btn_orange videoBtn" style="color: {{ block.settings.color_btn_text }}; background: {{ block.settings.color_btn_bg }}">
+                              {{ block.settings.button_label | escape }}
+                          </a>
+                      {% endif %}
+                  </div>
+                {% endif %}
+			</div>
+			{% else %}
+				<div class="imageBox" style="background-color: {{ block.settings.color_bg }}; {%- if block.settings.image_bg != blank -%}background-image: url('{{ block.settings.image_bg | img_url: 'master' }}');{%- endif -%}">
+
+					<div class="overlay" style="opacity: {{ block.settings.overlay_opacity }}%"></div>
+
+					<div class="imageBoxInfo">
+						{% if block.settings.title != blank %}
+							<h1 class="subtitle videoTitle" style="color: {{ block.settings.color_text }};">
+								{{ block.settings.title | escape }}
+							</h1>
+						{% endif %}
+
+						{%- style -%}
+							.videoBackground .imageBoxInfoDescription p {
+								color: {{ block.settings.color_text }}!important;
+							}
+						{%- endstyle -%}
+
+						{% if block.settings.text != blank %}
+							<div class="imageBoxInfoDescription" id="{{ block.id }}" style="color: {{ block.settings.color_text }}">
+								{{ block.settings.text }}
+							</div>
+						{% endif %}
+
+						{% if block.settings.button_link != blank and block.settings.button_label != blank %}
+							<a href="{{ block.settings.button_link }}" class="btn_ge btn_large btn_orange videoBtn" style="color: {{ block.settings.color_btn_text }}; background: {{ block.settings.color_btn_bg }}">
+								{{ block.settings.button_label | escape }}
+							</a>
+						{% endif %}
+					</div>
+				</div>
+		{% endif %}
+	{%- endfor -%}
+
+{% else %}
+	 <div class="placeholderNoblocks">
+      	This section doesn’t currently include any content. Add content to this section using the sidebar.
+    </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": {
+    "en": "Hero Video"
+  },
+  "class": "videoBackground",
+  "max_blocks": 1,
+  "blocks": [
+    {
+      "type": "video",
+      "name": "Video",
+      "settings": [
+        {
+          "type": "url",
+          "id": "video_link",
+          "label": {
+            "en": "Video link (desktop)"
+          }
+        },
+        {
+          "type": "url",
+          "id": "video_link_mobile",
+          "label": {
+            "en": "Video link (mobile)"
+          }
+        },
+        {
+          "type": "image_picker",
+          "id": "video_image",
+          "label": {
+            "en": "Cover image"
+          }
+        },
+        {
+          "type": "image_picker",
+          "id": "video_image_mobile",
+          "label": {
+            "en": "Cover image (mobile)"
+          }
+        },
+        {
+          "type": "range",
+          "id": "overlay_opacity",
+          "label": {
+            "en": "Overlay opacity"
+          },
+          "min": 0,
+          "max": 99,
+          "step": 1,
+          "unit": {
+            "en": "%"
+          },
+          "default": 0
+        },
+        {
+          "type": "header",
+          "content": {
+            "en": "Text"
+          }
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": {
+            "en": "Heading"
+          },
+          "default": "Video slide"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": {
+            "en": "Description"
+          },
+          "default": {
+            "en": "<p>Use this text to share information about your brand with your customers. Describe a product, share announcements, or welcome customers to your store.</p>"
+          }
+        },
+        {
+          "type": "color",
+          "id": "color_text",
+          "label": {
+            "en": "Text color"
+          },
+          "default": "#ffffff"
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": {
+            "en": "Button label"
+          }
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": {
+            "en": "Button link"
+          }
+        },
+        {
+          "type": "color",
+          "id": "color_btn_bg",
+          "label": {
+            "en": "Background button color"
+          },
+          "default": "#ffffff"
+        },
+        {
+          "type": "color",
+          "id": "color_btn_text",
+          "label": {
+            "en": "Button text color"
+          },
+          "default": "#ffffff"
+        }
+      ]
+    },
+    {
+      "type": "image",
+      "name": "Image",
+      "settings": [
+        {
+          "type": "color",
+          "id": "color_bg",
+          "label": {
+            "en": "Background color (optional)"
+          },
+          "default": "#16165b"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_bg",
+          "label": {
+            "en": "or use an image (required)"
+          }
+        },
+        {
+          "type": "range",
+          "id": "overlay_opacity",
+          "label": {
+            "en": "Overlay opacity"
+          },
+          "min": 0,
+          "max": 99,
+          "step": 1,
+          "unit": {
+            "en": "%"
+          },
+          "default": 0
+        },
+        {
+          "type": "header",
+          "content": {
+            "en": "Text"
+          }
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "default": "Image slide",
+          "label": {
+            "en": "Heading"
+          }
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": {
+            "en": "Description"
+          },
+          "default": {
+            "en": "<p>Use this text to share information about your brand with your customers. Describe a product, share announcements, or welcome customers to your store.</p>"
+          }
+        },
+        {
+          "type": "color",
+          "id": "color_text",
+          "label": {
+            "en": "Text color"
+          },
+          "default": "#ffffff"
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": {
+            "en": "Button label"
+          }
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": {
+            "en": "Button link"
+          }
+        },
+        {
+          "type": "color",
+          "id": "color_btn_bg",
+          "label": {
+            "en": "Background button color"
+          },
+          "default": "#ffffff"
+        },
+        {
+          "type": "color",
+          "id": "color_btn_text",
+          "label": {
+            "en": "Button text color"
+          },
+          "default": "#ffffff"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": {
+        "en": "Hero Video"
+      },
+      "category": {
+        "en": "Main"
+      },
+      "blocks": [
+        {
+          "type": "video"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
+

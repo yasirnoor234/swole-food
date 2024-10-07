@@ -1,0 +1,73 @@
+<div class="banner_pc">
+  <div class="image_wrap">
+  	<img src="{{section.settings.bg | img_url:'master'}}" />
+  </div>
+  <div class="content">
+ 	 <h2 class="title">{{section.settings.title}}</h2>
+  </div>
+</div>
+<div class="banner_mobile">
+  <div class="image_wrap">
+  	<img src="{{section.settings.bg_mb | img_url:'master'}}" />
+  </div>
+  <div class="content">
+ 	 <h2 class="title">{{section.settings.title}}</h2>
+  </div>
+</div>
+<style>
+  {% if section.settings.greyshade == true %}
+  .banner_pc .image_wrap::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: rgba(0,0,0,0.3);
+    width: 100%;
+    height: 100%;
+  }
+  {% endif %}
+</style>
+{% schema %}
+{
+  "name": "Banner partner",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "greyshade",
+      "label": "Grey Shade"
+    },
+    {
+      "type": "image_picker",
+      "id": "bg",
+      "label": "Background Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "bg_mb",
+      "label": "Background Mobile Image"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title line 1"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Banner Partner",
+      "category": "Default",
+      "settings": {
+        "greyshade": false,
+        "title": "Welcome to our store"
+      }
+    }
+  ]
+}
+{% endschema %}
+
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

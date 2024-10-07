@@ -1,0 +1,200 @@
+<style>
+@media screen and (min-width: 750px) {
+  body.homePage.template-product .product-page .grid__item {
+    max-width: calc(100% - var(--grid-desktop-horizontal-spacing) / 2) !important;
+  }
+  body.homePage.template-product .grid {
+    column-gap: unset !important;
+    row-gap: unset !important;
+  }
+}
+body.homePage.template-product .grid__item {
+  max-width: calc(100% - var(--grid-desktop-horizontal-spacing) / 2) !important;
+}
+body.homePage.template-product .grid {
+  column-gap: unset !important;
+  row-gap: unset !important;
+}  
+</style>
+
+<div class="product-page" id="productPage">
+  <div class="grid grid--stretch-align">
+
+    <div class="grid__item large-up--one-half product__slider-wrapper">
+      {% include 'product-image-slider' %}
+    </div>
+
+    <div class="grid__item large-up--one-half">
+      <div class="product__info">
+        <div class="product__header">
+        <h1>{{ product.title }}</h1>
+          <!-- Start of Judge.me code --><div style='{{ jm_style }}' class='jdgm-widget jdgm-preview-badge' data-id='{{ product.id }}' data-auto-install='false'>{{ product.metafields.judgeme.badge }}</div><!-- End of Judge.me code -->         
+
+          <div class="product-block price-add-product" style="border: 0 none;">
+            <ul class="order-buttons">
+              {% for variant in product.variants %}
+                {%- assign available = false -%}
+                {% if variant.inventory_quantity > 0 %}
+                  {%- assign available = true -%}
+                {% endif %}
+                <li class="order-variant variant--{{ variant.title | handleize }}" data-id="nurition_{{ variant.title | handleize }}{{ product.id }}">
+                  <div class="variant-title {% if available == false %}variantTextDisable{% endif %}" id="{{ variant.id }}-title-variant"><strong>{{ variant.title }}</strong></div>
+                  <div class="variant-price {% if available == false %}variantTextDisable{% endif %}">{{ variant.price | money }}</div>
+                  <div class="variant-add__wrapper">
+                    {% if collectionTag == 'wholesale' %}
+                      <input type="number" class="input-quantity" min="1" style="width:80px;"/>
+                    {% endif %}
+                    {% if available %}
+                      <button class="variant-add" id="{{ variant.id }}-add-buttom" data-cart-add="{{ variant.id }}" data-cart-quantity="1" data-aitems="{{variant.inventory_quantity}}" data-parent="{{ product.id }}">+<span> Add</span></button>
+                    {% else %}
+                      <button class="variant-add variantDisable" title="SOLD OUT" disabled>+<span> Add</span></button>
+                    {% endif %}
+                  </div>
+                </li>
+              {% endfor %}
+            </ul>
+          </div>
+
+
+        <div data-price-wrapper class="product__prices">
+          From 
+          <span data-product-price>
+            {{ product.price_min | money }}
+          </span>
+
+        </div>
+
+        {% comment %}
+          {% if cart.item_count == 0 %}
+            <a href="/collections" class="btn popup-hide build_pack" data-featherlight="/ #planWrapper">Build my pack now</a>    
+          {% elsif cart.item_count < 6  %}
+            <a href="/collections/6-meals" class="btn popup-hide build_pack">Continue Building Your Pack</a>
+          {% elsif cart.item_count < 12  %}
+            <a href="/collections/12-meals" class="btn popup-hide build_pack">Continue Building Your Pack</a>
+          {% else %}
+            <a href="/collections/18-meals" class="btn popup-hide build_pack">Continue Building Your Pack</a>
+          {% endif %}
+        {% endcomment %}
+          <a href="/collections" class="btn">Build Your Pack</a>
+        </div>
+        
+        
+        <div class="product__description">
+          
+          {% if product.description contains '<h6>'%}
+          <div id="accordion-container"> 
+            
+            {% assign ind = 0 %}
+            
+            {% assign description_parts = product.description | split: "<h6" %}
+            {% assign product_info = description_parts | first %}
+            
+            {% if product_info contains '<p>' %}
+              {{ product_info }}
+            {% else %}
+              <p>{{ product_info }}</p> 
+            {% endif %}
+            
+            {% for part in description_parts %}
+            {% if part contains "</h6>" %}
+            {% assign remove = part | split: ">" | first | append: ">" %}
+            <div class="accordion-header" >{{ part | split: "</h6>" | first | strip_html | replace: remove, "" }}<i class="fal fa-angle-down"></i></div>
+            <div class="accordion-content">{{ part | split: "</h6>" | last | replace: "<div", "<span" | replace: "</div", "</span" }}</div> 
+            {%comment%}<div class="accordion-content"{% if ind == 1 %}style="display: block;"{% endif %}>{{ part | split: "</h6>" | last | replace: "<div", "<span" | replace: "</div", "</span" }}</div> {%endcomment%}
+            <hr/>
+            {% endif %}
+            {% assign ind = ind | plus: 1 %}
+            {% endfor %}
+
+            
+          </div>
+          {% else %}
+          	{{ product.description }}
+          {% endif %}
+          
+          {% section 'product-note' %}
+          <!-- Start of Judge.me code --><div style='clear:both'></div><div id='judgeme_product_reviews' class='jdgm-widget jdgm-review-widget' data-product-title='{{ product.title | escape }}' data-id='{{ product.id }}' data-auto-install='false'>{{ product.metafields.judgeme.widget }}</div><!-- End of Judge.me code -->
+          {%- comment -%} Change on May 03, 2020 by Bekka F. at Shopify {%- endcomment -%} 
+          {% comment %}
+          <div id="shopify-product-reviews" data-id="{{product.id}}">{{ product.metafields.spr.reviews }}</div>
+          {% endcomment %}
+        </div>
+        
+        
+        {% section 'related-products' %}
+
+
+
+      </div>
+    </div>
+  </div>
+  
+  <script>
+jQuery(document).ready(function($) {
+    // Add Inactive Class To All Accordion Headers
+    $('.accordion-header').toggleClass('inactive-header');
+
+    // Set The Accordion Content Width
+    var contentwidth = $('.accordion-header').width();
+    $('.accordion-content').css({ 'width': contentwidth });
+
+    // Open The First Accordion Section When Page Loads
+    $('.accordion-header').first().toggleClass('active-header inactive-header');
+    $('.accordion-content').first().slideDown().toggleClass('open-content');
+
+    // The Accordion Effect
+    $('.accordion-header').click(function() {
+        if ($(this).hasClass('inactive-header')) {
+            $('.active-header').toggleClass('active-header inactive-header').next().toggle().toggleClass('open-content');
+            $(this).toggleClass('active-header inactive-header');
+            $(this).next().toggle().toggleClass('open-content');
+        } else {
+            $(this).toggleClass('active-header inactive-header');
+            $(this).next().toggle().toggleClass('open-content');
+        }
+    });
+
+    /* Uncomment if you want to initialize slick slider
+    $('.product__slider').each(function() {
+        $(this).slick({
+            infinite: true,
+            dots: true,
+            arrows: false,
+            slidesToShow: 1,
+            slidesToScroll: 1
+        });
+    });
+    */
+
+    return false;
+});
+
+    
+    // $(document).ready(function(){
+
+    //     /*
+    //     //GET PREVIOUS PAGE URL, SPLIT AND GET THE LAST ELEMENT
+    //     var previousPage =  document.referrer;
+    //     var splitUrl = previousPage.split('/');
+    //     var lastPageName = splitUrl[splitUrl.length-1];
+
+    //     console.log(lastPageName);
+
+    //     if((lastPageName != "6-meals") && (lastPageName != "12-meals") && (lastPageName != "18-meals")){
+    //         $(".build_pack").css("display", "block");
+    //     }
+
+    //     if(location.href.includes("collections/all")){
+    //         $(".build_pack").show();
+    //     }
+    //     */
+        
+    //     productScripts();
+
+    // });
+  </script>
+  
+</div>
+{% comment %}
+<div class="reputon-google-reviews-widget" id="4494f420-1856-11ed-8711-6bf12dc4670c" ></div>
+{% endcomment %}

@@ -1,0 +1,7 @@
+{% if customer %}
+                                    {% assign customerId = customer.id %}
+                                    {% assign customerName = customer.name %}
+                                    {% assign customerEmail = customer.email %}
+                                {% endif %}
+                                <script>AMSBConfig = {user : {name : "{{ customerName }}", email : "{{ customerEmail }}", id : "{{ customerId }}", country : ""}, site : {id : "40232", domain : "swolefoodsnz.myshopify.com", platform : "sb_shopify"}};</script>
+                                

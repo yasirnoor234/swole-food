@@ -1,0 +1,30 @@
+<div class="customer-review">
+  <div class="page-width">
+    <h3 class="title_ge">{{section.settings.title}}</h3>
+    <div class="reputon-google-reviews-widget" id="baafbe70-e832-11ea-9d59-c10e528cc937" ></div>
+  </div>
+</div>
+{% schema %}
+  {
+    "name": "Customer Review",
+    "settings": [
+	{
+	 	"id": "title",
+		"type":"text",
+		"label": "Title"
+       }
+],
+  "presets": [
+    {
+      "name": "Customer Review",
+      "category": "Advanced layout"
+    }
+]
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

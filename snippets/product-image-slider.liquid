@@ -1,0 +1,96 @@
+<!-- Slick CSS -->
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css"/>
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css"/>
+
+
+<style>
+ .slider {
+        width: 50%;
+        margin: 100px auto;
+    }
+
+    .slick-slide {
+      margin: 0px 20px;
+    }
+
+    .slick-slide img {
+      width: 100%;
+    }
+
+    .slick-prev:before,
+    .slick-next:before {
+      color: black;
+    }
+
+
+    .slick-slide {
+      transition: all ease-in-out .3s;
+      opacity: .2;
+    }
+    
+    .slick-active {
+      opacity: .5;
+    }
+
+    .slick-current {
+      opacity: 1;
+    }
+@media screen and (min-width: 750px) {
+  .grid__item {
+    max-width: calc(
+      75% - var(--grid-desktop-horizontal-spacing) / 2
+    ) !important;
+  }
+  .grid {
+    column-gap: unset !important;
+    row-gap: unset !important;
+  }
+}
+section.section__block-image-text.block-image-text.block-feature-range
+  .grid__item {
+  max-width: calc(100% - var(--grid-desktop-horizontal-spacing) / 2) !important;
+}
+section.section__block-image-text block-image-text block-feature-range .grid {
+  column-gap: unset !important;
+  row-gap: unset !important;
+}  
+</style>
+
+
+<div class="product__slider fixed-element slider--{{ product.id }}">
+  {% for image in product.images %}
+  <div class="slide">
+    <img
+         alt="{{ image.alt | escape  }}"
+         src="{{ image.src | img_url: '700x700', crop: 'center'  }}"
+         data-src="{{ image.src  | img_url: '700x700', crop: 'center' }}"
+         class="lazyload blur-up" width="auto" height="auto"/>
+  </div>
+  {% endfor %}
+</div>
+
+  <!-- Slick Slider JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>                
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
+  
+  <!-- Theme's main JavaScript file -->
+  <script src="{{ 'theme.js' | asset_url }}" defer="defer"></script>
+
+<script>
+ var $jq = jQuery.noConflict();
+   $jq('.slider--{{ product.id }}').slick({
+     draggable:true,
+     arrows:false,
+     autoplay:true,
+     centerMode:false,
+     infinite: true,
+  slidesToShow: 1,
+  slidesToScroll: 1,
+     variableWidth:false,
+     dots:true,
+     swipeToSlide:false
+     
+    });
+ 
+</script>
+

@@ -1,0 +1,135 @@
+{% comment %} {{ 'customize.css' | asset_url | stylesheet_tag }} {% endcomment %}
+{{ 'custom.css' | asset_url | stylesheet_tag }}
+{{ 'styles.css' | asset_url | stylesheet_tag }}
+{{ 'theme.css' | asset_url | stylesheet_tag }}
+
+
+<div class="popup_product featherlight-inner" data-id="{{ product.id }}">
+  <span class="close">✕</span>
+  <div class="popup_content">
+
+    <div class="product-page">
+      <div class="grid grid--stretch-align">
+		{% capture number_of_images %}{{ product.images | size }}{% endcapture %}
+        {% if number_of_images > '1' %}
+        <div class="grid__item large-up--one-half product__slider-wrapper">
+          <div class="product__slider fixed-element slider--{{ product.id }}">
+            {% for image in  product.images %}
+            <div class="slide">
+              <img
+                   alt="{{ image.alt | escape  }}"
+                   src="{{ image.src | img_url: '50x50', crop: 'center'  }}"
+                   data-src="{{ image.src  | img_url: '700x700', crop: 'center' }}"
+                   class="lazyload blur-up" />
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+        {% else %}
+        <div class="grid__item large-up--one-half product__single-wrapper">
+          <div class="product__single fixed-element slider--single">
+            {% for image in  product.images %}
+            <div class="slide">
+              <img
+                   alt="{{ image.alt | escape  }}"
+                   src="{{ image.src | img_url: '50x50', crop: 'center'  }}"
+                   data-src="{{ image.src  | img_url: '700x700', crop: 'center' }}"
+                   class="lazyload blur-up" />
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+        {% endif %}
+        <div class="grid__item large-up--one-half">
+          <div class="product__info">
+            <div class="product__header">
+              <h1>{{ product.title }}</h1>
+            </div>
+
+            <div class="product__description">
+
+              {% if product.description contains '<h6>'%}
+              <div id="accordion-container"> 
+
+                {% assign ind = 0 %}
+
+                {% assign description_parts = product.description | split: "<h6" %}
+                {% assign product_info = description_parts | first %}
+
+                {% if product_info contains '<p>' %}
+                {{ product_info }}
+                {% else %}
+                <p>{{ product_info }}</p> 
+                {% endif %}
+
+                {% for part in description_parts %}
+                {% if part contains "</h6>" %}
+                {% assign remove = part | split: ">" | first | append: ">" %}
+                <div class="accordion-header" >{{ part | split: "</h6>" | first | strip_html | replace: remove, "" }}<i class="fal fa-angle-down"></i></div>
+                <div class="accordion-content">{{ part | split: "</h6>" | last | replace: "<div", "<span" | replace: "</div", "</span" }}</div> 
+                {%comment%}<div class="accordion-content"{% if ind == 1 %}style="display: block;"{% endif %}>{{ part | split: "</h6>" | last | replace: "<div", "<span" | replace: "</div", "</span" }}</div> {%endcomment%}
+                <hr/>
+                {% endif %}
+                {% assign ind = ind | plus: 1 %}
+                {% endfor %}
+
+
+              </div>
+              {% else %}
+              {{ product.description }}
+              {% endif %}
+              {%- comment -%}
+              {% section 'product-note' %}
+              Change on May 03, 2020 by Bekka F. at Shopify {%- endcomment -%} 
+              <!-- Start of Judge.me code -->
+              <div style='{{ jm_style }}' class='jdgm-widget jdgm-preview-badge' data-id='{{ product.id }}' data-auto-install='false'>
+                {{ product.metafields.judgeme.badge }}
+              </div>
+              <!-- End of Judge.me code -->
+              {% comment %}
+              <div id="shopify-product-reviews" data-id="{{product.id}}">{{ product.metafields.spr.reviews }}</div>
+              {% endcomment %}
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+</div>
+<script>
+
+  $(document).ready(function(){
+  	var $jq{{ product.id }} = jQuery.noConflict();
+  	$jq{{ product.id }}('.slider--{{ product.id }}').slick({
+                      draggable:true,
+                      arrows:false,
+                      autoplay:true,
+                      centerMode:false,
+                      autoplaySpeed: 2000,                
+                      infinite: true,
+                      slidesToShow: 1,
+                      slidesToScroll: 1,
+                      variableWidth:false,
+                      dots:true,
+                      swipeToSlide:false
+
+                      });
+
+    $('.product-custom-{{ product.id }} .image-container--overlay').on('click',function(){
+      var obj = $(this);
+      setTimeout(function(){
+      obj.parents('.product_item').find('.product__slider').get(0).slick.setPosition();
+    	}, 500);
+
+
+    });
+
+
+
+  })
+
+</script>

@@ -1,0 +1,203 @@
+<div class="icon-text">
+{% for block in section.blocks %} 
+	{% include 'block-hero' %}
+	{% include 'block-text' %}
+    {% include 'block-process'%}
+{% endfor %}
+<div class="section__block-image-text section--grey" id="{{ section.id }}">
+  {% for block in section.blocks %} 
+  {% include 'block-image-text-alt' %}
+  {% endfor %}
+</div>
+</div>
+{% schema %}
+{
+  "name": "Custom image column",
+  "settings": [],
+  "blocks": [
+    {
+      "type": "hero",
+      "name": "Hero",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "image_picker",
+          "id": "mobileimage",
+          "label": "Mobile Image"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Name"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Text"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "name": "Text",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title"
+        },
+        {
+          "type": "richtext",
+          "id": "text_top",
+          "label": "Text Top"
+        },
+        {
+          "type": "checkbox",
+          "id": "bullet-points",
+          "label": "Hide Bullet point list?",
+          "default": false
+        },
+        {
+          "type": "richtext",
+          "id": "bullet-pointstext",
+          "label": "List bullet points here"
+        },
+        {
+          "type": "richtext",
+          "id": "text_bottom",
+          "label": "Text bottom"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_icons",
+          "label": "Show icons?"
+        },
+        {
+          "type": "image_picker",
+          "id": "icon_1",
+          "label": "Replace Icon 1?"
+        },
+        {
+          "type": "image_picker",
+          "id": "icon_2",
+          "label": "Replace Icon 2?"
+        },
+        {
+          "type": "image_picker",
+          "id": "icon_3",
+          "label": "Replace Icon 3?"
+        },
+        {
+          "type": "image_picker",
+          "id": "icon_4",
+          "label": "Replace Icon 4?"
+        }
+      ]
+    },
+    {
+      "type": "image-text",
+      "name": "Image and Text",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        }
+      ]
+    },
+    {
+      "type": "block",
+      "name": "Block",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image1",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "number1",
+          "label": "Heading or number"
+        },
+        {
+          "type": "text",
+          "id": "title1",
+          "label": "Name"
+        },
+        {
+          "type": "text",
+          "id": "text1",
+          "label": "Text"
+        },
+        {
+          "type": "image_picker",
+          "id": "image2",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "number2",
+          "label": "Heading or number"
+        },
+        {
+          "type": "text",
+          "id": "title2",
+          "label": "Name"
+        },
+        {
+          "type": "text",
+          "id": "text2",
+          "label": "Text"
+        },
+        {
+          "type": "image_picker",
+          "id": "image3",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "number3",
+          "label": "Heading or number"
+        },
+        {
+          "type": "text",
+          "id": "title3",
+          "label": "Name"
+        },
+        {
+          "type": "text",
+          "id": "text3",
+          "label": "Text"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Custom Image Column",
+      "category": "Custom"
+    }
+  ]
+}
+{% endschema %}
+
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

@@ -1,0 +1,132 @@
+<style>
+/* Ensure Slick dots are visible and properly styled */
+.slick-dots {
+  bottom: -30px; /* Adjust position as needed */
+}
+.slick-dots li button:before {
+  color: black; /* Change color to ensure visibility */
+}
+.slick-dots li.slick-active button:before {
+  color: black; /* Change active dot color */
+}
+</style>
+
+<div class="lastest-news">
+  <div class="page-width">
+    <div class="list">
+      {% assign blog_handles = blog.handle %}
+      {% for article in blogs[blog_handles].articles limit: 5 %}
+        <div class="blogitem">
+          <div class="post-content">
+            <div class="post-media">
+              <div class="img">
+                <img src="{{ article.image.src | img_url: 'original' }}" alt="">
+              </div>
+            </div>
+            <div class="post-body">
+              <div class="post-time">
+                <span>{{ article.published_at | date: "%B %d, %Y" }}</span>
+
+                {% for tag in article.tags %}
+                {% assign han = tag | handle %}
+                {% if han == 'diet' %}
+                {% assign color = 'bg-red' %}
+                {% elsif han == 'sleep' or han == 'training' or han == 'beef' %}
+                {% assign color = 'orange' %}
+                {% elsif han == 'lifestyle'or han == 'lamb' %}
+                {% assign color = 'red' %}
+                {% elsif han == 'carbohydrates' %}
+                {% assign color = 'pink' %}
+                {% elsif han == 'exercise' %}
+                {% assign color = 'gray' %} 
+                {% elsif han == 'motivation'or han == 'chicken' %}
+                {% assign color = 'blue' %} 
+                {% elsif han == 'nutrition'or han == 'pork' %}
+                {% assign color = 'green' %} 
+                {% elsif han == 'protein' %}
+                {% assign color = 'yellow' %} 
+                {% elsif han == 'snacking' %}
+                {% assign color = 'violet' %} 
+                {% elsif han == 'superfoods' or han == 'vegetarian'%}
+                {% assign color = 'greendark' %} 
+                {% else %}
+                {% assign color = 'brown' %} 
+                {% endif %}
+                <a href="/blogs/{{ blog_handles }}/tagged/{{ tag | handle }}" class="tag color-{{color}}">{{ tag }}</a>{% unless forloop.last %}<span>,</span>{% endunless %}
+                {% endfor %}
+              </div>
+
+              <h4 class="post-title">
+                <a href="{{ article.url }}" title="{{ article.title }}">{{ article.title }}</a>
+              </h4>
+
+              {% if blog.title == 'Recipes' %}
+              {% assign dish = article.content | split: '<h4>Some Dish Descriptions</h4>' | last | split: '<h4>' | first %}
+              {% if dish == empty %}
+              {% else %}
+              <p class="section-post-excerpt">{{ dish | strip_html | truncate: 150 }}</p>
+              {% endif %}
+              {% else %}
+              <p class="section-post-excerpt">{{ article.content | strip_html | truncate: 150 }}</p>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Lastest News",
+  "settings": []
+}
+{% endschema %}
+
+{% stylesheet %}
+
+{% endstylesheet %}
+
+<script type="text/javascript">
+  $(document).ready(function(){
+    // Check if jQuery is loaded
+    if (typeof jQuery !== 'undefined') {
+      console.log('jQuery is loaded');
+    } else {
+      console.log('jQuery is not loaded');
+    }
+
+    // Initialize Slick Slider and log a message
+    $('.list').slick({
+      slidesToShow: 1,
+      slidesToScroll: 1,
+      autoplay: true,
+      autoplaySpeed: 2000,
+      arrows: true,
+      dots: true,
+      responsive: [
+        {
+          breakpoint: 1024,
+          settings: {
+            slidesToShow: 2,
+            slidesToScroll: 1,
+            infinite: true,
+            dots: true
+          }
+        },
+        {
+          breakpoint: 600,
+          settings: {
+            slidesToShow: 1,
+            slidesToScroll: 1
+          }
+        }
+      ]
+    });
+
+    console.log('Slick Slider initialized');
+  });
+</script>
+
+

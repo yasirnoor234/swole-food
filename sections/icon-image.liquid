@@ -1,0 +1,84 @@
+<div class="icon_image">
+  <p class="titles">{{section.settings.titleIcon}}</p>
+  <div class="wrap">
+    {%for item in section.blocks %}
+    <div class="image_wrap">
+      	<div class="img">
+    		<img src="{{item.settings.image | img_url:'master'}}" />
+      	</div>
+      	<div class="img">
+    		<img src="{{item.settings.image1 | img_url:'master'}}" />
+      	</div>
+      	<div class="img">
+    		<img src="{{item.settings.image2 | img_url:'master'}}" />
+      	</div>
+      	<div class="img">
+    		<img src="{{item.settings.image3 | img_url:'master'}}" />
+      	</div>
+        <div class="img">
+              <img src="{{item.settings.image4 | img_url:'master'}}" />
+          </div>
+        <div class="img">
+    		<img src="{{item.settings.image5 | img_url:'master'}}" />
+      	</div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+{% schema %}
+  {
+    "name": "icon_image",
+    "settings": [
+		{
+			"type":"text",
+			"label":"titles",
+			"id":"titleIcon"
+		}
+	],
+    "blocks":[
+		{
+        "type":"image",
+        "name":"image",
+        "settings":[
+            {
+                "type":"image_picker",
+                "label":"name",
+                "id":"image"
+            },
+            {
+                "type":"image_picker",
+                "label":"name1",
+                "id":"image1"
+            },
+            {
+                "type":"image_picker",
+                "label":"name2",
+                "id":"image2"
+            },
+            {
+                "type":"image_picker",
+                "label":"nam3",
+                "id":"image3"
+            },
+            {
+                "type":"image_picker",
+                "label":"nam4",
+                "id":"image4"
+            },
+            {
+                "type":"image_picker",
+                "label":"nam5",
+                "id":"image5"
+            }
+        ]
+		}
+]
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

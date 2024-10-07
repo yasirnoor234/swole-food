@@ -1,0 +1,130 @@
+<div class="page-about">
+<div class="banner_footer banner_des" style="background-image: url('{{section.settings.bg | img_url:''}}');">
+  <div class="page-width">
+  <div class="content">
+    <h2>
+      {% if section.settings.title1 != blank %}
+      <span style="font-size:{{section.settings.font1}}px;color:#1f9ed9;">{{section.settings.title1}}</span><br>
+      {% endif %}
+      {% if section.settings.title2 != blank %}
+      <span style="font-size:{{section.settings.font2}}px;color:#fff;">{{section.settings.title2}}</span><br>
+      {% endif %}
+      {% if section.settings.title3 != blank %}
+      <span style="font-size:{{section.settings.font3}}px;color:#fff;">{{section.settings.title3}}</span>
+      {% endif %}
+    </h2>    
+    <p class="des">{{section.settings.content}}</p>
+    <a href="{{section.settings.link}}" class="btn_ge btn_large btn_orange">{{section.settings.textbtn}}</a>
+  </div>
+  </div>
+</div>
+<div class="banner_home banner_mb" style="background-image: url('{{section.settings.bg_mb | img_url:''}}');">
+  <div class="page-width">
+  <div class="content">
+    <h2>
+      {% if section.settings.title1 != blank %}
+      <span style="font-size:{{section.settings.font1}}px;color:#1f9ed9;">{{section.settings.title1}}</span><br>
+      {% endif %}
+      {% if section.settings.title2 != blank %}
+      <span style="font-size:{{section.settings.font2}}px;color:#fff;">{{section.settings.title2}}</span><br>
+      {% endif %}
+      {% if section.settings.title3 != blank %}
+      <span style="font-size:{{section.settings.font3}}px;color:#fff;">{{section.settings.title3}}</span>
+      {% endif %}
+    </h2>    
+    <p class="des">{{section.settings.content}}</p>
+    <a href="{{section.settings.link}}" class="btn_ge btn_large btn_orange">{{section.settings.textbtn}}</a>
+  </div>
+  </div>
+</div>
+</div>
+{% schema %}
+  {
+    "name": "Banner Footer",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "bg",
+        "label": "Background Image"
+      },
+      {
+        "type": "image_picker",
+        "id": "bg_mb",
+        "label": "Background Mobile Image"
+      },
+      {
+        "type": "text",
+        "id": "title1",
+        "label": "Title line 1"
+      },
+      {
+        "type": "range",
+        "id": "font1",
+        "min": 18,
+        "max": 80,
+        "step": 2,
+        "unit": "px",
+        "label": "Font size line 1",
+        "default": 42
+      },
+      {
+        "type": "text",
+        "id": "title2",
+        "label": "Title line 2"
+      },
+      {
+        "type": "range",
+        "id": "font2",
+        "min": 18,
+        "max": 80,
+        "step": 2,
+        "unit": "px",
+        "label": "Font size line 2",
+        "default": 42
+      },
+      {
+        "type": "text",
+        "id": "title3",
+        "label": "Title line 3"
+      },
+      {
+        "type": "range",
+        "id": "font3",
+        "min": 18,
+        "max": 80,
+        "step": 2,
+        "unit": "px",
+        "label": "Font size line 3",
+        "default": 42
+      },
+      {
+        "type": "richtext",
+        "id": "content",
+        "label": "Content"
+      },
+      {
+        "type": "text",
+        "id": "textbtn",
+        "label": "Text Button"
+      },
+      {
+        "type": "text",
+        "id": "link",
+        "label": "Link"
+      }
+    ],
+    "presets": [
+      {
+        "name": "Banner Footer",
+        "category": "Image"
+      }
+    ]
+  }
+{% endschema %}
+
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

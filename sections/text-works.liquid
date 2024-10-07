@@ -1,0 +1,36 @@
+<div class="text-works">
+  {% for block in section.blocks %} 
+    {% render 'block-text', block: block %}
+  {% endfor %}
+</div>
+
+{% schema %}
+{
+  "name": "Text-works",
+  "settings": [],
+  "blocks": [
+    {
+      "type": "text",
+      "name": "Text",
+      "settings": [
+        { 
+          "type": "text",
+          "id": "title",
+          "label": "Title"
+        },
+        { 
+          "type": "richtext",
+          "id": "text_top",
+          "label": "Text Top"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

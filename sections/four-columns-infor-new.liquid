@@ -1,0 +1,200 @@
+<div class="four-columns-infor section" id="new" style="background-color:{{section.settings.bg_color}}">
+  
+  <div class="page-width">
+    <div class="heading">
+    	<{{ section.settings.heading_tag }} class="title_ge">{{section.settings.title}}</{{ section.settings.heading_tag }}>
+    	<p class="description">{{section.settings.content}}</p>
+    </div>
+    <div class="div_columns_infor">
+      <div class="row">
+        {%for i in (1..4)%}
+        {% capture img %}img{{ i }}{% endcapture %}
+        {% capture title %}title{{ i }}{% endcapture %}
+        {% capture text %}text{{ i }}{% endcapture %}
+        {% capture link %}link{{ i }}{% endcapture %}
+        <div class="col_item" style="background-color:{{section.settings.bg_box}}">
+          <img src="{{section.settings[img] | img_url:''}}" alt="{{section.settings[img] | Escape }}" />
+          <div class="content">
+          	<h4>{{section.settings[title]}}</h4>
+          	<p>{{section.settings[text]}}</p>
+            {% if section.settings[link] != blank %}
+            <a href="{{section.settings[link]}}">Learn more</a>
+            {% endif %}
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+  
+
+</div>
+{% schema %}
+  {
+    "name": "Four colums infor new",
+    "settings": [
+	{
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Section"
+    },
+	{
+      "type": "color",
+      "id": "bg_box",
+      "label": "Background box"
+    },
+	{
+      "type": "text",
+      "id": "title",
+      "label": "Title"
+    },
+    {
+      "type": "select",
+      "id": "heading_tag",
+      "label": "Heading tag",
+      "options": [
+        {
+          "value": "h1",
+          "label": "H1"
+        },
+        {
+          "value": "h2",
+          "label": "H2"
+        },
+        {
+          "value": "h3",
+          "label": "H3"
+        },
+        {
+          "value": "h4",
+          "label": "H4"
+        },
+        {
+          "value": "h5",
+          "label": "H5"
+        },
+        {
+          "value": "h6",
+          "label": "H6"
+        }
+      ],
+      "default": "h3"
+    },
+	{
+      "type": "text",
+      "id": "content",
+      "label": "Content"
+    },
+	{
+      "type": "header",
+      "content": "Column 1"
+    },
+	{
+      "type": "image_picker",
+      "id": "img1",
+      "label": "Image 1"
+    },
+	{
+      "type": "text",
+      "id": "title1",
+      "label": "Title 1"
+    },
+	{
+      "type": "text",
+      "id": "text1",
+      "label": "Text 1"
+    },
+	{
+      "type": "text",
+      "id": "link1",
+      "label": "Link 1"
+    },
+	{
+      "type": "header",
+      "content": "Column 2"
+    },
+	{
+      "type": "image_picker",
+      "id": "img2",
+      "label": "Image 2"
+    },
+	{
+      "type": "text",
+      "id": "title2",
+      "label": "Title 2"
+    },
+	{
+      "type": "text",
+      "id": "text2",
+      "label": "Text 2"
+    },
+	{
+      "type": "text",
+      "id": "link2",
+      "label": "Link 2"
+    },
+	{
+      "type": "header",
+      "content": "Column 3"
+    },
+	{
+      "type": "image_picker",
+      "id": "img3",
+      "label": "Image 3"
+    },
+	{
+      "type": "text",
+      "id": "title3",
+      "label": "Title 3"
+    },
+	{
+      "type": "text",
+      "id": "text3",
+      "label": "Text 3"
+    },
+	{
+      "type": "text",
+      "id": "link3",
+      "label": "Link 3"
+    },
+	{
+      "type": "header",
+      "content": "Column 4"
+    },
+	{
+      "type": "image_picker",
+      "id": "img4",
+      "label": "Image 4"
+    },
+	{
+      "type": "text",
+      "id": "title4",
+      "label": "Title 4"
+    },
+	{
+      "type": "text",
+      "id": "text4",
+      "label": "Text 4"
+    },
+	{
+      "type": "text",
+      "id": "link4",
+      "label": "Link 4"
+    }
+	
+],
+  "presets": [
+    {
+      "name": "Four colums infor new",
+      "category": "Text"
+    }
+]
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}
+

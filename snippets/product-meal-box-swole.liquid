@@ -1,0 +1,200 @@
+{% assign viewProduct = false %}{% if product-item == 'view'%}{% assign viewProduct = true %}{% endif %}
+{% assign on_sale = false %}
+{% if product.compare_at_price > product.price %}
+{% assign on_sale = true %}
+{% endif %}
+{% comment %}Nutritional Info{% endcomment %}
+{% assign swole_nutrition = product.metafields.c_f.swole_nutrition | split: ", " %}
+{% assign active_nutrition = product.metafields.c_f.active_nutrition | split: ", " %}
+{% assign low_carb_nutrition = product.metafields.c_f.low_carb_nutrition | split: ", " %}
+
+<div class="product-block {% unless product.available %} sold-out{% endunless %}{% if on_sale %} on-sale{% endif %}{% if viewProduct %} view-only{% endif %}" id="{{ product.id }}">
+   
+    
+  
+    <div class="image-container hover_over">
+     <img  alt="{{ product.featured_image.alt | escape }}" src="{{ product | img_url: '60x65', crop: 'center'  }}"
+               data-src="{{ product | img_url: '390x390', crop: 'center' }}"
+               class="lazyload blur-up" />
+      <div class="image-container--overlay">
+        {%- comment -%}
+        <div class="overlay-icon"><i class="fal fa-plus-circle"></i></div>
+        {%- endcomment -%}
+        
+      </div>
+      {%- comment -%} Change on May 03, 2020 by Bekka F. at Shopify {%- endcomment -%} 
+      <span class="shopify-product-reviews-badge" data-id="{{ product.id }}"></span>
+      </div>
+  
+ <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal-{{ product.id }}">View Meal</button>
+ 
+
+  <div class="text">
+    <div class="product-tile  swole-title">
+      
+      <p class="pst_qty"><span>X</span> {% if product.metafields.custom_fields["swole_quantity"] != blank %}
+      {{ product.metafields.custom_fields["swole_quantity"] }}   
+	  {% endif %}
+      </p>
+      
+     
+    {% if template == "collection.order" %}  
+        {{ product.title }}
+      
+    {% else %}
+       
+          {{ product.title }}
+       
+    {% endif %}
+    </div>
+    <ul class="title_property">
+        {% for item in swole_nutrition %}
+        	<li>{{ item | replace: ': ','<br><span>' }}</li>
+        {% endfor %}
+      </ul>
+       <div class="modal fade" id="myModal-{{ product.id }}" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        
+        <div class="modal-body">
+          
+             <div class="grid__item large-up--one-half product__slider-wrapper">
+      {% include 'product-image-slider' %}
+    </div>
+          
+ <div class="grid__item large-up--one-half">
+         <h1>{{ product.title }}</h1>
+          {% if product.description contains '<h6>'%}
+          <div id="accordion-container"> 
+            
+            {% assign ind = 0 %}
+            
+            {% assign description_parts = product.description | split: "<h6" %}
+            {% assign product_info = description_parts | first %}
+            
+            {% if product_info contains '<p>' %}
+              {{ product_info }}
+            {% else %}
+              <p>{{ product_info }}</p> 
+            {% endif %}
+            
+            {% for part in description_parts %}
+            {% if part contains "</h6>" %}
+            {% assign remove = part | split: ">" | first | append: ">" %}
+            <div class="accordion-header" >{{ part | split: "</h6>" | first | strip_html | replace: remove, "" }}<i class="fal fa-angle-down"></i></div>
+            <div class="accordion-content">{{ part | split: "</h6>" | last | replace: "<div", "<span" | replace: "</div", "</span" }}</div> 
+            {%comment%}<div class="accordion-content"{% if ind == 1 %}style="display: block;"{% endif %}>{{ part | split: "</h6>" | last | replace: "<div", "<span" | replace: "</div", "</span" }}</div> {%endcomment%}
+            <hr/>
+            {% endif %}
+            {% assign ind = ind | plus: 1 %}
+            {% endfor %}
+
+            
+          </div>
+        
+          	
+          {% endif %}
+          
+            </div>
+          </div>
+        
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">X</button>
+        </div>
+      </div>
+      
+    </div>
+  </div> 
+
+    {% if viewProduct %}
+    <!--div class="product-block__price">From {{ product.price | money}}</div-->
+    {% else %}
+     <!---the tile with add button -->
+    {% unless collection.title contains 'Products' %}
+    <ul class="order-buttons" style="display:none">
+      {% for variant in product.variants %}
+        {%- assign available = false -%}
+        {% if variant.inventory_quantity > 0 %}
+          {%- assign available = true -%}
+        {% endif %}
+     {% if variant.title == 'Swole' %}
+       {% if available %}
+       {%assign swoleprice = variant.price  %}	
+     {%- assign quantity = product.metafields.custom_fields["swole_quantity"] -%}
+      {% assign swolemealbox = swoleprice | times: quantity %}
+      {% assign swolemeal = swolemealbox | divided_by: 100.00 %}
+     {% assign count = count | plus: product.metafields.custom_fields["swole_quantity"] %}
+      
+      {%endif%}
+        <li class="order-variant variant--{{ variant.title | handleize }}" data-id="nurition_{{ variant.title | handleize }}{{ product.id }}">
+          <div class="variant-title {% if available == false %}variantTextDisable{% endif %}" id="{{ variant.id }}-title-variant"><strong>{{ variant.title }}</strong></div>
+          <div class="variant-price {% if available == false %}variantTextDisable{% endif %}">{{ variant.price | money }}</div>
+          <div class="variant-add__wrapper">
+            {% if collectionTag == 'wholesale' %}
+              <input type="number" class="input-quantity" min="1" style="width:80px;"/>
+            {% endif %}
+            {% if available %}
+           <button class="variant-add meal-box" id="{{ variant.id }}-add-buttom" data-cart-add="{{ variant.id }}" data-cart-quantity="{{ quantity }}" data-aitems="{{variant.inventory_quantity}}" data-parent="{{ product.id }}">+<span> Add</span></button>
+            {% else %}
+              <button class="variant-add variantDisable" title="SOLD OUT" disabled>+<span> Add</span></button>
+            {% endif %}
+          </div>
+        </li>
+      {% endif %}
+      {% endfor %}
+    </ul>
+    {% endunless %}
+  <!---the tile with add button -->
+    {% endif %}
+  </div>
+
+<script>
+function updateInventory(){
+    $( ".cart-item-id" ).each(function( index ) {
+      var variantId               = $(this).text();
+      var total_available_items   = parseInt($("#" + variantId + "-add-buttom").attr("data-aitems"));
+      var total_items_cart = parseInt($(this).next().text());
+      var items_left = parseInt(total_available_items - total_items_cart);
+      $("#" + variantId + "-add-buttom").attr("data-left-items", items_left);
+      if( items_left == 0) {
+        $("#" + variantId + "-add-buttom").attr("disabled", true).addClass("variantDisable").attr("title", "SOLD OUT");
+        $("#" + variantId + "-title-variant").addClass("sold-out-title");
+        $(this).next().next().addClass("no-add-sold");
+      } else {
+        $("#" + variantId + "-add-buttom").attr("disabled", false).removeClass("variantDisable").attr("title", "");
+        $("#" + variantId + "-title-variant").removeClass("sold-out-title");
+        $(this).next().next().removeClass("no-add-sold");
+      }
+    });
+};
+
+$(window).on('load', function() {
+  updateInventory();
+});
+$( document ).ready(function() {
+  $(".input-quantity").blur(function(){
+    if($(this).val().length==0){
+      $(this).val("1");
+    }
+    $(this).siblings("button").attr("data-cart-quantity",$(this).val());
+  });
+  
+  $(document).on('cart.requestComplete', function(event, cart) {
+    updateInventory();
+  });
+   $(".variant-add").click(function(){  
+  	  var variationid=  $(this).data("cart-add");
+      alert(variationid);
+  }); 
+});
+
+ $('.price-add-product button').on('click', function(){
+    $('.featherlight-close').click();
+    updateInventory();
+  });
+
+
+</script>

@@ -1,0 +1,13 @@
+<div class="cartbar_bottom">
+  <form action="/cart?cart_quanity=10" method="post" novalidate class="cart">
+    <div class="counttotal">
+      <div class="count"><span>{{ cart.item_count }}</span> {% if cart.item_count > 1 %}meals{%else%}meal{%endif %} added</div>
+      <div class="total_price cart-sidebar__price" rv-html="cart.total_price | money Currency.currentCurrency">{{cart.total_price | money}}</div>
+    </div>
+    <div class="btncheckout">
+      <input type="submit" class="btn_checkout btn btn--blue" name="checkout" value="{{ 'cart.general.checkout' | t }}">
+    </div>
+    <p class="save">{{section.settings.save}}</p>
+    <button>{{section.settings.min_order}}</button>
+  </form>
+</div>

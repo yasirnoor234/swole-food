@@ -1,0 +1,263 @@
+{% for block in section.blocks %} 
+	{% include 'block-hero' %}
+  {% include 'block-image-text-feature' %}
+	{% include 'block-text' %}
+	{% include 'block-image-text-alt' %}
+	{% include 'block-products' %}
+{% endfor %}
+
+
+{% schema %}
+  {
+    "name": "Custom page",
+    "settings": [
+		],
+    "blocks": [
+      {
+        "type": "hero",
+        "name": "Hero",
+        "settings": [
+          {
+            "type": "image_picker",
+            "id": "image",
+            "label": "Image"
+          },
+      {
+            "type": "image_picker",
+            "id": "mobileimage",
+            "label": "Mobile Image"
+          },
+          {
+             "type":      "select",
+             "id":        "bg_position",
+             "label":     "Background Position",
+             "options": [
+               {
+                 "value": "50% 0",
+                 "label": "Top"
+               },
+               {
+                 "value": "50% 10%",
+                 "label": "20% Top"
+               },
+               {
+                 "value": "50% 50%",
+                 "label": "Middle"
+               },
+               {
+                 "value": "50% 100%",
+                 "label": "Bottom"
+               }
+             ],
+             "default":   "50% 50%"
+          },
+		  {
+            "type": "image_picker",
+            "id": "inner-image",
+            "label": "Image"
+          },
+          { 
+             "type": "text",
+             "id": "title",
+             "label": "Name"
+          },
+          { 
+             "type": "text",
+             "id": "text",
+             "label": "Inner Title"
+          },
+          { 
+             "type": "richtext",
+             "id": "subtext",
+             "label": "Subtext"
+          }
+        ]
+      },
+      {
+        "type": "text",
+        "name": "Text",
+        "settings": [
+          { 
+             "type": "text",
+             "id": "title",
+             "label": "Title"
+          },
+          { 
+             "type": "richtext",
+             "id": "text_top",
+             "label": "Text Top"
+          },
+          { 
+             "type": "checkbox",
+             "id": "bullet-points",
+             "label": "Hide Bullet point list?",
+             "default": false
+          },
+          { 
+             "type": "richtext",
+             "id": "bullet-pointstext",
+             "label": "List bullet points here"
+          },
+          { 
+             "type": "checkbox",
+             "id": "bullet-points-2",
+             "label": "Hide Bullet point list?",
+             "default": true
+          },
+          { 
+             "type": "richtext",
+             "id": "bullet-pointstext-2",
+             "label": "List second bullet points here"
+          },
+          { 
+             "type": "richtext",
+             "id": "text_bottom",
+             "label": "Text bottom"
+          },
+          { 
+             "type": "checkbox",
+             "id": "show_icons",
+             "label": "Show icons?"
+          },
+          { 
+             "type": "image_picker",
+             "id": "icon_1",
+             "label": "Replace Icon 1?"
+          },
+          { 
+             "type": "image_picker",
+             "id": "icon_2",
+             "label": "Replace Icon 2?"
+          },
+          { 
+             "type": "image_picker",
+             "id": "icon_3",
+             "label": "Replace Icon 3?"
+          },
+          { 
+             "type": "image_picker",
+             "id": "icon_4",
+             "label": "Replace Icon 4?"
+          }
+        ]
+      },
+      {
+        "type": "image-text",
+        "name": "Image and Text",
+        "settings": [
+          { 
+             "type": "text",
+             "id": "title",
+             "label": "Title"
+          },
+          { 
+             "type": "richtext",
+             "id": "text",
+             "label": "Text"
+          },
+          { 
+             "type": "checkbox",
+             "id": "bullet-points",
+             "label": "Hide Bullet point list?",
+             "default": false
+          },
+          { 
+             "type": "richtext",
+             "id": "bullet-pointstext",
+             "label": "List bullet points here"
+          },
+          {
+            "type": "image_picker",
+            "id": "image",
+            "label": "Image"
+          }
+        ]
+      },
+      {
+        "type": "image-text-feature",
+        "name": "Image and Text Feature",
+        "settings": [
+          { 
+             "type": "text",
+             "id": "title",
+             "label": "Title"
+          },
+          { 
+             "type": "richtext",
+             "id": "text",
+             "label": "Text"
+          },
+
+
+
+          { 
+             "type": "text",
+             "id": "title_col1",
+             "label": "Col 1 Title"
+          },
+          { 
+             "type": "richtext",
+             "id": "text_col1",
+             "label": "Col 1 Text"
+          },
+
+          { 
+             "type": "text",
+             "id": "title_col2",
+             "label": "Col 2 Title"
+          },
+          { 
+             "type": "richtext",
+             "id": "text_col2",
+             "label": "Col 2 Text"
+          },
+
+           { 
+             "type": "text",
+             "id": "title_col3",
+             "label": "Col 3 Title"
+          },
+          { 
+             "type": "richtext",
+             "id": "text_col3",
+             "label": "Col 3 Text"
+          },
+
+
+          {
+            "type": "image_picker",
+            "id": "image",
+            "label": "Image"
+          }
+        ]
+      },
+      {
+        "type": "products",
+        "name": "products",
+        "settings": [
+          { 
+             "type": "text",
+             "id": "title",
+             "label": "Title"
+          },
+          { 
+             "type": "richtext",
+             "id": "text",
+             "label": "Text"
+          },
+          {
+            "type": "image_picker",
+            "id": "image",
+            "label": "Image"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

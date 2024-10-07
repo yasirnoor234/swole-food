@@ -1,0 +1,111 @@
+<div class="list_set_meals">
+  <h3>{{ section.settings.title }}</h3>
+  <p class="subtitle">{{ section.settings.text }}</p>
+  <div class="list{% if section.settings.slider_mb %} slider_mb{% endif %}">
+    {% for block in section.blocks %} 
+    <div class="meal_item">
+      <div class="meal_content">
+        <div class="img"><img src="{{ block.settings.image | img_url:'' }}" alt="{{ block.settings.image | Escape }}" /></div>
+        <div class="meta">
+          <h4><a href="{{ block.settings.button_link }}">{{ block.settings.title }}</a></h4>
+          <p>{{ block.settings.text }}</p>
+          <a href="{{ block.settings.button_link }}" class="btn">{{ block.settings.button_text }}</a>
+          {% if block.settings.per_day != blank %}<div class="per_day">{{ block.settings.per_day }}<p>meals</p></div>{% endif %}
+          {% if block.settings.label != blank %}<label>{{ block.settings.label }}</label>{% endif %}
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  <a class="view_all btn_ge btn_orange" href="{{ section.settings.button_link }}">{{ section.settings.button_text }}</a>
+</div>
+{% schema %}
+  {
+    "name": "List set meals",
+    "settings": [
+	{ 
+      "type": "checkbox",
+      "id": "slider_mb",
+      "label": "Slider on Mobile"
+    },
+	{ 
+      "type": "text",
+      "id": "title",
+      "label": "Title"
+    },
+    { 
+      "type": "textarea",
+      "id": "text",
+      "label": "Text"
+    },
+	{ 
+      "type": "text",
+      "id": "button_text",
+      "label": "Button text",
+      "default" : "View All Sets"
+    },
+    { 
+      "type": "text",
+      "id": "button_link",
+      "label": "Button Link"
+    }
+],
+"blocks": [
+      {
+        "type": "block",
+        "name": "Block",
+        "settings": [
+          {
+            "type": "image_picker",
+            "id": "image",
+            "label": "Image"
+          },
+          { 
+             "type": "text",
+             "id": "title",
+             "label": "Name"
+          },
+          { 
+             "type": "text",
+             "id": "per_day",
+             "label": "Meals per day"
+          },
+		  { 
+             "type": "text",
+             "id": "label",
+             "label": "Label"
+          },
+          { 
+             "type": "textarea",
+             "id": "text",
+             "label": "Text"
+          },
+          { 
+             "type": "text",
+             "id": "button_text",
+             "label": "Button text",
+			"default" : "Get Started"
+          },
+          { 
+             "type": "url",
+             "id": "button_link",
+             "label": "Button Link"
+          }
+        ]
+      }
+    ],
+  "presets": [
+    {
+      "name": "List set meals",
+      "category": "Collection"
+	  
+    }
+]
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

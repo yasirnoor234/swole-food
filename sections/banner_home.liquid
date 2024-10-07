@@ -1,0 +1,228 @@
+<div class="banner_pc banner-home">
+  <div class="image_wrap">
+  	<img src="{{section.settings.bg | img_url:'master'}}" />
+  </div>
+  <div class="contents">
+ 	 <{{ section.settings.heading_tag }}>
+      {% if section.settings.title1 != blank %}
+      <span class="title-home" style="font-size:{{section.settings.font1}}px;color:{{section.settings.color1}};">{{section.settings.title1}}</span><br>
+      {% endif %}
+      {% if section.settings.title2 != blank %}
+      <span class="subtitle" style="font-size:{{section.settings.font2}}px;color:{{section.settings.color2}};">{{section.settings.title2}}</span><br>
+      {% endif %}
+      {% if section.settings.title3 != blank %}
+      <span class="descreption" style="font-size:{{section.settings.font3}}px;color:{{section.settings.color3}};">{{section.settings.title3}}</span>
+      {% endif %}
+    </{{ section.settings.heading_tag }}>    
+    <a href="{{section.settings.link}}" class="btn_ge btn_large btn_orange">{{section.settings.textbtn}}</a>
+    <p class="label-banner" style="color:{{section.settings.color}};margin-top:{{section.settings.margin-top}}px;">{{section.settings.content}}</p>
+  </div>
+</div>
+<div class="banner_mobile">
+  <div class="image_wrap">
+  	<img src="{{section.settings.bg_mb | img_url:'master'}}" />
+  </div>
+  <div class="contents">
+ 	 <div>
+      {% if section.settings.title1 != blank %}
+      <span class="title-home" style="font-size:{{section.settings.font1}}px;color:{{section.settings.color1}};">{{section.settings.title1}}</span><br>
+      {% endif %}
+      {% if section.settings.title2 != blank %}
+      <span class="subtitle" style="font-size:{{section.settings.font2}}px;color:{{section.settings.color2}};">{{section.settings.title2}}</span><br>
+      {% endif %}
+      {% if section.settings.title3 != blank %}
+      <span class="descreption" style="font-size:{{section.settings.font3}}px;color:{{section.settings.color3}};">{{section.settings.title3}}</span>
+      {% endif %}
+    </div>    
+    <a href="{{section.settings.link}}" class="btn_ge btn_large btn_orange">{{section.settings.textbtn}}</a>
+    <p class="label-banner" style="color:{{section.settings.color}};margin-top:{{section.settings.margin-top}}px;">{{section.settings.content}}</p>
+  </div>
+</div>
+<style>
+  .banner-home .contents .label-banner{
+    font-size:{{section.settings.font4}}px!important;
+  }
+  {% if section.settings.greyshade == true %}
+  .image_wrap::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: rgba(0,0,0,0.10);
+    width: 100%;
+    height: 100%;
+  }
+  {% endif %}
+  @media (max-width:768px){
+    
+  .banner_mobile .contents .title2,.banner_mobile .contents .title3{
+    color: #fff!important;
+  }
+  }
+</style>
+{% schema %}
+  {
+    "name": "Banner",
+    "settings": [
+	{
+      "type": "checkbox",
+      "id": "greyshade",
+      "label": "Grey Shade"
+    },
+	{
+      "type": "image_picker",
+      "id": "bg",
+      "label": "Background Image"
+    },
+	{
+      "type": "image_picker",
+      "id": "bg_mb",
+      "label": "Background Mobile Image"
+    },
+    {
+      "type": "select",
+      "id": "heading_tag",
+      "label": "Heading tag",
+      "options": [
+        {
+          "value": "h1",
+          "label": "H1"
+        },
+        {
+          "value": "h2",
+          "label": "H2"
+        },
+        {
+          "value": "h3",
+          "label": "H3"
+        },
+        {
+          "value": "h4",
+          "label": "H4"
+        },
+        {
+          "value": "h5",
+          "label": "H5"
+        },
+        {
+          "value": "h6",
+          "label": "H6"
+        }
+      ],
+      "default": "h3"
+    },
+	{
+      "type": "text",
+      "id": "title1",
+      "label": "Title line 1"
+    },
+	{
+      "type": "color",
+      "id": "color1",
+      "label": "Color 1",
+	  "default": "#1f9ed9"
+    },
+	{
+      "type": "range",
+      "id": "font1",
+      "min": 18,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "Font size line 1",
+      "default": 42
+    },
+	{
+      "type": "text",
+      "id": "title2",
+      "label": "Title line 2"
+    },
+	{
+      "type": "color",
+      "id": "color2",
+      "label": "Color 2",
+	  "default": "#fff"
+    },
+	{
+      "type": "range",
+      "id": "font2",
+      "min": 18,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "Font size line 2",
+      "default": 42
+    },
+	{
+      "type": "text",
+      "id": "title3",
+      "label": "Title line 3"
+    },
+	{
+      "type": "color",
+      "id": "color3",
+      "label": "Color 3",
+	  "default": "#fff"
+    },
+	{
+      "type": "range",
+      "id": "font3",
+      "min": 18,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "Font size line 3",
+      "default": 42
+    },
+	{
+      "type": "text",
+      "id": "content",
+      "label": "Content"
+    },
+	{
+      "type": "text",
+      "id": "textbtn",
+      "label": "Text Button"
+    },
+	{
+      "type": "text",
+      "id": "link",
+      "label": "Link"
+    },
+	{
+		"type":"color",
+		"id":"color",
+		"label":"Color",
+        "default":"#1f9ed9"
+	},
+	{
+		"type":"text",
+		"id":"margin-top",
+		"label":"Margin-top"
+	},
+	{
+      "type": "range",
+      "id": "font4",
+      "min": 16,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "Font size line 4",
+	  "default": 16
+    }
+],
+
+  "presets": [
+    {
+      "name": "Banner",
+      "category": "Banner"
+    }
+]
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

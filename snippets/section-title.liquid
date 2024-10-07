@@ -1,0 +1,27 @@
+{% if section-title contains 'show-icons' %}{% assign showIcons = true %}{% endif %}
+{% if section-title contains 'white' %}{% assign whiteText = true %}{% endif %}
+
+<div class="section-title {% if whiteText %}section-title--white{% endif %}">
+  <h2>{{ section.settings.title }}</h2>
+  <p>{{ section.settings.text }}</p>
+
+  {% if showIcons %}
+    <ul class="range-icons">
+        <li >{% include 'badge-swole'%}
+        <div class="text"><span class="h4">Swole</span><br>450g</div> 
+        </li>
+        <li>{% include 'badge-active'%}
+        <div class="text"><span class="h4">Active</span><br>350g</div> 
+        </li>
+        <li class="badge-padding">{% include 'badge-low_carb'%}
+        <div class="text"><span class="h4">Low Carb</span><br>300g</div> 
+        </li>
+    </ul>
+    
+  
+  {% endif %}
+</div>
+
+
+{% assign whiteText = false %}
+{% assign showIcons = false %}

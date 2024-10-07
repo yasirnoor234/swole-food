@@ -1,0 +1,124 @@
+{% comment %} <link rel="stylesheet" href="{{ 'faq-style.css' | asset_url }}" media="print" onload="this.media='all'"> {% endcomment %}
+{{ 'faq-style.css' | asset_url | stylesheet_tag }}
+
+<div class="page-width">
+  <h1 class="main-page-title page-title h0">
+    {{ section.settings.faq_title | escape }}
+  </h1>
+  {% if section.settings.faq_description %}
+    <div class="rte faq-description">
+      {{ section.settings.faq_description }}
+    </div>
+  {% endif %}
+  <div class="faq-container">
+    <div class="tabs">
+      {% for block in section.blocks %}
+        {% assign item = block.settings %}
+        {% case block.type %}
+          {% when 'faq' %}
+            <div class="tab">
+              <input type="checkbox" id="faq_checkbox_{{ forloop.index }}" class="faq-checkbox">
+              <label for="faq_checkbox_{{ forloop.index }}" class="tab-label button button--primary">{{ item.question }}</label>
+              <div class="tab-content">{{ item.answer }}</div>
+            </div>
+          {% when 'heading' %}
+            <h2 class="faq-section-heading">{{ item.heading_title }}</h2>
+        {% endcase %}
+      {% endfor %}
+    </div>
+  </div>
+  <div class="text-center">
+    <a href="{{ section.settings.button_link }}" class="btn btn-faq popup-hide">{{ section.settings.button_text }}</a>
+  </div>
+</div>
+{% schema %}
+{
+  "name": "FAQ",
+  "tag": "section",
+  "class": "spaced-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "faq_title",
+      "default": "Frequently Asked Questions",
+      "label": "Title"
+    },
+    {
+      "type": "text",
+      "id": "faq_description",
+      "default": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+      "label": "Description"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "default": "Contact Us",
+      "label": "Button Text"
+    },
+    {
+      "type": "text",
+      "id": "button_link",
+      "default": "https://example.com/contact",
+      "label": "Button Link"
+    },
+    {
+      "type": "range",
+      "id": "button_padding",
+      "label": "Button Padding",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "default": 10
+    },
+    {
+      "type": "range",
+      "id": "button_margin",
+      "label": "Button Margin",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "default": 10
+    }
+  ],
+  "blocks": [
+    {
+      "name": "FAQ Item",
+      "type": "faq",
+      "settings": [
+        {
+          "type": "text",
+          "id": "question",
+          "label": "Question",
+          "default": "Do you have a question?"
+        },
+        {
+          "type": "richtext",
+          "id": "answer",
+          "label": "Answer",
+          "default": "<p>I have an answer</p>"
+        }
+      ]
+    },
+    {
+      "name": "Section Heading",
+      "type": "heading",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading_title",
+          "label": "Heading Title",
+          "default": "Section Title"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "FAQ Block"
+    }
+  ]
+}
+
+{% endschema %}

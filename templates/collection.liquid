@@ -1,0 +1,207 @@
+<style>
+.variant-add {
+    visibility:hidden;
+}
+  @media only screen and (min-width: 750px) {
+    .medium-up--one-third {
+        width: 32.33333% !important;
+    }
+}
+  .collection-page--btn {
+    position: fixed;
+    bottom: 0;
+    padding: 15px 3px !important;
+    background: #000;
+    width: 100%;
+    z-index: 11;
+    left: 0;
+}
+</style>
+
+
+<div class="collection-page fixed_sets">
+
+	{% if collection.handle == 'fixed-sets' %}
+  		{% section 'collection-fixed-sets' %}
+  	{% else %}	
+  		{% section 'promo-bar' %} 
+  		<section class="section__collection-hero" id="{{ collection.id }}">
+          <div class="inner">
+            <div class="page-width">
+              <h1>{% if collection.title == 'Products' %}Menu{% else %}{{ collection.title }}{% endif %}</h1>
+              <h2 style="color:white;">We have taken everyday meals you love to eat and given them the Swole Factor!<br>
+                Eating clean was never this delicious!
+                </h2>
+            </div>
+          </div>
+
+          <img
+               alt="{{ collection.title }}"
+               src="
+                    {% if collection.image %}
+                        {{ collection.image | img_url: 'master'  }}
+                    {% else %}
+                        {{ 'sfmenubg.jpg' | asset_img_url: 'master' }}		
+                    {% endif %}
+                    "
+               class="background-image lazyload blur-up" width="auto" height="auto" />
+        </section>
+
+
+        <div class="page-width"> 
+          <div class="grid grid--uniform collection_test">
+            {% assign count = 0 %}
+            {% assign tagcount = 0 %}
+            {% assign tagcount1 = 0 %}
+            {% assign tagcount2 = 0 %}
+            {% comment %}/********assign tag count end **************/{% endcomment %}
+            {% for product in collection.products %}
+                {%assign slicedvariable = collection.title | split: " " | last %}
+
+                        {% if slicedvariable == 'Box' %}
+                          {% for tag in product.tags %}
+                                  {% if tag == '6mealboxactive' %}
+                                      {%assign maintagactive = tag %}
+                                   {%endif%}
+                                  {% if tag == '6mealboxlowcarb' %}
+                                      {%assign maintaglowcarb = tag %}
+                                  {%endif%}
+                                  {% if tag == '6mealboxswole' %}
+                                      {%assign maintagswole = tag %}
+                                  {%endif%}
+                          {%endfor%}{% comment %}/********tagendfor **************/{% endcomment %}
+
+                                  {% if maintagactive == '6mealboxactive' %}
+                                        {% assign tagcount = tagcount | plus: 1 %}
+                                             {% if tagcount == 1 %}
+                                                  <div class="grid__item medium-up--one-third one-half Active_class" >
+                                                        {% include 'product-meal-box-active.liquid' %}
+                                                  </div>
+                                              {%endif;%}
+                                  {%endif;%}
+
+                                    {% if maintaglowcarb == '6mealboxlowcarb' %}
+                                            {% assign tagcount1 = tagcount1 | plus: 1 %}
+                                                {% if tagcount1 == 1 %}
+                                                 <div class="grid__item medium-up--one-third one-half Active_class" >
+                                                      {% include 'product-meal-box-lowcarb.liquid' %}
+                                                    </div>
+                                                {%endif;%}
+                                     {%endif;%}
+
+                                         {% if maintagswole == '6mealboxswole' %}
+                                            {% assign tagcount2 = tagcount2 | plus: 1 %}
+                                                {% if tagcount2 == 1 %}
+                                                     <div class="grid__item medium-up--one-third one-half Active_class" >
+                                                          {% include 'product-meal-box-swole.liquid' %}
+                                                        </div>
+                                                {%endif;%}
+                                         {%endif;%}
+
+                                    {%elsif slicedvariable =='active'  %} {% comment %}/********Box type end **************/{% endcomment %}
+                                        <div class="grid__item medium-up--one-third one-half Active_class " >
+                                              {% include 'product-active.liquid' %}
+                                        </div>
+
+                                    {%elsif slicedvariable =='swole'   %}
+                                         <div class="grid__item medium-up--one-third one-half Swole_class ">
+                                                 {% include 'product-Swole.liquid' %}
+
+                                         </div>
+                                    {%elsif slicedvariable =='lowcarb' %}
+                                             <div class="grid__item medium-up--one-third one-half Low_Carb " >
+                                                 {% include 'product-Low-Carb.liquid' %} 
+
+                                              </div>
+                                     {%else;%}
+                                        <div class="grid__item medium-up--one-third one-half">
+                                          {% include 'product-item' %}
+                                        </div>
+                                     {%endif;%}
+            {% endfor %}
+          </div>
+           {% assign swolresults = swoleprice | divided_by: 100.00 %}
+           {% assign carbresults = lowcarbprice | divided_by: 100.00 %}
+           {% assign activeresults = activeprice | divided_by: 100.00 %}
+
+            {% if slicedvariable =='active'%}
+              <div class="text-center collection-page--btn">
+                <a href="javascript:void(0)" class="addtocartactive btn popup-hide build_pack" ><span>${{ activeresults | times: count }}</span> <span>|</span> <span>ADD To CART</span></a>
+              </div>
+            {%elsif slicedvariable =='lowcarb' %}
+              <div class="text-center collection-page--btn">
+                <a href="javascript:void(0)" class="addtocartlowcarb btn popup-hide build_pack" ><span>${{ carbresults | times: count }} </span><span> | </span><span>ADD To CART</span></a>
+              </div>
+             {%elsif slicedvariable =='swole' %}
+              <div class="text-center collection-page--btn">
+                <a href="javascript:void(0)" class="addtocartswole btn popup-hide build_pack" ><span>${{ swolresults | times: count }}</span> <span>|</span> <span>ADD To CART</span></a>
+              </div>
+              {%elsif slicedvariable =='Box' %}
+                <div class="text-center collection-page--btn">
+                  <a href="javascript:void(0)" class="addtocartmeal btn popup-hide build_pack" ><span>${{ lowcarbmeal | plus: swolemeal | plus:activemeal }}</span> <span>|</span> <span>ADD To CART</span></a>
+                </div>
+              {%else%}
+                <div class="text-center collection-page--btn">
+                <a href="/collections" class="btn popup-hide" data-featherlight="/ #planWrapper">Start Building my plan now!</a>
+                </div>
+            {%endif%}
+        </div>
+  	{% endif %}
+  
+    
+
+    
+</div>
+<script type="text/javascript">
+   $(".addtocartmeal").click(function(e){
+    	  $('.order-buttons').find('.order-variant').find('.meal-box').each(function(){
+            var id = $(this).attr('data-cart-add');   
+            var quantity = $(this).attr('data-cart-quantity');
+            CartJS.addItem(id,quantity,{fixedd:'1'}); 
+       			});  
+    });
+  
+  
+  
+  $(".addtocartswole").click(function(e){
+    
+    	  $('.order-buttons').find('.order-variant').find('.Swole_class').each(function(){
+            var id = $(this).attr('data-cart-add');   
+            var quantity = $(this).attr('data-cart-quantity');
+           // alert(id);
+            CartJS.addItem(id,quantity,{fixedd:'1'}); 
+       			});
+    
+   // alert("add to cart sucessfully");
+    // window.location.href = "/cart"
+    
+    });
+   $(".addtocartactive").click(function(e){
+    	  $('.order-buttons').find('.order-variant').find('.Active_class').each(function(){
+            var id = $(this).attr('data-cart-add');   
+            var quantity = $(this).attr('data-cart-quantity');
+            CartJS.addItem(id,quantity,{fixedd:'1'}); 
+       			});
+      //alert("add to cart sucessfully");
+    });
+   $(".addtocartlowcarb").click(function(e){
+    	  $('.order-buttons').find('.order-variant').find('.Low_Carb').each(function(){
+            var id = $(this).attr('data-cart-add');   
+            var quantity = $(this).attr('data-cart-quantity');
+            CartJS.addItem(id,quantity,{fixedd:'1'},{test:12}); 
+       			});
+     // alert("add to cart sucessfully");
+    });
+  $(document).ajaxComplete(function() {
+    
+    setTimeout(function(){ window.location.href = "/cart"; }, 2000);
+  
+ 		     
+		    });
+  
+</script>
+<style>
+ul.order-buttons {
+    display: none;
+}
+</style>

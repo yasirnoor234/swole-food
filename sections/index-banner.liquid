@@ -1,0 +1,117 @@
+<section class="section__banner" id="{{ section.id }}"style="background-image: url({{ section.settings.image | img_url: 'master' }}); background-size: cover; background-position: center center;">
+
+
+    <div class="inner">
+      <div class="page-width">
+        {% unless section.settings.hide-icons %}
+        <ul class="benefit-icons">
+          {% if section.settings.icon1 != blank %}<li><img src="{{ section.settings.icon1 | img_url }}" alt="{{ section.settings.title }}"></li>{% endif %}
+          {% if section.settings.icon2 != blank %} <li><img src="{{ section.settings.icon2 | img_url }}" alt="{{ section.settings.title }}"></li>{% endif %}
+          {% if section.settings.icon3 != blank %} <li><img src="{{ section.settings.icon3 |  img_url }}" alt="{{ section.settings.title }}"></li>{% endif %}
+        </ul>
+        {% endunless %}
+        
+        <h1>{{ section.settings.title }}</h1>
+        <div class="subtitle">{{ section.settings.subtext }}</div>
+        {% unless section.settings.bullet-points %}
+       <div class="bulletpoints page-width">
+        <ul>
+       {{ section.settings.bullet-pointstext | replace: '<p>','<li>' | replace: '</p>','</li>'}}
+        </ul>
+        </div><br>
+        {% endunless %}
+        <a href="{{ section.settings.button_link }}" class="btn" data-featherlight="#planWrapper">{{ section.settings.button_text }}</a>
+      </div>
+    </div>
+    
+    {%- comment -%}
+    <img
+	alt="{{ section.settings.title }}"
+	src="{{ section.settings.image | img_url: 'x100' }}"
+	data-src="{{ section.settings.image | img_url: 'x1850' }}"
+	class="background-image lazyload blur-up" />
+    {%- endcomment -%}
+    
+ 
+</section>
+
+<style>
+  
+</style>
+
+{% schema %}
+  {
+    "name": "Banner",
+    "settings": [
+          {
+            "type": "image_picker",
+            "id": "image",
+            "label": "Image Desktop"
+          },
+          { 
+             "type": "checkbox",
+             "id": "hide-icons",
+             "label": "Hide Icons?" ,
+		     "default": false
+          },
+          {
+            "type": "image_picker",
+            "id": "icon1",
+            "label": "Icon 1"
+          },
+          {
+            "type": "image_picker",
+            "id": "icon2",
+            "label": "Icon 2"
+          },
+          {
+            "type": "image_picker",
+            "id": "icon3",
+            "label": "Icon 3"
+          },
+          { 
+             "type": "text",
+             "id": "title",
+             "label": "Title" 
+          },
+          { 
+             "type": "richtext",
+             "id": "subtext",
+             "label": "Sub text"
+          },
+          { 
+             "type": "checkbox",
+             "id": "bullet-points",
+             "label": "Hide Bullet point list?",
+             "default": false
+          },
+          { 
+             "type": "richtext",
+             "id": "bullet-pointstext",
+             "label": "List bullet points here"
+          },
+          { 
+             "type": "text",
+             "id": "button_text",
+             "label": "Button Text"
+          },
+          { 
+             "type": "url",
+             "id": "link",
+             "label": "Link"
+          }
+		],
+    "presets": [
+      {
+        "name": "Banner", 
+        "category": "Zyber Custom"
+      }
+    ]
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

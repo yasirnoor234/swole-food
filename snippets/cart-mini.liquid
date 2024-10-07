@@ -1,0 +1,80 @@
+<div class="popup-cart py-25 px-20 js-popup-cart-ajax" data-popup-content>
+    <div class="popup-cart__head d-flex align-items-center">
+      	<i class="fa fa-times" aria-hidden="true"></i>
+        <h5 class="m-0">YOUR ORDER<span data-js-popup-cart-count></span></h5>
+      	<span class="total_cart">{{ cart.item_count }}</span>
+    </div>
+    <div class="popup-cart__content d-none-important">
+        
+    
+
+        <form action="/cart?cart_quanity=10" method="post" novalidate class="cart">
+		  {% if cart.item_count > 0 %}
+          <div class="page-width" data-section-id="{{ section.id }}" data-section-type="cart-template">
+
+            <div data-cart-view="data-cart-view">
+
+              <div class="cart__products">
+                  {% include 'cart-item' %}
+
+                  <div rv-show="cart.item_count | gt 0" class="sidebar__footer">
+
+                  </div>
+
+                </div>
+
+                
+              <div class="popup-cart__buttons">         
+                  <div class="total-min">
+                    <span>Min spend is $79</span>
+                    <div rv-html="cart.total_price | money Currency.currentCurrency" class="cart-sidebar__price"></div>
+                  </div>
+                  <div class="button-checkout">
+                    <div rv-html="cart.total_price | money Currency.currentCurrency" class="cart-sidebar__price"></div>
+                    <a href="/cart" class="btn_checkout" >Cart</a>
+                    {% comment %}
+                    <input type="submit" class="btn_checkout" name="checkout" value="{{ 'cart.general.checkout' | t }}">
+                    {% endcomment %}
+                  </div> 
+                </div>
+            </div>
+
+          </div>
+          {% else %}
+          <div class="page-width" data-section-id="{{ section.id }}" data-section-type="cart-template">
+
+            <div data-cart-view="data-cart-view">
+                <div class="cart__products">
+                    <div class="empty-page-content text-center">
+                      <h2>{{ 'cart.general.title' | t }}</h2>
+                      <p class="cart--empty-message">{{ 'cart.general.empty' | t }}</p>
+                      <div class="cookie-message">
+                        <p>{{ 'cart.general.cookies_required' | t }}</p>
+                      </div>
+                      <a href="/" class="btn btn--has-icon-after cart__continue-btn">{{ 'general.404.link' | t }}{% include 'icon-arrow-right' %}</a>
+                    </div>
+                    
+                </div>
+              <div class="popup-cart__buttons no-checkout">         
+                <div class="total-min">
+                  <span>Min spend is $79</span>
+                  <div rv-html="cart.total_price | money Currency.currentCurrency" class="cart-sidebar__price">$0</div>
+                </div>
+                <div class="button-checkout">
+                  <div rv-html="cart.total_price | money Currency.currentCurrency" class="cart-sidebar__price">$0</div>
+                  <a href="/cart" class="btn_checkout" >Cart</a>
+                  {% comment %}
+                  <input type="submit" class="btn_checkout" name="checkout" value="{{ 'cart.general.checkout' | t }}">
+                  {% endcomment %}
+                </div> 
+              </div>
+            </div>
+          </div>
+          {% endif %}
+
+        </form>
+        
+      	
+    </div>
+    
+</div>

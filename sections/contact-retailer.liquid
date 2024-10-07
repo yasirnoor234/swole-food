@@ -1,0 +1,75 @@
+
+<section class="section__block-contact-retailer">
+  {% for block in section.blocks %} 
+{% if block.type == 'text' %}
+  <div class="grid grid--align {% cycle 'grid--dark','grid--reverse' %}">
+    <div class="grid__item medium-up--one-half small--one-whole image" >
+       <div class="image-wrapper lazyload blur-up" style="background-image:url({{ block.settings.image1 | img_url: '960x600', crop: 'center' }});">
+        <!--img
+             alt="{{ block.settings.title1 }}"
+             src="{{ block.settings.image1 | img_url: '50x50', crop: 'center'  }}"
+             data-src="{{ block.settings.image1 | img_url: '960x600', crop: 'center' }}"
+             class="lazyload blur-up" /-->
+      </div>
+    </div>
+    <div class="grid__item medium-up--one-half small--one-whole {% cycle 'grid--dark', '' %}">
+      <div class="page-width">
+      <div class="text text__wrapper">
+     <h2>{{ block.settings.title1 }}</h2>
+        {% if block.settings.text1 != blank %}<div class="text">{{ block.settings.text1 }}</div>{% endif %}
+        {% if block.settings.btn-url1 != blank %}<a class="btn" href="{{ block.settings.btn-url1 }}">{{ block.settings.btn-text1 }}</a>{% endif %}
+      </div>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+{% endfor %}
+</section>
+
+{% schema %}
+  {
+    "name": "Retailer section",
+    "settings": [],
+	"blocks" : [
+		{
+			"name": "Content",
+			"type": "text",
+			"limit": 2,
+			"settings": [
+				{
+					"type":"image_picker",
+					"id": "image1",
+					"label": "Background Image 1"
+				},
+				{
+					"type":"text",
+					"id": "title1",
+					"label": "Title 1"
+				},
+				{
+					"type":"richtext",
+					"id": "text1",
+					"label": "Content"
+				},
+				{
+					"type":"text",
+					"id": "btn-text1",
+					"label": "Button text 1"
+				},
+				{
+					"type":"url",
+					"id": "btn-url1",
+					"label": "Button link 1"
+				}
+			]
+
+		}
+	]
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

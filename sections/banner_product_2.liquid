@@ -1,0 +1,116 @@
+<div class="banner_product check12345">
+    <div class="container">
+      <div class="top">
+        <h2>
+          {% for block in section.blocks %}
+          {% assign slug = product.handle %}
+          {% if slug == block.settings.product %}
+          {% if block.settings.title != blank %}
+          {{block.settings.title}}
+          {% else %}
+          {{product.title}}
+          {% endif %}
+          {% endif %}
+          {% endfor %}
+          
+        </h2>
+        <div class="description">
+        {{ product.description | split: "<h4>" | first }}
+        </div>
+      </div>
+      
+      <div class="bottom">
+        <div class="main custom-main">
+          <div class="left">
+            {% assign meals = product.description | split: '<h3>Meals</h3>' | last | split: '<h3>' | first %}
+            <span class="meals">{{ meals | strip_html}} Meals</span>
+            <span class="price">{{product.price | money }}</span>
+          </div>
+          <div class="right">
+             <div class="nutrition-info">
+               {% assign mealast = product.description | split: '<h3>Meals</h3>'| last |split:'</h3>'|last %}
+               <span class="meals">{{ mealast}}</span> <p>average macros per set</p>
+            </div>
+          </div>
+          {% form 'product', product, class:form_classes, novalidate: 'novalidate', data-product-form: '' %}
+          <input type="hidden" name="id" value="{{ product.variants.first.id }}">
+          <div class="product-form__item product-form__item--quantity" style="display:none;">
+            <label for="Quantity-{{ section.id }}">{{ 'products.product.quantity' | t }}</label>
+            <input type="number" id="Quantity-{{ section.id }}" name="quantity" value="1" min="1" class="product-form__input" pattern="[0-9]*">
+          </div>
+          <div class="button__cart product-form__item product-form__item--submit product-form-cus{% if section.settings.enable_payment_button %} product-form__item--payment-button{% endif %}{% if product.has_only_default_variant %} product-form__item--no-variants{% endif %}">
+            <button type="submit" name="add" {% unless product.available %}disabled="disabled"{% endunless %} class="open btn product-form__cart-submit" data-add-to-cart>
+              <span data-add-to-cart-text style="display: block">
+                {% unless product.available %}
+                {{ 'products.product.sold_out' | t }}
+                {% else %}
+                <span class="icon-cart-pro">
+                  {% include 'icon-cart-new' %}
+                </span>
+                <span class="cart-text">
+                  <span>Add To Cart</span>
+                </span>
+                {% endunless %}
+              </span>
+            </button>
+
+          </div>
+          {% endform %}
+        </div>
+      </div>
+      
+     </div>
+  </div>
+<style>
+{% for block in section.blocks %}
+{% assign slug = product.handle %}
+{% if slug == block.settings.product %}
+  {% if block.settings.img != blank %}
+  .banner_product{
+      background-image:url({{block.settings.img | img_url:'' }});
+  }
+  {% else %}
+  .banner_product{
+      background-image:url({{product.img | img_url:'' }});
+  }
+  {% endif %}
+{% endif %}
+{% endfor %}
+</style>
+{% schema %}
+  {
+    "name": "Banner",
+    "settings": [
+]
+,
+"blocks": [
+        {
+            "type": "product",
+            "name": "Product",
+            "settings": [
+				{
+                    "type": "product",
+                    "id": "product",
+                    "label": "Product"
+                },
+				{
+                    "type": "text",
+                    "id": "title",
+                    "label": "Title"
+                },
+				{
+                    "type": "image_picker",
+                    "id": "img",
+                    "label": "Banner"
+                }
+            ]
+        }
+]
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

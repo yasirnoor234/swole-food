@@ -1,0 +1,31 @@
+{% if block.type == 'products' %}
+<section class="section__block-products ">
+
+  <div class="page-width">
+        <div class="section-title {% if whiteText %}section-title--white{% endif %}">
+          <h2 class="blue-title">{{ block.settings.title }}</h2>
+          <p>{{ block.settings.text }}</p>
+        </div>
+    <div class="grid grid--align">
+      
+
+        {% for product in collection.products %}
+        {%- comment -%} Wholesale Gorilla: do not delete unless app is uninstalled{%- endcomment -%}
+{%- assign wsgTempProd = product -%}{%- assign wsgExclude = false -%}{%- if forloop.first == true -%}{%- assign wsgActive = false -%}{%- assign wsgActiveCustomer = false -%}
+{%- include 'wsg-status' wsgStatusAction: 'init' | strip -%}{%- endif -%}{%- if wsgActive -%}{%- include 'wsg-status' wsgStatusAction: 'col-item' | strip -%}{%- endif -%}{%- if wsgExclude -%} {%- continue -%} {%- endif -%}
+{%- comment -%} end WSG {%- endcomment -%}
+        <div class="grid__item medium-up--one-third one-whole">
+          {% include 'product-item'  with 'view'%}
+        </div>
+        {% endfor %}
+
+   
+
+    </div>
+    
+    <div class="button-wrapper text-center">
+    <a href="/colletions" class="btn" data-featherlight="/ #planWrapper">Get started</a>
+  </div>
+  </div>
+</section>
+{% endif %}

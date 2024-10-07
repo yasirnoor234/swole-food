@@ -1,0 +1,53 @@
+{{ 'customize.css' | asset_url | stylesheet_tag }}
+{{ 'custom.css' | asset_url | stylesheet_tag }}
+{{ 'styles.css' | asset_url | stylesheet_tag }}
+
+{% if block.type == 'block' %}
+<section class="block__process" >
+  <div class="wrapper">
+    <div class="page-width">
+     
+      <div class="grid__item medium-up--one-third">
+        <div class="process-block">
+          {% if block.settings.image1 != blank %}
+          <img
+               alt="{{ block.settings.title1 }}"
+               src="{{ block.settings.image1| img_url: '330x280', crop: 'center'  }}"
+               data-src="{{ block.settings.image1 | img_url: '330x280', crop: 'center' }}"
+               class="lazyload blur-up" />
+          {% endif %}
+          <div class="h3"><strong>{{ block.settings.number1 }}</strong></div>
+          <h3><strong>{{ block.settings.title1 }}</strong></h3>
+          <p>{{ block.settings.text1 }}</p>
+        </div>
+      </div>
+      <div class="grid__item medium-up--one-third">
+        <div class="process-block">
+          <img
+               alt="{{ block.settings.title2 }}"
+               src="{{ block.settings.image2 | img_url: '330x280', crop: 'center'  }}"
+               data-src="{{ block.settings.image2 | img_url: '330x280', crop: 'center' }}"
+               class="lazyload blur-up" />
+          <div class="h3"><strong>{{ block.settings.number2 }}</strong></div>
+          <h3><strong>{{ block.settings.title2 }}</strong></h3>
+          <p>{{ block.settings.text2 }}</p>
+        </div>
+      </div>
+      <div class="grid__item medium-up--one-third">
+        <div class="process-block">
+          <img
+               alt="{{ block.settings.title3 }}"
+               src="{{ block.settings.image3 | img_url: '330x280', crop: 'center'  }}"
+               data-src="{{ block.settings.image3 | img_url: '330x280', crop: 'center' }}"
+               class="lazyload blur-up" />
+          <div class="h3"><strong>{{ block.settings.number3 }}</strong></div>
+          <h3><strong>{{ block.settings.title3 }}</strong></h3>
+          <p>{{ block.settings.text3 }}</p>
+        </div>
+      </div>
+      
+      
+    </div>
+  </div>
+</section>
+{% endif %}

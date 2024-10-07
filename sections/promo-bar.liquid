@@ -1,0 +1,30 @@
+{% if collection.handle != 'fixed-sets' %}
+<section class="promotion-bar {% if collection.title contains 'Active'%}promotion-bar--active {% elsif collection.title contains 'Low-Carb' %}promotion-bar--lowcarb{% endif %}">
+  {% if section.settings.link != blank %}<a href="{{ section.settings.link }}">{% endif %}
+  <div class="text">{{ section.settings.title }}</div>
+  {% if section.settings.link != blank %}</a>{% endif %}
+</section>
+{% endif %}
+{% schema %}
+  {
+    "name": "Promotion bar",
+    "settings": [
+          { 
+             "type": "text",
+             "id": "title",
+             "label": "Name"
+          },
+          { 
+             "type": "url",
+             "id": "link",
+             "label": "Link"
+          }
+		]
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

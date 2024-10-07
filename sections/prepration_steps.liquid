@@ -1,0 +1,83 @@
+{{ 'section-preparation-steps.css' | asset_url | stylesheet_tag }}
+
+<section class="preparation-steps__section" id="{{ section.id }}">
+  <h2 class="preparation__title">{{ section.settings.title }}</h2>
+  
+  <div class="preparation-steps__wrapper">
+    {%- for block in section.blocks -%}
+      {%- case block.type -%}
+        {%- when 'step' -%}
+          <div class="preparation-step__wrapper--outer">
+            <div class="preparation-step__wrapper--inner">
+              <img alt="{{ block.settings.title }}"
+                   src="{{ block.settings.image | img_url: '350x350'  }}"
+                   data-src="{{ block.settings.image | img_url: '350x350' }}"
+                   class="lazyload blur-up" />
+              <h4 class="preparation-step__title">{{ block.settings.title }}</h4>
+            </div>
+          </div>
+        {%- when 'icon' -%}
+          <div class="preparation-icon__wrapper--outer">
+            <div class="preparation-icon__wrapper--inner">
+              <img alt="{{ block.settings.icon_image.alt }}"
+                   src="{{ block.settings.icon_image | img_url: '50x'  }}"
+                   data-src="{{ block.settings.icon_image | img_url: '50x' }}"
+                   class="lazyload blur-up" />
+            </div>
+          </div>
+      {%- endcase -%}
+    {%- endfor -%}
+  </div>
+</section>
+ 
+{% schema %}
+  {
+    "name": "Preparation steps",
+    "settings": [
+      { 
+        "type": "text",
+        "id": "title",
+        "label": "Title"
+      },
+      { 
+        "type": "textarea",
+        "id": "text",
+        "label": "Text"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "step",
+        "name": "Step",
+        "settings": [
+          {
+            "type": "image_picker",
+            "id": "image",
+            "label": "Image"
+          },
+          { 
+             "type": "text",
+             "id": "title",
+             "label": "Name"
+          }
+        ]
+      },
+	  {
+		"type": "icon",
+		"name": "Icon",
+		"settings": [
+		  {
+			"type": "image_picker",
+		  	"id": "icon_image",
+		  	"label": "Icon image"
+		  }
+		]
+	  }
+    ],
+    "presets": [
+      {
+        "name": "Preparation steps"
+      }
+    ]
+  }
+{% endschema %}

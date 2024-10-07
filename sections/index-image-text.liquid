@@ -1,0 +1,148 @@
+<section class="section__image-text section--{{ section.settings.background_color }}">
+
+  <div class="grid grid--full grid--align grid--no-gutters">
+    {% for block in section.blocks %} 
+    {% if block.type == 'image' %}
+    <div class="grid__item medium-up--one-half image" style="background-image: url('{{ block.settings.image | img_url: '1024x' }}');">
+
+    <img
+      alt="Swolefoods"
+      src="{{ block.settings.image | img_url: '50x50', crop: 'center'  }}"
+      data-src="{{ block.settings.image | img_url: '500x350', crop: 'center' }}"
+      class="lazyload blur-up img-only-small-index" />
+    {%- comment -%}
+      <div class="image-wrapper">
+        <img
+             alt="Swolefoods"
+             src="{{ block.settings.image | img_url: '50x50', crop: 'center'  }}"
+             data-src="{{ block.settings.image | img_url: '700x700', crop: 'center' }}"
+             class="lazyload blur-up" />
+      </div>
+      {%- endcomment -%}
+    </div>
+    
+    {% else %}
+
+
+
+    {% if section.settings.background_color == 'dark' %}
+      <div class="grid__item medium-up--one-half text dark-bg-img" style="background-image: url('{{ 'texture_bg.jpg' | asset_url  }}');">
+    {% else %}
+      <div class="grid__item medium-up--one-half text">
+
+     {% endif %}
+
+
+
+      <div class="text__wrapper">
+        {% if block.settings.title != blank %}<h2>{{ block.settings.title }}</h2>{% endif %}
+        {% if block.settings.text_top != blank %}<div class="subtitle">{{ block.settings.text_top }}</div>{% endif %}
+        {% if block.settings.show_icons != blank %}
+        <ul class="range-icons">
+          <li >{% include 'badge-swole'%}
+            <div class="text">Swole</div> 
+          </li>
+          <li>{% include 'badge-active'%}
+            <div class="text">Active</div> 
+          </li>
+          <li>{% include 'badge-low_carb'%}
+            <div class="text">Low Carb</div> 
+          </li>
+        </ul>
+        {% endif %}
+        {% if block.settings.text_bottom != blank %}<div class="text">{{ block.settings.text_bottom }}</div>{% endif %}
+        {% if block.settings.button_link != blank %}<div class="learn-more"><a href="{{ block.settings.button_link}}" class="btn">{{ block.settings.button_text }}</a></div>{% endif %}
+      </div>
+    </div>
+
+
+    {% endif %}
+
+    {% endfor %}
+  </div>
+</section>
+ 
+{% schema %}
+  {
+    "name": "Image Text",
+	"max_blocks": 2,
+    "settings": [
+          {
+             "type": "select",
+             "id": "background_color",
+             "options": [
+                { "value": "white", "label": "White"},
+                { "value": "grey", "label": "Grey"},
+                { "value": "dark", "label": "Dark"}
+             ],
+             "label": "Background color"
+          }
+		],
+    "blocks": [
+      {
+        "type": "image",
+        "name": "Image",
+        "settings": [
+          {
+            "type": "image_picker",
+            "id": "image",
+            "label": "Image"
+          },
+          { 
+             "type": "text",
+             "id": "title",
+             "label": "Title"
+          }
+        ]
+      },
+      {
+        "type": "text",
+        "name": "Text",
+        "settings": [
+          { 
+             "type": "text",
+             "id": "title",
+             "label": "Title"
+          },
+          { 
+             "type": "richtext",
+             "id": "text_top",
+             "label": "Text Top"
+          },
+          { 
+             "type": "richtext",
+             "id": "text_bottom",
+             "label": "Text Bottom"
+          },
+          { 
+             "type": "checkbox",
+             "id": "show_icons",
+             "label": "Show icons?"
+          },
+          { 
+             "type": "text",
+             "id": "button_text",
+             "label": "Button Text"
+          },
+          { 
+             "type": "url",
+             "id": "button_link",
+             "label": "Button Link"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "Image Text", 
+        "category": "Zyber Custom"
+      }
+    ]
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

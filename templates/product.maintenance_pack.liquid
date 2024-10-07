@@ -1,0 +1,23 @@
+<div class="product-page product_performance_pack" id="productPage">
+  {% section 'banner_product_2' %}
+  {% section 'list_other_products_2' %}
+  <div class="linkmore">
+    <a href="/collections/fixed-sets">View Other Fixed Sets</a>
+  </div>
+  
+  
+  
+</div>
+<script>
+  var fixmeTop = $('.banner_product .bottom').offset().top;
+  console.log(fixmeTop);
+  $(window).scroll(function() {
+    var currentScroll = $(window).scrollTop();
+    console.log(currentScroll);
+    if (currentScroll >= fixmeTop) {
+      $('.banner_product .bottom').addClass('fixed');
+    } else {
+      $('.banner_product .bottom').removeClass('fixed');
+    }
+  });
+</script>

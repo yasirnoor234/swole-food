@@ -576,6 +576,7 @@
   	line-height:1.4;
   	font-family: 'Blacksword';
   	text-transform: initial;
+    color: black !important;
 }
 .banner-home .contents .subtitle{
     font-weight: 700 !important;

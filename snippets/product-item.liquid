@@ -83,7 +83,7 @@
         </div>
         {% endunless %} 
       </a>
-      {%- if wsgActive -%}{%- include 'wsg-status' wsgStatusAction: 'col-item' | strip -%}{%- endif -%}
+      {%- if wsgActive -%}{%- include 'wsg-status', wsgStatusAction: 'col-item' -%}{%- endif -%}
       <div class="text">
         <div class="product-tile">
 
@@ -207,4 +207,13 @@
       });
 
 
-    </script>
+    </script>{%- comment -%}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: "{%- include 'wsg-status' wsgStatusAction: 'col-item' | strip -%}"
+  to: "{%- include 'wsg-status', wsgStatusAction: 'col-item' -%}"
+  position: 3450..3507
+{%- endcomment -%}

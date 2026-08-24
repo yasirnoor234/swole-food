@@ -26,7 +26,7 @@
     {% for product in collection.products limit: product_limit %}
       {%- comment -%} Wholesale Gorilla: do not delete unless app is uninstalled{%- endcomment -%}
       {%- assign wsgTempProd = product -%}{%- assign wsgExclude = false -%}{%- if forloop.first == true -%}{%- assign wsgActive = false -%}{%- assign wsgActiveCustomer = false -%}
-      {%- include 'wsg-status' wsgStatusAction: 'init' | strip -%}{%- endif -%}{%- if wsgActive -%}{%- include 'wsg-status' wsgStatusAction: 'ajax-search' | strip -%}{%- endif -%}{%- if wsgExclude -%} {%- continue -%} {%- endif -%}
+      {%- include 'wsg-status', wsgStatusAction: 'init' -%}{%- endif -%}{%- if wsgActive -%}{%- include 'wsg-status', wsgStatusAction: 'ajax-search' -%}{%- endif -%}{%- if wsgExclude -%} {%- continue -%} {%- endif -%}
       {%- comment -%} end WSG {%- endcomment -%}
       <div class="grid__item productitem product_item col-md-3 {{ grid_item_width }}" id="product_modal">
         {% include 'product-item' with 'view' %}
@@ -162,3 +162,16 @@
   ]
 }
 {% endschema %}
+{% comment %}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: "{%- include 'wsg-status' wsgStatusAction: 'init' | strip -%}"
+  to: "{%- include 'wsg-status', wsgStatusAction: 'init' -%}"
+  position: 1266..1319
+- from: "{%- include 'wsg-status' wsgStatusAction: 'ajax-search' | strip -%}"
+  to: "{%- include 'wsg-status', wsgStatusAction: 'ajax-search' -%}"
+  position: 1352..1412
+{% endcomment %}
